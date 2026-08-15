@@ -2,9 +2,35 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export const runtime = 'edge';
 
+const MAX_LENGTH = 300;
+const MAX_MESSAGE_LENGTH = 5000;
+const EMAIL_RE = /^[^\s@\r\n]+@[^\s@\r\n]+\.[^\s@\r\n]+$/;
+const HEADER_INJECTION_RE = /[\r\n]/;
+
+function isCleanString(value: unknown, maxLength: number): value is string {
+    return typeof value === 'string' && value.length > 0 && value.length <= maxLength && !HEADER_INJECTION_RE.test(value);
+}
+
 export async function POST(request: NextRequest) {
     try {
-        const { email, firstName, lastName, company, message } = await request.json();
+        const body = await request.json().catch(() => null);
+        if (!body || typeof body !== 'object') {
+            return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
+        }
+
+        const { email, firstName, lastName, company, message } = body as Record<string, unknown>;
+
+        if (
+            !isCleanString(email, MAX_LENGTH) ||
+            !EMAIL_RE.test(email) ||
+            !isCleanString(firstName, MAX_LENGTH) ||
+            !isCleanString(lastName, MAX_LENGTH) ||
+            !isCleanString(company, MAX_LENGTH) ||
+            !isCleanString(message, MAX_MESSAGE_LENGTH)
+        ) {
+            return NextResponse.json({ error: 'Invalid or missing fields' }, { status: 400 });
+        }
+
         const mailgunDomain = process.env.MAILGUN_DOMAIN || '';
         const mailgunApiKey = process.env.MAILGUN_API_KEY || '';
         const recipientEmails = process.env.RECIPIENT_EMAILS || '';
