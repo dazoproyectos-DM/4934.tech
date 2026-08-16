@@ -39,6 +39,7 @@ import { MenuCTAItem, MenuItem } from '@/features/NavBar/NavBar.types'
 const projects: MenuItem[] = [
     { name: 'UltraAgent', description: 'A powerful AI powered agent with real-world capabilities.', href: '/projects/ultraagent', icon: BeakerIcon },
     { name: 'malware.4934.tech', description: 'A massive malware repository with a focus on security.', href: '/projects/malware', icon: ShieldCheckIcon },
+    { name: 'Nexus Empresarial', description: 'Gestor inteligente de OT y subcontratos sobre el SRC de YPF.', href: '/nexus', icon: SquaresPlusIcon },
 ]
 
 // noinspection SpellCheckingInspection
