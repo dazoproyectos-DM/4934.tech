@@ -1,0 +1,121 @@
+========================================
+NEXUS EMPRESARIAL - AUTO RUN
+========================================
+
+INSTRUCCIONES RÁPIDAS:
+
+📍 WINDOWS:
+  1. Descarga los archivos en una carpeta
+  2. Haz doble clic en "autorun.bat"
+  3. La app se abrirá automáticamente en tu navegador
+
+📍 MAC / LINUX:
+  1. Descarga los archivos en una carpeta
+  2. Abre Terminal
+  3. Ve a la carpeta: cd /ruta/a/la/carpeta
+  4. Ejecuta: chmod +x autorun.sh
+  5. Ejecuta: ./autorun.sh
+  6. La app se abrirá automáticamente en tu navegador
+
+========================================
+
+¿QUÉ NECESITAS?
+
+✓ Una carpeta con estos archivos:
+  • autorun.bat (Windows)
+  • autorun.sh (Mac/Linux)
+  • index.html
+  • nexus-pitch-demo.html
+  • informe-ejecutivo-nexus.html
+  • README.md
+
+✓ Un navegador moderno:
+  • Chrome, Firefox, Safari o Edge
+  • Versión reciente (2020+)
+
+========================================
+
+¿QUÉ HACE AUTORUN?
+
+1. Verifica que todos los archivos estén en la misma carpeta
+2. Detecta tu navegador predeterminado
+3. Abre automáticamente index.html
+4. Te muestra un mensaje con la ubicación
+
+Todo en tu navegador local, sin conexión remota.
+
+========================================
+
+ARCHIVOS DE LA CARPETA:
+
+📄 autorun.bat
+   Script para Windows. Abre la app con un clic.
+   Uso: Doble clic en el archivo
+
+📄 autorun.sh
+   Script para Mac/Linux. Abre la app desde Terminal.
+   Uso: chmod +x autorun.sh && ./autorun.sh
+
+📄 index.html
+   Página principal con menú, usuarios, guía y FAQ.
+   Úsala como punto de entrada.
+
+📄 nexus-pitch-demo.html
+   Aplicación interactiva con 4 roles.
+   Linked desde index.html
+
+📄 informe-ejecutivo-nexus.html
+   Reporte ejecutivo profesional.
+   Linked desde index.html
+
+📄 README.md
+   Documentación completa (seguridad, uso, FAQ)
+
+========================================
+
+TROUBLESHOOTING:
+
+❌ "No se abre nada en Windows"
+   → Haz doble clic en index.html manualmente
+   → O copia la ruta en tu navegador
+
+❌ "No funciona en Mac/Linux"
+   → Verifica que todos los archivos estén en la carpeta
+   → Prueba: open index.html (Mac)
+   → Prueba: xdg-open index.html (Linux)
+
+❌ "La app no carga"
+   → Actualiza la página (F5 o Cmd+R)
+   → Limpia el cache del navegador
+   → Intenta en otro navegador
+
+❌ "No puedo ejecutar autorun.sh"
+   → Abre Terminal en la carpeta
+   → Ejecuta: chmod +x autorun.sh
+   → Luego: ./autorun.sh
+
+========================================
+
+SEGURIDAD:
+
+✓ Sin conexión a servidores
+✓ Sin datos enviados a internet
+✓ Sin rastreo ni analíticas
+✓ Completamente offline
+✓ Código visible y verificable
+
+Lee README.md para más detalles de seguridad.
+
+========================================
+
+¿PREGUNTAS?
+
+1. Lee README.md (documentación completa)
+2. Abre index.html → Pestaña "FAQ"
+3. Abre index.html → Pestaña "Seguridad"
+
+========================================
+
+Versión: 1.0
+Última actualización: Agosto 2026
+Estado: Completamente funcional
