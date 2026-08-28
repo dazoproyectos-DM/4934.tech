@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus - Login</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f1729 0%, #1a2d4d 100%);
+      color: #e0e7ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .login-container {
+      max-width: 1000px;
+      width: 100%;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .login-header h1 {
+      font-size: 48px;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #00e4b8, #4a90ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .login-header p {
+      font-size: 16px;
+      color: #a0b4cf;
+    }
+
+    .users-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .user-card {
+      background: linear-gradient(135deg, #1a2d4d 0%, #0f1729 100%);
+      border: 2px solid #243b5c;
+      border-radius: 12px;
+      padding: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .user-card:hover {
+      border-color: #4a90ff;
+      transform: translateY(-8px);
+      box-shadow: 0 12px 40px rgba(74, 144, 255, 0.2);
+    }
+
+    .user-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .user-name {
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 8px;
+      color: #e0e7ff;
+    }
+
+    .user-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #6880a0;
+      letter-spacing: 0.5px;
+      margin-bottom: 16px;
+    }
+
+    .user-desc {
+      font-size: 13px;
+      color: #a0b4cf;
+      line-height: 1.5;
+    }
+
+    .footer {
+      text-align: center;
+      color: #6880a0;
+      font-size: 12px;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #243b5c;
+    }
+
+    @media (max-width: 768px) {
+      .login-header h1 { font-size: 32px; }
+      .users-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-container">
+  <div class="login-header">
+    <h1>🔐 Nexus Empresarial</h1>
+    <p>Control de Recursos SRC - YPF</p>
+  </div>
+
+  <div class="users-grid">
+    <!-- Admin -->
+    <div class="user-card" onclick="login('admin')">
+      <span class="user-icon">👤</span>
+      <div class="user-name">Administrador</div>
+      <div class="user-title">Admin Sistema</div>
+      <div class="user-desc">Acceso total al sistema</div>
+    </div>
+
+    <!-- Auditor -->
+    <div class="user-card" onclick="login('lucia')">
+      <span class="user-icon">👩‍💼</span>
+      <div class="user-name">Auditor</div>
+      <div class="user-title">Lucía Auditora</div>
+      <div class="user-desc">Ver y auditar cumplimiento</div>
+    </div>
+
+    <!-- Empresa -->
+    <div class="user-card" onclick="login('codesin')">
+      <span class="user-icon">🏢</span>
+      <div class="user-name">Empresa</div>
+      <div class="user-title">Contratista CODESIN</div>
+      <div class="user-desc">Gestionar recursos propios</div>
+    </div>
+
+    <!-- Inspector YPF -->
+    <div class="user-card" onclick="login('inspector')">
+      <span class="user-icon">🚨</span>
+      <div class="user-name">Inspector YPF</div>
+      <div class="user-title">Miguel Melchiori</div>
+      <div class="user-desc">Validar y aprobar OTs</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p>👉 Haz clic en tu usuario para continuar • Demostración - Datos locales</p>
+  </div>
+</div>
+
+<script>
+function login(username) {
+  // Guardar usuario en localStorage
+  localStorage.setItem('nexus-user', username);
+  // Redirigir a app
+  window.location.href = 'index.html';
+}
+</script>
+
+</body>
+</html>

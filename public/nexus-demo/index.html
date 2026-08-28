@@ -533,7 +533,7 @@ function render() {
           <h1>Nexus Empresarial</h1>
           <div class="user-info">
             <div style="font-weight: 600;">${state.user.nombre}</div>
-            <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+            <button class="logout-btn" onclick="logout()">🔄 Cambiar Usuario</button>
           </div>
         </div>
 
@@ -554,7 +554,8 @@ function logout() {
   state.loggedIn = false;
   state.user = null;
   localStorage.removeItem('nexus-state');
-  render();
+  localStorage.removeItem('nexus-user');
+  window.location.href = 'login.html';
 }
 
 // ============================================
@@ -562,6 +563,14 @@ function logout() {
 // ============================================
 
 loadState();
+
+// Auto-login si hay usuario guardado
+const savedUser = localStorage.getItem('nexus-user');
+if (savedUser && users[savedUser]) {
+  state.loggedIn = true;
+  state.user = { username: savedUser, ...users[savedUser] };
+}
+
 render();
 </script>
 
