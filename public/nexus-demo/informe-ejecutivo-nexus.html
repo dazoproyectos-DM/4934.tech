@@ -1,0 +1,474 @@
+<meta charset="utf-8">
+<title>Informe Ejecutivo Nexus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+
+<style>
+  /* ═══════════════════════════════════════════════════════════════
+     VARIABLES CSS — ESQUEMA CORPORATIVO
+     Azul oscuro → cabeceras y acentos · Gris neutro → fondos y bordes
+     Rojo → exclusivo para riesgos y desvíos
+     ═══════════════════════════════════════════════════════════════ */
+  :root {
+    /* Azul corporativo */
+    --navy-900: #0A1B33;
+    --navy-800: #123262;
+    --navy-700: #1B4685;
+    --blue-accent: #2C5DA8;
+    --blue-accent-soft: #E8EFF9;
+
+    /* Gris neutro */
+    --gray-50:  #F4F5F7;
+    --gray-100: #EBEDF1;
+    --gray-200: #E1E4E9;
+    --gray-400: #9AA3B2;
+    --gray-600: #5B6472;
+    --ink:      #16202E;
+
+    /* Rojo — riesgos y desvíos, uso exclusivo */
+    --risk: #B3222E;
+    --risk-soft: #FBEAEA;
+    --risk-border: #F0C4C8;
+
+    /* Semántica complementaria (no compite con el acento) */
+    --ok: #1F7A4D;
+    --ok-soft: #E7F4ED;
+    --warn: #9A6B08;
+    --warn-soft: #FBF2DF;
+
+    --surface: #FFFFFF;
+    --shadow-card: 0 1px 2px rgba(10,27,51,.05), 0 6px 16px rgba(10,27,51,.07);
+    --radius: 10px;
+
+    --font-display: 'Montserrat', 'Inter', system-ui, sans-serif;
+    --font-body: 'Inter', 'Roboto', system-ui, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--gray-50); color: var(--ink); }
+  body { font-family: var(--font-body); -webkit-font-smoothing: antialiased; }
+  h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+  p { margin: 0; }
+  ::selection { background: var(--blue-accent); color: #fff; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  a { color: var(--blue-accent); }
+  button:focus-visible, a:focus-visible { outline: 2px solid var(--blue-accent); outline-offset: 2px; }
+
+  /* ── Layout general: CSS Grid como columna vertebral ────────── */
+  .page { display: flex; flex-direction: column; min-height: 100vh; }
+
+  .masthead {
+    background: linear-gradient(155deg, var(--navy-900), var(--navy-800));
+    color: #fff;
+    padding: 28px clamp(20px, 4vw, 48px);
+  }
+  .masthead-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+  }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .brand-mark {
+    width: 44px; height: 44px; border-radius: 9px;
+    background: linear-gradient(135deg, var(--blue-accent), var(--navy-700));
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-weight: 800; font-size: 20px; color: #fff;
+    flex-shrink: 0;
+  }
+  .brand-text h1 { font-size: 21px; font-weight: 800; letter-spacing: .01em; }
+  .brand-text p { font-size: 12px; color: #B9C6DE; letter-spacing: .06em; text-transform: uppercase; margin-top: 3px; }
+  .masthead-meta { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .period-badge {
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.18);
+    border-radius: 999px; padding: 8px 16px; font-size: 13px; font-weight: 600;
+  }
+  .btn-print {
+    background: #fff; color: var(--navy-800); border: none; border-radius: 8px;
+    padding: 10px 18px; font-size: 13px; font-weight: 700; cursor: pointer;
+    font-family: var(--font-body);
+  }
+  .btn-print:hover { background: var(--gray-100); }
+
+  .report {
+    flex: 1;
+    max-width: 1280px; width: 100%; margin: 0 auto;
+    padding: clamp(20px, 3.5vw, 40px) clamp(20px, 4vw, 48px) 60px;
+    display: flex; flex-direction: column; gap: 32px;
+  }
+
+  .section-label {
+    font-size: 11px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+    color: var(--navy-700); margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+  }
+  .section-label .rule { flex: 1; height: 1px; background: var(--gray-200); }
+
+  /* ── Tarjetas ─────────────────────────────────────────────────── */
+  .card {
+    background: var(--surface); border: 1px solid var(--gray-200); border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+  }
+  .card-pad { padding: 20px 22px; }
+
+  /* ── KPIs: grid responsivo, se reacomoda según el monitor ───── */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+  }
+  .kpi-card {
+    background: var(--surface); border: 1px solid var(--gray-200); border-left: 4px solid var(--navy-800);
+    border-radius: var(--radius); box-shadow: var(--shadow-card);
+    padding: 16px 18px; display: flex; flex-direction: column; gap: 6px;
+  }
+  .kpi-card.is-risk { border-left-color: var(--risk); }
+  .kpi-card.is-warn { border-left-color: var(--warn); }
+  .kpi-card.is-ok { border-left-color: var(--ok); }
+  .kpi-label { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--gray-600); }
+  .kpi-value { font-family: var(--font-display); font-size: 30px; font-weight: 800; color: var(--navy-900); line-height: 1; }
+  .kpi-value.risk { color: var(--risk); }
+  .kpi-value.ok { color: var(--ok); }
+  .kpi-sub { font-size: 12px; color: var(--gray-600); }
+
+  /* ── Sección de dos columnas: Estado + Hito ─────────────────── */
+  .two-col { display: grid; grid-template-columns: 1.25fr 1fr; gap: 20px; align-items: stretch; }
+  @media (max-width: 860px) { .two-col { grid-template-columns: 1fr; } }
+
+  .chart-row { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+  .legend { display: flex; flex-direction: column; gap: 9px; }
+  .legend-item { display: flex; align-items: center; gap: 9px; font-size: 13px; color: var(--gray-600); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+  .legend-item b { color: var(--ink); font-weight: 600; margin-left: auto; padding-left: 14px; }
+
+  .milestone-track { display: flex; flex-direction: column; gap: 16px; }
+  .progress-track { height: 10px; background: var(--gray-100); border-radius: 6px; overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: 6px; background: linear-gradient(90deg, var(--blue-accent), var(--navy-800)); }
+  .month-dots { display: flex; gap: 6px; flex-wrap: wrap; }
+  .month-dot { width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; }
+  .month-dot.filled { background: var(--navy-800); color: #fff; }
+  .month-dot.empty { background: var(--gray-100); color: var(--gray-400); border: 1px dashed var(--gray-200); }
+
+  .callout { border-radius: var(--radius); padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start; }
+  .callout.risk { background: var(--risk-soft); border: 1px solid var(--risk-border); }
+  .callout-icon { width: 26px; height: 26px; border-radius: 7px; background: var(--risk); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; flex-shrink: 0; }
+  .callout p { font-size: 13px; color: var(--ink); line-height: 1.5; }
+  .callout strong { color: var(--risk); }
+
+  /* ── Riesgos y desvíos ───────────────────────────────────────── */
+  .risk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+  .risk-card {
+    background: var(--risk-soft); border: 1px solid var(--risk-border); border-radius: var(--radius);
+    padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start;
+  }
+  .risk-tag {
+    font-size: 10px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase;
+    color: #fff; background: var(--risk); border-radius: 5px; padding: 3px 8px; flex-shrink: 0;
+  }
+  .risk-body p:first-child { font-size: 13.5px; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+  .risk-body p:last-child { font-size: 12px; color: var(--gray-600); }
+
+  /* ── Tabla de subcontratistas ────────────────────────────────── */
+  .table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--gray-200); box-shadow: var(--shadow-card); }
+  table { width: 100%; border-collapse: collapse; min-width: 620px; background: var(--surface); }
+  thead th {
+    text-align: left; font-size: 10.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    color: var(--gray-600); background: var(--gray-50); padding: 12px 16px; border-bottom: 1px solid var(--gray-200);
+  }
+  tbody td { padding: 13px 16px; font-size: 13.5px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: var(--gray-50); }
+  .empresa-cell { display: flex; align-items: center; gap: 10px; }
+  .empresa-swatch { width: 8px; height: 28px; border-radius: 3px; flex-shrink: 0; }
+  .empresa-name { font-weight: 600; color: var(--ink); }
+  .empresa-sub { font-size: 11.5px; color: var(--gray-400); }
+  .pill { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+  .pill.ok { background: var(--ok-soft); color: var(--ok); }
+  .pill.warn { background: var(--warn-soft); color: var(--warn); }
+  .pill.risk { background: var(--risk-soft); color: var(--risk); }
+  .mini-bar-track { width: 90px; height: 6px; background: var(--gray-100); border-radius: 4px; overflow: hidden; display: inline-block; vertical-align: middle; margin-right: 8px; }
+  .mini-bar-fill { height: 100%; border-radius: 4px; }
+
+  /* ── Recomendaciones ─────────────────────────────────────────── */
+  .rec-list { display: flex; flex-direction: column; gap: 10px; }
+  .rec-item { display: flex; gap: 12px; align-items: flex-start; border-radius: 8px; padding: 12px 14px; border-left: 4px solid var(--gray-200); background: var(--gray-50); }
+  .rec-item.p-critica { border-left-color: var(--risk); background: var(--risk-soft); }
+  .rec-item.p-alta { border-left-color: var(--warn); background: var(--warn-soft); }
+  .rec-item.p-media { border-left-color: var(--blue-accent); background: var(--blue-accent-soft); }
+  .rec-item.p-buena { border-left-color: var(--ok); background: var(--ok-soft); }
+  .rec-badge { font-size: 9.5px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: var(--gray-600); flex-shrink: 0; margin-top: 2px; min-width: 54px; }
+  .rec-item.p-critica .rec-badge { color: var(--risk); }
+  .rec-item.p-alta .rec-badge { color: var(--warn); }
+  .rec-item.p-media .rec-badge { color: var(--blue-accent); }
+  .rec-item.p-buena .rec-badge { color: var(--ok); }
+  .rec-item p { font-size: 13px; color: var(--ink); line-height: 1.5; }
+
+  /* ── Plan de la semana ───────────────────────────────────────── */
+  .plan-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+  .plan-item { border: 1px solid var(--gray-200); border-radius: 8px; padding: 12px 14px; background: var(--surface); display: flex; flex-direction: column; gap: 6px; }
+  .plan-when { font-size: 10.5px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; }
+  .plan-when.overdue { color: var(--risk); }
+  .plan-when.soon { color: var(--warn); }
+  .plan-title { font-size: 13px; font-weight: 600; color: var(--ink); }
+  .plan-meta { font-size: 11.5px; color: var(--gray-400); }
+
+  footer { border-top: 1px solid var(--gray-200); padding: 20px clamp(20px, 4vw, 48px); }
+  .footer-inner { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 11.5px; color: var(--gray-400); }
+
+  @media print {
+    .btn-print { display: none; }
+    .masthead { background: var(--navy-900) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .card, .kpi-card, .risk-card, table { box-shadow: none !important; }
+    body { background: #fff; }
+  }
+</style>
+
+<div class="page">
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="brand">
+        <div class="brand-mark">N</div>
+        <div class="brand-text">
+          <h1>Informe Ejecutivo Semanal</h1>
+          <p>Nexus Empresarial · Cumplimiento de Contratistas SRC-YPF</p>
+        </div>
+      </div>
+      <div class="masthead-meta">
+        <span class="period-badge">Semana del 24 al 30 de agosto, 2026</span>
+        <button class="btn-print" onclick="window.print()">Imprimir / Exportar PDF</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="report">
+
+    <!-- KPIs -->
+    <section>
+      <div class="section-label">Estado general<span class="rule"></span></div>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <span class="kpi-label">Recursos totales</span>
+          <span class="kpi-value num">8</span>
+          <span class="kpi-sub">Personal, vehículos y equipos</span>
+        </div>
+        <div class="kpi-card is-ok">
+          <span class="kpi-label">Avalados</span>
+          <span class="kpi-value ok num">4</span>
+          <span class="kpi-sub">Habilitados para acceso</span>
+        </div>
+        <div class="kpi-card is-warn">
+          <span class="kpi-label">Pendientes</span>
+          <span class="kpi-value num">3</span>
+          <span class="kpi-sub">En circuito de afectación</span>
+        </div>
+        <div class="kpi-card is-risk">
+          <span class="kpi-label">Rechazados</span>
+          <span class="kpi-value risk num">1</span>
+          <span class="kpi-sub">Requiere corrección</span>
+        </div>
+        <div class="kpi-card">
+          <span class="kpi-label">Cumplimiento</span>
+          <span class="kpi-value num">50%</span>
+          <span class="kpi-sub">Meta: 90%</span>
+        </div>
+        <div class="kpi-card is-risk">
+          <span class="kpi-label">Riesgo de retención</span>
+          <span class="kpi-value risk num">3%</span>
+          <span class="kpi-sub">Sobre monto certificado</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Estado de cumplimiento + Hito -->
+    <section class="two-col">
+      <div class="card card-pad">
+        <div class="section-label" style="margin-bottom:16px;">Estado de cumplimiento<span class="rule"></span></div>
+        <div class="chart-row">
+          <svg width="150" height="150" viewBox="0 0 150 150" role="img" aria-label="Distribución de estados de cumplimiento">
+            <circle cx="75" cy="75" r="58" fill="none" stroke="var(--gray-100)" stroke-width="17"/>
+            <circle cx="75" cy="75" r="58" fill="none" stroke="var(--ok)" stroke-width="17"
+                    stroke-dasharray="182.2 364.4" stroke-dashoffset="0" transform="rotate(-90 75 75)"/>
+            <circle cx="75" cy="75" r="58" fill="none" stroke="var(--blue-accent)" stroke-width="17"
+                    stroke-dasharray="45.5 364.4" stroke-dashoffset="-182.2" transform="rotate(-90 75 75)"/>
+            <circle cx="75" cy="75" r="58" fill="none" stroke="var(--warn)" stroke-width="17"
+                    stroke-dasharray="91.1 364.4" stroke-dashoffset="-227.7" transform="rotate(-90 75 75)"/>
+            <circle cx="75" cy="75" r="58" fill="none" stroke="var(--risk)" stroke-width="17"
+                    stroke-dasharray="45.5 364.4" stroke-dashoffset="-318.8" transform="rotate(-90 75 75)"/>
+            <text x="75" y="71" text-anchor="middle" font-family="Montserrat, sans-serif" font-size="26" font-weight="800" fill="var(--navy-900)">8</text>
+            <text x="75" y="90" text-anchor="middle" font-family="Inter, sans-serif" font-size="9" letter-spacing="1" fill="var(--gray-400)">RECURSOS</text>
+          </svg>
+          <div class="legend">
+            <div class="legend-item"><span class="legend-dot" style="background:var(--ok)"></span>Avalado <b class="num">4</b></div>
+            <div class="legend-item"><span class="legend-dot" style="background:var(--blue-accent)"></span>Nuevo <b class="num">2</b></div>
+            <div class="legend-item"><span class="legend-dot" style="background:var(--warn)"></span>Pend. Inspector <b class="num">1</b></div>
+            <div class="legend-item"><span class="legend-dot" style="background:var(--risk)"></span>Rechazado <b class="num">1</b></div>
+          </div>
+        </div>
+        <div class="callout risk" style="margin-top:18px;">
+          <span class="callout-icon">!</span>
+          <p><strong>Cumplimiento 40 puntos por debajo de la meta.</strong> Al ritmo actual de las últimas 8 semanas, se proyecta alcanzar el 90% recién en ~37 semanas — se requieren acciones correctivas del Plan de Acción para acortar la brecha.</p>
+        </div>
+      </div>
+
+      <div class="card card-pad">
+        <div class="section-label" style="margin-bottom:16px;">Camino a "Empresa Promovida"<span class="rule"></span></div>
+        <div class="milestone-track">
+          <div>
+            <p style="font-size:13px;color:var(--gray-600);margin-bottom:8px;">2 de 12 meses consecutivos sin incumplimientos</p>
+            <div class="progress-track"><div class="progress-fill" style="width:16.6%"></div></div>
+          </div>
+          <div class="month-dots">
+            <span class="month-dot filled">1</span><span class="month-dot filled">2</span>
+            <span class="month-dot empty">3</span><span class="month-dot empty">4</span>
+            <span class="month-dot empty">5</span><span class="month-dot empty">6</span>
+            <span class="month-dot empty">7</span><span class="month-dot empty">8</span>
+            <span class="month-dot empty">9</span><span class="month-dot empty">10</span>
+            <span class="month-dot empty">11</span><span class="month-dot empty">12</span>
+          </div>
+          <p style="font-size:12px;color:var(--gray-600);line-height:1.5;">
+            Alcanzar 12 meses sin multas ni retenciones habilita el <strong style="color:var(--navy-800);">Control Trimestral</strong>
+            (febrero, mayo, agosto, noviembre) en lugar de la auditoría mensual — reduce costos administrativos y agiliza la logística de personal.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Riesgos y Desvíos -->
+    <section>
+      <div class="section-label">Riesgos y desvíos<span class="rule"></span></div>
+      <div class="risk-grid">
+        <div class="risk-card">
+          <span class="risk-tag">Bloqueo</span>
+          <div class="risk-body">
+            <p>Diego Martínez — ART vencida</p>
+            <p>Recurso bloqueado · SERMAT S.A. · hace 8 días</p>
+          </div>
+        </div>
+        <div class="risk-card">
+          <span class="risk-tag">Documentación</span>
+          <div class="risk-body">
+            <p>Diego Martínez — Apto médico vencido</p>
+            <p>SERMAT S.A. · requiere renovación inmediata</p>
+          </div>
+        </div>
+        <div class="risk-card">
+          <span class="risk-tag">Alta ARCA</span>
+          <div class="risk-body">
+            <p>2 recursos sin Alta Temprana ARCA</p>
+            <p>Roberto Díaz (TECFOR) y Pablo Sánchez (CODESIN) — no pueden ingresar</p>
+          </div>
+        </div>
+        <div class="risk-card">
+          <span class="risk-tag">Vencimiento</span>
+          <div class="risk-body">
+            <p>Contrato VCD23028 vence en 45 días</p>
+            <p>SERMAT S.A. — iniciar gestión de prórroga</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabla de subcontratistas -->
+    <section>
+      <div class="section-label">Cumplimiento por subcontratista<span class="rule"></span></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Subcontratista</th><th>Contrato</th><th>Cumplimiento</th><th>Avance OT</th><th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="empresa-cell">
+                <span class="empresa-swatch" style="background:var(--ok)"></span>
+                <span><span class="empresa-name">CODESIN S.A.</span><br><span class="empresa-sub">Ingeniería Multidisciplinaria</span></span>
+              </td>
+              <td class="num">VCD25232</td>
+              <td class="num"><span class="mini-bar-track"><span class="mini-bar-fill" style="width:60%;background:var(--ok)"></span></span>60%</td>
+              <td class="num">65%</td>
+              <td><span class="pill ok">En regla</span></td>
+            </tr>
+            <tr>
+              <td class="empresa-cell">
+                <span class="empresa-swatch" style="background:var(--blue-accent)"></span>
+                <span><span class="empresa-name">TECFOR S.R.L.</span><br><span class="empresa-sub">Montaje Electromecánico</span></span>
+              </td>
+              <td class="num">VCD25213</td>
+              <td class="num"><span class="mini-bar-track"><span class="mini-bar-fill" style="width:50%;background:var(--warn)"></span></span>50%</td>
+              <td class="num">42%</td>
+              <td><span class="pill warn">Atención</span></td>
+            </tr>
+            <tr>
+              <td class="empresa-cell">
+                <span class="empresa-swatch" style="background:var(--risk)"></span>
+                <span><span class="empresa-name">SERMAT S.A.</span><br><span class="empresa-sub">Mantenimiento Industrial</span></span>
+              </td>
+              <td class="num">VCD23028</td>
+              <td class="num"><span class="mini-bar-track"><span class="mini-bar-fill" style="width:0%;background:var(--risk)"></span></span>0%</td>
+              <td class="num">78%</td>
+              <td><span class="pill risk">Crítico</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Recomendaciones -->
+    <section>
+      <div class="section-label">Recomendaciones<span class="rule"></span></div>
+      <div class="rec-list">
+        <div class="rec-item p-critica">
+          <span class="rec-badge">Crítica</span>
+          <p>Regularizar 1 recurso con documentación vencida (ART/Apto) esta semana — el 1er mes en falta retiene 3% del monto certificado, y 5% desde el 2do mes.</p>
+        </div>
+        <div class="rec-item p-critica">
+          <span class="rec-badge">Crítica</span>
+          <p>Completar Alta Temprana ARCA de 2 recursos antes del ingreso — el Estudio Auditor responde altas y actualizaciones en hasta 48hs hábiles.</p>
+        </div>
+        <div class="rec-item p-alta">
+          <span class="rec-badge">Alta</span>
+          <p>Reingresar 1 documento rechazado; mensual y bajas se resuelven en hasta 72hs hábiles.</p>
+        </div>
+        <div class="rec-item p-media">
+          <span class="rec-badge">Media</span>
+          <p>Cumplimiento en 50%, 40 puntos por debajo de la meta (90%) — priorizar el Plan de Acción de la semana.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Plan de la semana -->
+    <section>
+      <div class="section-label">Plan de la semana próxima<span class="rule"></span></div>
+      <div class="plan-grid">
+        <div class="plan-item">
+          <span class="plan-when overdue">Vencida · 18 días</span>
+          <span class="plan-title">Alta ARCA de Roberto Díaz — urgente</span>
+          <span class="plan-meta">Ricardo Almada · TECFOR S.R.L.</span>
+        </div>
+        <div class="plan-item">
+          <span class="plan-when overdue">Vencida · 17 días</span>
+          <span class="plan-title">Corregir DDJJ Independiente de Diego Martínez</span>
+          <span class="plan-meta">Graciela Fuentes · SERMAT S.A.</span>
+        </div>
+        <div class="plan-item">
+          <span class="plan-when overdue">Vencida · 16 días</span>
+          <span class="plan-title">Completar Alta ARCA de Pablo Sánchez</span>
+          <span class="plan-meta">Damián Manzo · CODESIN S.A.</span>
+        </div>
+        <div class="plan-item">
+          <span class="plan-when soon">En 3 días</span>
+          <span class="plan-title">Renovar Apto Médico de María López</span>
+          <span class="plan-meta">Damián Manzo · CODESIN S.A.</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>Nexus Empresarial — Plataforma de Gestión de Auditoría SRC-YPF</span>
+      <span>Generado el 28/08/2026 · Distribuido a Administrador, Auditor y subcontratistas</span>
+    </div>
+  </footer>
+</div>
