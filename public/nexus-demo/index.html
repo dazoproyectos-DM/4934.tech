@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nexus - Control de Recursos SRC</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0f1729;
+      color: #e0e7ff;
+      line-height: 1.6;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1a2d4d, #0f1729);
+      padding: 20px;
+      border-bottom: 1px solid #243b5c;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 { font-size: 24px; margin: 0; }
+
+    .user-info {
+      text-align: right;
+    }
+
+    .logout-btn {
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 8px;
+    }
+
+    .logout-btn:hover { background: #b91c1c; }
+
+    .login-container {
+      display: flex;
+      height: 100vh;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-box {
+      background: #1a2d4d;
+      border: 1px solid #243b5c;
+      border-radius: 12px;
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .login-box h2 { margin-bottom: 30px; text-align: center; }
+
+    .users-grid {
+      display: grid;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .user-btn {
+      background: #243b5c;
+      border: 2px solid transparent;
+      color: white;
+      padding: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+
+    .user-btn:hover {
+      border-color: #4a90ff;
+      background: #2d4a6d;
+    }
+
+    .admin { border-left: 4px solid #ff5050; }
+    .auditor { border-left: 4px solid #a06cff; }
+    .empresa { border-left: 4px solid #4a90ff; }
+    .inspector { border-left: 4px solid #ffb020; }
+
+    .container {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      min-height: 100vh;
+      background: #050a12;
+    }
+
+    .sidebar {
+      background: #1a2d4d;
+      border-right: 1px solid #243b5c;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .sidebar-section {
+      margin-bottom: 24px;
+    }
+
+    .sidebar-section h3 {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #6880a0;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    .sidebar-btn {
+      display: block;
+      width: 100%;
+      background: transparent;
+      border: 1px solid transparent;
+      color: #a0b4cf;
+      padding: 10px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: left;
+      font-size: 14px;
+      margin-bottom: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .sidebar-btn:hover {
+      background: #243b5c;
+      color: #e0e7ff;
+      border-color: #4a90ff;
+    }
+
+    .sidebar-btn.active {
+      background: #243b5c;
+      color: #4a90ff;
+      border-color: #4a90ff;
+    }
+
+    .main-content {
+      padding: 30px;
+      overflow-y: auto;
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .page h2 { margin-bottom: 20px; font-size: 28px; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: #1a2d4d;
+      border: 1px solid #243b5c;
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .stat-label { font-size: 12px; color: #6880a0; text-transform: uppercase; }
+    .stat-value { font-size: 32px; font-weight: 700; margin-top: 8px; color: #00e4b8; }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #0e1726;
+      border: 1px solid #243b5c;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+
+    .table th {
+      background: #1a2d4d;
+      border-bottom: 1px solid #243b5c;
+      padding: 12px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: #6880a0;
+    }
+
+    .table td {
+      padding: 12px;
+      border-bottom: 1px solid #243b5c;
+    }
+
+    .table tr:hover { background: #13203a; }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge.approved { background: rgba(0, 228, 184, 0.2); color: #00e4b8; }
+    .badge.pending { background: rgba(255, 176, 32, 0.2); color: #ffb020; }
+    .badge.rejected { background: rgba(255, 80, 80, 0.2); color: #ff5050; }
+
+    .button {
+      background: #4a90ff;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .button:hover { background: #3a7fe8; }
+    .button:active { transform: scale(0.98); }
+
+    .input {
+      background: #0e1726;
+      border: 1px solid #243b5c;
+      color: #e0e7ff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .input:focus {
+      outline: none;
+      border-color: #4a90ff;
+    }
+
+    .role-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .admin-role { background: rgba(255, 80, 80, 0.2); color: #ff5050; }
+    .auditor-role { background: rgba(160, 108, 255, 0.2); color: #a06cff; }
+    .empresa-role { background: rgba(74, 144, 255, 0.2); color: #4a90ff; }
+    .inspector-role { background: rgba(255, 176, 32, 0.2); color: #ffb020; }
+  </style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+// ============================================
+// STATE MANAGEMENT
+// ============================================
+
+let state = {
+  loggedIn: false,
+  user: null,
+  currentPage: 'dashboard',
+  data: {
+    recursos: [
+      { id: 1, nombre: 'Juan Pérez', empresa: 'CODESIN', estado: 'approved', rol: 'Operario' },
+      { id: 2, nombre: 'María García', empresa: 'CODESIN', estado: 'pending', rol: 'Técnico' },
+      { id: 3, nombre: 'Carlos López', empresa: 'TECFOR', estado: 'approved', rol: 'Supervisor' },
+      { id: 4, nombre: 'Ana Martínez', empresa: 'SERMAT', estado: 'rejected', rol: 'Operario' },
+    ],
+    empresas: ['CODESIN', 'TECFOR', 'SERMAT', 'COVIASA']
+  }
+};
+
+const users = {
+  admin: { nombre: 'Admin Sistema', role: 'admin', empresa: null },
+  lucia: { nombre: 'Lucía Auditora', role: 'auditor', empresa: null },
+  codesin: { nombre: 'Empresa CODESIN', role: 'empresa', empresa: 'CODESIN' },
+  inspector: { nombre: 'Inspector YPF', role: 'inspector', empresa: null }
+};
+
+// ============================================
+// PERSISTENCE
+// ============================================
+
+function saveState() {
+  localStorage.setItem('nexus-state', JSON.stringify(state));
+}
+
+function loadState() {
+  const saved = localStorage.getItem('nexus-state');
+  if (saved) state.data = JSON.parse(saved).data;
+}
+
+// ============================================
+// LOGIN
+// ============================================
+
+function renderLogin() {
+  return `
+    <div class="login-container">
+      <div class="login-box">
+        <h2>🔐 Nexus Empresarial</h2>
+        <p style="text-align: center; color: #a0b4cf; margin-bottom: 30px;">Selecciona tu usuario para continuar</p>
+        <div class="users-grid">
+          ${Object.entries(users).map(([key, user]) => `
+            <button class="user-btn admin" onclick="login('${key}')">
+              <div style="font-size: 24px; margin-bottom: 8px;">${key === 'admin' ? '👤' : key === 'lucia' ? '👩‍💼' : key === 'codesin' ? '🏢' : '🚨'}</div>
+              <div style="font-weight: 700;">${user.nombre}</div>
+              <div style="font-size: 12px; color: #a0b4cf;">${user.role}</div>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function login(username) {
+  state.loggedIn = true;
+  state.user = { username, ...users[username] };
+  saveState();
+  render();
+}
+
+// ============================================
+// DASHBOARD
+// ============================================
+
+function renderDashboard() {
+  const recursos = state.data.recursos;
+  const totalRecursos = recursos.length;
+  const aprobados = recursos.filter(r => r.estado === 'approved').length;
+  const pendientes = recursos.filter(r => r.estado === 'pending').length;
+
+  return `
+    <h2>📊 Dashboard</h2>
+    <span class="role-badge ${state.user.role}-role">${state.user.nombre}</span>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Recursos</div>
+        <div class="stat-value">${totalRecursos}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Aprobados</div>
+        <div class="stat-value" style="color: #00e4b8;">${aprobados}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Pendientes</div>
+        <div class="stat-value" style="color: #ffb020;">${pendientes}</div>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 30px; margin-bottom: 16px;">Recursos Recientes</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Empresa</th>
+          <th>Rol</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${recursos.map(r => `
+          <tr>
+            <td>${r.nombre}</td>
+            <td>${r.empresa}</td>
+            <td>${r.rol}</td>
+            <td><span class="badge ${r.estado}">${r.estado.toUpperCase()}</span></td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+// ============================================
+// USUARIOS
+// ============================================
+
+function renderUsuarios() {
+  return `
+    <h2>👥 Gestión de Usuarios</h2>
+    <p style="color: #a0b4cf; margin-bottom: 20px;">Administra los recursos y usuarios del sistema</p>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Empresa</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${state.data.recursos.map((r, idx) => `
+          <tr>
+            <td>${r.nombre}</td>
+            <td>${r.empresa}</td>
+            <td>${r.rol}</td>
+            <td><span class="badge ${r.estado}">${r.estado.toUpperCase()}</span></td>
+            <td>
+              <button class="button" style="padding: 4px 8px; font-size: 12px;" onclick="cambiarEstado(${idx})">
+                ${r.estado === 'approved' ? '✗ Revocar' : '✓ Aprobar'}
+              </button>
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function cambiarEstado(idx) {
+  const rec = state.data.recursos[idx];
+  rec.estado = rec.estado === 'approved' ? 'pending' : 'approved';
+  saveState();
+  render();
+}
+
+// ============================================
+// CONTROL
+// ============================================
+
+function renderControl() {
+  return `
+    <h2>🎯 Control de Cumplimiento</h2>
+    <p style="color: #a0b4cf; margin-bottom: 20px;">Monitoreo de estado por empresa</p>
+
+    <div style="display: grid; gap: 16px;">
+      ${state.data.empresas.map(empresa => {
+        const rec = state.data.recursos.filter(r => r.empresa === empresa);
+        const aprobados = rec.filter(r => r.estado === 'approved').length;
+        const porcentaje = rec.length > 0 ? Math.round((aprobados / rec.length) * 100) : 0;
+
+        return `
+          <div class="stat-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+              <div style="font-weight: 600;">${empresa}</div>
+              <div style="font-size: 20px; color: #00e4b8;">${porcentaje}%</div>
+            </div>
+            <div style="background: #0e1726; border-radius: 4px; height: 8px; overflow: hidden;">
+              <div style="background: #00e4b8; height: 100%; width: ${porcentaje}%; transition: width 0.3s ease;"></div>
+            </div>
+            <div style="font-size: 12px; color: #6880a0; margin-top: 8px;">${aprobados} de ${rec.length} recursos aprobados</div>
+          </div>
+        `;
+      }).join('')}
+    </div>
+  `;
+}
+
+// ============================================
+// REPORTES
+// ============================================
+
+function renderReportes() {
+  const totalRecursos = state.data.recursos.length;
+  const aprobados = state.data.recursos.filter(r => r.estado === 'approved').length;
+  const pendientes = state.data.recursos.filter(r => r.estado === 'pending').length;
+  const rechazados = state.data.recursos.filter(r => r.estado === 'rejected').length;
+
+  return `
+    <h2>📈 Reportes</h2>
+    <p style="color: #a0b4cf; margin-bottom: 20px;">Estado general del sistema</p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Recursos</div>
+        <div class="stat-value">${totalRecursos}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">✓ Aprobados</div>
+        <div class="stat-value" style="color: #00e4b8;">${aprobados}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">⏳ Pendientes</div>
+        <div class="stat-value" style="color: #ffb020;">${pendientes}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">✗ Rechazados</div>
+        <div class="stat-value" style="color: #ff5050;">${rechazados}</div>
+      </div>
+    </div>
+
+    <div style="background: #1a2d4d; border: 1px solid #243b5c; border-radius: 8px; padding: 20px; margin-top: 30px;">
+      <div style="font-weight: 600; margin-bottom: 12px;">Tasa de Cumplimiento</div>
+      <div style="font-size: 36px; color: #00e4b8; font-weight: 700;">${Math.round((aprobados / totalRecursos) * 100)}%</div>
+      <div style="color: #a0b4cf; font-size: 14px; margin-top: 8px;">${aprobados} de ${totalRecursos} recursos cumpliendo</div>
+    </div>
+  `;
+}
+
+// ============================================
+// RENDER MAIN
+// ============================================
+
+function render() {
+  const app = document.getElementById('app');
+
+  if (!state.loggedIn) {
+    app.innerHTML = renderLogin();
+    return;
+  }
+
+  const pageContent = state.currentPage === 'dashboard' ? renderDashboard() :
+                     state.currentPage === 'usuarios' ? renderUsuarios() :
+                     state.currentPage === 'control' ? renderControl() :
+                     state.currentPage === 'reportes' ? renderReportes() :
+                     renderDashboard();
+
+  app.innerHTML = `
+    <div class="container">
+      <aside class="sidebar">
+        <div class="sidebar-section">
+          <h3>Menú Principal</h3>
+          <button class="sidebar-btn ${state.currentPage === 'dashboard' ? 'active' : ''}" onclick="setPage('dashboard')">📊 Dashboard</button>
+          <button class="sidebar-btn ${state.currentPage === 'usuarios' ? 'active' : ''}" onclick="setPage('usuarios')">👥 Usuarios</button>
+          <button class="sidebar-btn ${state.currentPage === 'control' ? 'active' : ''}" onclick="setPage('control')">🎯 Control</button>
+          <button class="sidebar-btn ${state.currentPage === 'reportes' ? 'active' : ''}" onclick="setPage('reportes')">📈 Reportes</button>
+        </div>
+      </aside>
+
+      <main style="display: flex; flex-direction: column;">
+        <div class="header">
+          <h1>Nexus Empresarial</h1>
+          <div class="user-info">
+            <div style="font-weight: 600;">${state.user.nombre}</div>
+            <button class="logout-btn" onclick="logout()">🔄 Cambiar Usuario</button>
+          </div>
+        </div>
+
+        <div class="main-content">
+          ${pageContent}
+        </div>
+      </main>
+    </div>
+  `;
+}
+
+function setPage(page) {
+  state.currentPage = page;
+  render();
+}
+
+function logout() {
+  state.loggedIn = false;
+  state.user = null;
+  localStorage.removeItem('nexus-state');
+  localStorage.removeItem('nexus-user');
+  window.location.href = 'login.html';
+}
+
+// ============================================
+// INIT
+// ============================================
+
+loadState();
+
+// Auto-login si hay usuario guardado
+const savedUser = localStorage.getItem('nexus-user');
+if (savedUser && users[savedUser]) {
+  state.loggedIn = true;
+  state.user = { username: savedUser, ...users[savedUser] };
+}
+
+render();
+</script>
+
+</body>
+</html>

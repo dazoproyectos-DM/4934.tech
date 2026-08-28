@@ -1,0 +1,2425 @@
+<meta charset="utf-8">
+<title>Nexus Empresarial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+
+<style>
+  :root{
+    --bg:#050A12; --bg2:#0A1020; --sf:#0E1726; --sf2:#13203A;
+    --bd:#1A2D4D; --bd2:#243B5C;
+    --t:#EAF0FA; --t2:#A0B4CF; --t3:#6880A0; --t4:#3E5575;
+    --ac:#00E4B8; --bl:#4A90FF; --am:#FFB020; --rd:#FF5050; --vi:#A06CFF;
+    --font-display:'Inter','Segoe UI',system-ui,sans-serif;
+    --font-mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',monospace;
+  }
+  body[data-nx-mode="light"]{
+    --bg:#F6F8FB; --bg2:#EBEFF5; --sf:#FFFFFF; --sf2:#F3F5F9;
+    --bd:#DCE3EE; --bd2:#C2CCDD;
+    --t:#111827; --t2:#3E4C63; --t3:#67748A; --t4:#93A0B4;
+    --ac:#00967D; --bl:#2563EB; --am:#B25B00; --rd:#DC2C46; --vi:#7C3AED;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--t);}
+  body{font-family:var(--font-display);}
+  ::selection{background:var(--ac);color:var(--bg);}
+  ::-webkit-scrollbar{width:10px;height:10px;}
+  ::-webkit-scrollbar-track{background:var(--bg2);}
+  ::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:6px;border:2px solid var(--bg2);}
+  ::-webkit-scrollbar-thumb:hover{background:var(--t4);}
+  h1,h2{text-wrap:balance;}
+  button,input,select{font-family:inherit;}
+  button:focus-visible,[tabindex]:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{
+    outline:2px solid var(--ac);outline-offset:2px;
+  }
+  .nx-scroll{scroll-behavior:smooth;}
+  .nx-num{font-variant-numeric:tabular-nums;font-family:var(--font-mono);}
+
+  @keyframes nxShimmer{0%{background-position:-200px 0}100%{background-position:calc(200px + 100%) 0}}
+  @keyframes nxPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.94)}}
+  @keyframes nxFadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes nxSpin{to{transform:rotate(360deg)}}
+  @keyframes nxProgress{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
+
+  .nx-skel{background:linear-gradient(90deg,var(--bd) 25%,var(--bd2) 37%,var(--bd) 63%);background-size:400% 100%;animation:nxShimmer 1.4s ease infinite;border-radius:6px;}
+  .nx-row-new{animation:nxFadeIn .5s ease;background:rgba(0,228,184,.07);}
+  .nx-spin{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.22);border-top-color:currentColor;display:inline-block;animation:nxSpin .7s linear infinite;vertical-align:-2px;}
+  body[data-nx-mode="light"] .nx-spin{border-color:rgba(0,0,0,.15);}
+  body[data-nx-mode="light"] .nx-overlay{background:rgba(15,23,42,.45);}
+  .nx-progress-track{position:relative;overflow:hidden;height:3px;background:var(--bd);border-radius:2px;}
+  .nx-progress-fill{position:absolute;inset:0;width:40%;background:linear-gradient(90deg,transparent,var(--ac),transparent);animation:nxProgress 1.1s ease-in-out infinite;}
+
+  .nx-toggle{position:relative;display:inline-flex;width:38px;height:20px;flex-shrink:0;}
+  .nx-toggle input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer;}
+  .nx-toggle .trk{position:absolute;inset:0;background:var(--bd);border-radius:20px;transition:background .2s ease;pointer-events:none;}
+  .nx-toggle .trk:before{content:"";position:absolute;width:14px;height:14px;left:3px;top:3px;background:var(--t3);border-radius:50%;transition:transform .2s ease,background .2s ease;}
+  .nx-toggle input:checked + .trk{background:rgba(0,228,184,.28);}
+  .nx-toggle input:checked + .trk:before{transform:translateX(18px);background:var(--ac);}
+  .nx-toggle input:focus-visible + .trk{outline:2px solid var(--ac);outline-offset:2px;}
+
+  .nx-overlay{position:fixed;inset:0;background:rgba(2,5,10,.72);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:200;padding:24px;animation:nxFadeIn .18s ease;}
+  .nx-modal{background:var(--sf);border:1px solid var(--bd2);border-radius:12px;width:100%;max-width:440px;max-height:88vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,.5);}
+
+  .nx-input{width:100%;background:var(--bg2);border:1px solid var(--bd);color:var(--t);border-radius:6px;padding:9px 11px;font-size:13px;transition:border-color .15s ease;}
+  .nx-input:focus{border-color:var(--ac);}
+  .nx-check{width:16px;height:16px;accent-color:var(--ac);}
+
+  .nx-card-hover{transition:border-color .18s ease,transform .18s ease;}
+  .nx-card-hover:hover{border-color:var(--bd2);transform:translateY(-2px);}
+  .nx-btn{cursor:pointer;transition:filter .15s ease,transform .1s ease;}
+  .nx-btn:hover{filter:brightness(1.12);}
+  .nx-btn:active{transform:scale(.97);}
+  .nx-btn:disabled{opacity:.45;cursor:not-allowed;filter:none;transform:none;}
+
+  @media (prefers-reduced-motion: reduce){
+    .nx-scroll{scroll-behavior:auto !important;}
+    .nx-skel{animation:none;background:var(--bd);}
+    .nx-row-new{animation:none;}
+    .nx-spin{animation:nxSpin 1.6s steps(8) infinite;}
+    .nx-progress-fill{animation:none;left:0;width:100%;}
+    *{transition-duration:.001ms !important;}
+  }
+</style>
+
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useRef, useCallback, useMemo, useContext, createContext } = React;
+
+// ═══════════════════════════════════════════════════════════════════
+// CAPABILITY: downloads — la vista solo puede OFRECER un archivo vía
+// window.claude.use("downloads"); un <a download>/href blob: no hace
+// nada para el visor real del artifact.
+// ═══════════════════════════════════════════════════════════════════
+const DownloadsContext = createContext(null);
+
+function DownloadsProvider({ children }) {
+  const [api, setApi] = useState(null);
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        if (typeof window !== "undefined" && window.claude && typeof window.claude.use === "function") {
+          const ns = await window.claude.use("downloads");
+          if (alive) setApi(() => ns);
+        }
+      } catch (e) { /* queda null — se diseña para su ausencia */ }
+    })();
+    return () => { alive = false; };
+  }, []);
+  return <DownloadsContext.Provider value={api}>{children}</DownloadsContext.Provider>;
+}
+const useDownloads = () => useContext(DownloadsContext);
+
+/** Convierte una blob: URL creada en esta misma página a Blob real (no navega, solo lee memoria). */
+async function blobFromObjectUrl(url) {
+  const resp = await fetch(url);
+  return resp.blob();
+}
+
+/*
+  NEXUS EMPRESARIAL — Interactive Pitch & Live Demo
+  Original presentation preserved. The "Demo" section has been extended
+  with a real role-based login, live data entry (add recurso / add
+  usuario), an approval queue that mutates state, and branded loading
+  transitions — the "carga de datos y usuarios" improvements.
+*/
+
+// ═══════════════════════════════════════════════════════════════════
+// PALETTE & TOKENS — dos estilos de presentación (oscuro / claro)
+// ═══════════════════════════════════════════════════════════════════
+const DARK_PALETTE = {
+  bg: "#050A12", bg2: "#0A1020", sf: "#0E1726", sf2: "#13203A",
+  bd: "#1A2D4D", bd2: "#243B5C",
+  t: "#EAF0FA", t2: "#A0B4CF", t3: "#6880A0", t4: "#3E5575",
+  ac: "#00E4B8", ac2: "rgba(0,228,184,.08)", ac3: "rgba(0,228,184,.20)",
+  bl: "#4A90FF", bl2: "rgba(74,144,255,.10)",
+  am: "#FFB020", am2: "rgba(255,176,32,.10)",
+  rd: "#FF5050", rd2: "rgba(255,80,80,.10)",
+  vi: "#A06CFF", vi2: "rgba(160,108,255,.10)",
+};
+const LIGHT_PALETTE = {
+  bg: "#F6F8FB", bg2: "#EBEFF5", sf: "#FFFFFF", sf2: "#F3F5F9",
+  bd: "#DCE3EE", bd2: "#C2CCDD",
+  t: "#111827", t2: "#3E4C63", t3: "#67748A", t4: "#93A0B4",
+  ac: "#00967D", ac2: "rgba(0,150,125,.09)", ac3: "rgba(0,150,125,.18)",
+  bl: "#2563EB", bl2: "rgba(37,99,235,.09)",
+  am: "#B25B00", am2: "rgba(178,91,0,.09)",
+  rd: "#DC2C46", rd2: "rgba(220,44,70,.09)",
+  vi: "#7C3AED", vi2: "rgba(124,58,237,.09)",
+};
+// Objeto mutable: todos los componentes leen P.xxx en cada render.
+// App() reescribe sus propiedades según el modo elegido antes de
+// que se rendericen los hijos, sin necesitar Context en cada componente.
+const P = { ...DARK_PALETTE };
+
+// ═══════════════════════════════════════════════════════════════════
+// MICRO COMPONENTS
+// ═══════════════════════════════════════════════════════════════════
+const ease = "all .4s cubic-bezier(.4,0,.2,1)";
+
+const Badge = ({ c = P.ac, children }) => (
+  <span style={{ display: "inline-flex", padding: "3px 10px", borderRadius: 4, fontSize: 10, fontWeight: 700, letterSpacing: ".05em", textTransform: "uppercase", color: c, background: `${c}18` }}>{children}</span>
+);
+
+const Bar = ({ v, mx, c = P.ac, h = 5 }) => (
+  <div style={{ background: P.bd, borderRadius: h, height: h, width: "100%", overflow: "hidden" }}>
+    <div style={{ width: `${mx ? (v / mx) * 100 : 0}%`, height: "100%", background: c, borderRadius: h, transition: "width 1s ease" }} />
+  </div>
+);
+
+const Glow = ({ c = P.ac, size = 300, x = "50%", y = "50%", opacity = 0.06 }) => (
+  <div style={{ position: "absolute", left: x, top: y, width: size, height: size, borderRadius: "50%", background: c, filter: `blur(${size / 2}px)`, opacity, transform: "translate(-50%,-50%)", pointerEvents: "none" }} />
+);
+
+const Spinner = ({ c }) => <span className="nx-spin" style={{ color: c || "currentColor" }} />;
+
+const ProgressPulse = ({ label }) => (
+  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, padding: "56px 20px" }}>
+    <div style={{ width: 44, height: 44, borderRadius: 12, background: `linear-gradient(135deg,${P.ac},${P.bl})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 800, color: P.bg, animation: "nxPulse 1.1s ease-in-out infinite" }}>N</div>
+    <div style={{ fontSize: 12, color: P.t3 }}>{label}</div>
+    <div className="nx-progress-track" style={{ width: 170 }}><div className="nx-progress-fill" /></div>
+  </div>
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// SHARED FORM PIECES
+// ═══════════════════════════════════════════════════════════════════
+const Field = ({ label, children }) => (
+  <label style={{ display: "block", marginBottom: 14 }}>
+    <div style={{ fontSize: 10, color: P.t4, textTransform: "uppercase", letterSpacing: ".05em", marginBottom: 6, fontWeight: 700 }}>{label}</div>
+    {children}
+  </label>
+);
+
+const ReasonPrompt = ({ placeholder, confirmLabel, confirmColor, onConfirm, onCancel }) => {
+  const [text, setText] = useState("");
+  return (
+    <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 8 }}>
+      <textarea
+        className="nx-input"
+        rows={2}
+        placeholder={placeholder}
+        value={text}
+        onChange={e => setText(e.target.value)}
+        style={{ resize: "vertical" }}
+      />
+      <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+        <button type="button" onClick={onCancel} className="nx-btn" style={{ background: "transparent", border: `1px solid ${P.bd}`, color: P.t3, borderRadius: 5, padding: "6px 12px", fontSize: 11, cursor: "pointer" }}>Cancelar</button>
+        <button type="button" onClick={() => text.trim() && onConfirm(text.trim())} disabled={!text.trim()} className="nx-btn" style={{ background: `${confirmColor}18`, color: confirmColor, border: `1px solid ${confirmColor}40`, borderRadius: 5, padding: "6px 12px", fontSize: 11, fontWeight: 700, cursor: "pointer" }}>{confirmLabel}</button>
+      </div>
+    </div>
+  );
+};
+
+const Modal = ({ title, onClose, children, accent = P.ac }) => (
+  <div className="nx-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+    <div className="nx-modal">
+      <div style={{ height: 3, background: accent }} />
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", borderBottom: `1px solid ${P.bd}` }}>
+        <span style={{ fontSize: 14, fontWeight: 700 }}>{title}</span>
+        <button onClick={onClose} className="nx-btn" style={{ background: "transparent", border: "none", color: P.t3, fontSize: 18, cursor: "pointer", lineHeight: 1, padding: 4 }} aria-label="Cerrar">✕</button>
+      </div>
+      <div style={{ padding: 20 }}>{children}</div>
+    </div>
+  </div>
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// NAV BAR (persistent top bar)
+// ═══════════════════════════════════════════════════════════════════
+const TopBar = ({ section, setSection, sections, mode, onToggleMode }) => (
+  <div style={{
+    position: "fixed", top: 0, left: 0, right: 0, height: 52, zIndex: 50,
+    background: mode === "light" ? "rgba(255,255,255,.85)" : "rgba(5,10,18,.85)", backdropFilter: "blur(16px)",
+    borderBottom: `1px solid ${P.bd}`, display: "flex", alignItems: "center",
+    padding: "0 28px", gap: 8,
+  }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 8, marginRight: 28 }}>
+      <div style={{ width: 28, height: 28, borderRadius: 6, background: `linear-gradient(135deg,${P.ac},${P.bl})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 800, color: P.bg }}>N</div>
+      <span style={{ fontSize: 13, fontWeight: 700, letterSpacing: ".02em" }}>NEXUS</span>
+      <span style={{ fontSize: 8, color: P.t3, letterSpacing: ".12em", marginTop: 1 }}>EMPRESARIAL</span>
+    </div>
+    <div style={{ display: "flex", gap: 2, flex: 1, overflowX: "auto" }}>
+      {sections.map(s => (
+        <div key={s.id} onClick={() => setSection(s.id)} className="nx-btn" style={{
+          padding: "6px 14px", borderRadius: 4, fontSize: 12, cursor: "pointer", whiteSpace: "nowrap",
+          color: section === s.id ? P.ac : P.t3, fontWeight: section === s.id ? 600 : 400,
+          background: section === s.id ? P.ac2 : "transparent", transition: ease,
+        }}>{s.label}</div>
+      ))}
+    </div>
+    <button
+      onClick={onToggleMode}
+      className="nx-btn"
+      title="Cambiar estilo de presentación"
+      style={{ background: P.bg2, border: `1px solid ${P.bd}`, color: P.t2, borderRadius: 20, padding: "5px 12px", fontSize: 11, fontWeight: 600, cursor: "pointer", marginRight: 12, whiteSpace: "nowrap" }}
+    >
+      {mode === "light" ? "Modo oscuro" : "Modo claro"}
+    </button>
+    <div style={{ fontSize: 10, color: P.t4, whiteSpace: "nowrap" }}>v2.2 · Agosto 2026</div>
+  </div>
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// SECTION: HERO
+// ═══════════════════════════════════════════════════════════════════
+const Hero = ({ onNext }) => {
+  const [show, setShow] = useState(false);
+  useEffect(() => { const t = setTimeout(() => setShow(true), 100); return () => clearTimeout(t); }, []);
+  return (
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", overflow: "hidden" }}>
+      <Glow c={P.ac} size={600} x="30%" y="60%" opacity={0.04} />
+      <Glow c={P.bl} size={500} x="70%" y="30%" opacity={0.03} />
+      <div style={{ maxWidth: 800, textAlign: "center", opacity: show ? 1 : 0, transform: show ? "translateY(0)" : "translateY(30px)", transition: "all .8s ease", padding: "0 20px" }}>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 16, marginBottom: 32 }}>
+          <div style={{ width: 64, height: 64, borderRadius: 14, background: `linear-gradient(135deg,${P.ac},${P.bl})`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32, fontWeight: 800, color: P.bg, boxShadow: `0 0 60px ${P.ac}30` }}>N</div>
+        </div>
+        <h1 style={{ fontSize: 56, fontWeight: 800, lineHeight: 1.1, margin: "0 0 8px", letterSpacing: "-.01em" }}>
+          NEXUS <span style={{ color: P.ac }}>EMPRESARIAL</span>
+        </h1>
+        <p style={{ fontSize: 14, color: P.t3, letterSpacing: ".18em", textTransform: "uppercase", margin: "0 0 32px" }}>
+          Plataforma de Gestión de Auditoría SRC-YPF
+        </p>
+        <p style={{ fontSize: 19, color: P.t2, lineHeight: 1.6, maxWidth: 600, margin: "0 auto 40px" }}>
+          Una plataforma que centraliza el compliance de contratistas para YPF.
+          Tres empresas. Tres subcontratos. Un solo panel de control.
+        </p>
+        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+          <button onClick={() => onNext()} className="nx-btn" style={{
+            background: P.ac, color: P.bg, border: "none", padding: "12px 32px",
+            borderRadius: 8, fontWeight: 700, fontSize: 15, cursor: "pointer",
+            boxShadow: `0 0 30px ${P.ac}25`,
+          }}>Explorar la Propuesta →</button>
+          <button onClick={() => onNext("demo")} className="nx-btn" style={{
+            background: "transparent", color: P.ac, border: `1px solid ${P.ac}40`,
+            padding: "12px 28px", borderRadius: 8, fontWeight: 600, fontSize: 15, cursor: "pointer",
+          }}>Ver Demo en Vivo</button>
+        </div>
+        <div style={{ marginTop: 48, display: "flex", gap: 40, justifyContent: "center", flexWrap: "wrap" }}>
+          {[{ n: "3", l: "Subcontratos" }, { n: "48", l: "Recursos gestionados" }, { n: "9", l: "Módulos" }, { n: "4", l: "Roles de acceso" }].map((s, i) => (
+            <div key={i} style={{ textAlign: "center" }}>
+              <div className="nx-num" style={{ fontSize: 28, fontWeight: 700, color: P.ac }}>{s.n}</div>
+              <div style={{ fontSize: 11, color: P.t4, marginTop: 2 }}>{s.l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// SECTION: PROBLEMA
+// ═══════════════════════════════════════════════════════════════════
+const Problema = () => (
+  <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", padding: "80px 60px", position: "relative" }}>
+    <Glow c={P.rd} size={400} x="80%" y="20%" opacity={0.03} />
+    <div style={{ maxWidth: 1100, width: "100%" }}>
+      <Badge c={P.rd}>El Desafío</Badge>
+      <h2 style={{ fontSize: 38, fontWeight: 800, margin: "12px 0 8px", lineHeight: 1.15 }}>
+        El compliance fragmentado<br />cuesta <span style={{ color: P.rd }}>tiempo, dinero y acceso</span>
+      </h2>
+      <p style={{ fontSize: 16, color: P.t2, maxWidth: 600, lineHeight: 1.6, marginBottom: 36 }}>
+        Las empresas contratistas de YPF enfrentan un proceso complejo de auditoría
+        a través del Sistema de Recursos Contratados (SRC 3.0). Sin una herramienta
+        centralizada, cada gestión es un riesgo.
+      </p>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+        {[
+          { icon: "⚠", title: "Vencimientos no detectados", desc: "ART, aptos médicos y seguros vencen sin aviso. El recurso queda bloqueado y la empresa pierde días de operación.", stat: "45 días", statL: "de anticipación necesaria" },
+          { icon: "✕", title: "Altas ARCA omitidas", desc: "Sin Alta Temprana en ARCA (ex AFIP), el trabajador no puede ingresar a planta. Las multas por omisión son graves.", stat: "48hs", statL: "plazo de auditoría para altas" },
+          { icon: "◎", title: "Sin trazabilidad formal", desc: "Las Órdenes de Servicio (OS) y Pedidos de Empresa (PE) quedan dispersos en emails sin registro legal.", stat: "0%", statL: "trazabilidad sin sistema" },
+          { icon: "▤", title: "Documentación duplicada", desc: "Cada empresa repite el proceso de carga en SRC-Digitalización sin saber qué falta o qué fue rechazado.", stat: "72hs", statL: "plazo de auditoría para bajas" },
+        ].map((p, i) => (
+          <div key={i} style={{ background: P.sf, border: `1px solid ${P.bd}`, borderRadius: 8, padding: 24, display: "flex", gap: 16 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 8, background: P.rd2, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, color: P.rd, flexShrink: 0 }}>{p.icon}</div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 6 }}>{p.title}</div>
+              <div style={{ fontSize: 13, color: P.t3, lineHeight: 1.5, marginBottom: 12 }}>{p.desc}</div>
+              <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
+                <span className="nx-num" style={{ fontSize: 24, fontWeight: 700, color: P.am }}>{p.stat}</span>
+                <span style={{ fontSize: 11, color: P.t4 }}>{p.statL}</span>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// SECTION: SOLUCIÓN
+// ═══════════════════════════════════════════════════════════════════
+const Solucion = () => (
+  <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", padding: "80px 60px", position: "relative" }}>
+    <Glow c={P.ac} size={500} x="20%" y="50%" opacity={0.04} />
+    <div style={{ maxWidth: 1100, width: "100%" }}>
+      <Badge c={P.ac}>La Solución</Badge>
+      <h2 style={{ fontSize: 38, fontWeight: 800, margin: "12px 0 8px", lineHeight: 1.15 }}>
+        NEXUS centraliza todo el flujo<br />de compliance <span style={{ color: P.ac }}>en una plataforma</span>
+      </h2>
+      <p style={{ fontSize: 16, color: P.t2, maxWidth: 600, lineHeight: 1.6, marginBottom: 36 }}>
+        Desde el alta temprana ARCA hasta el aval final, cada paso del SRC queda
+        gestionado, documentado y monitoreado en tiempo real.
+      </p>
+
+      <div style={{ background: P.sf, border: `1px solid ${P.bd}`, borderRadius: 10, padding: 28, marginBottom: 28 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: P.t4, textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 18 }}>Pipeline de Compliance SRC</div>
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
+          {[
+            { n: "01", l: "NUEVO", d: "Carga ficha\nAlta ARCA\nDatos CUIL, CCT", c: P.bl },
+            { n: "02", l: "PEND. INSPECTOR", d: "Validación YPF\nRevisión docs\nAprobación afectación", c: P.am },
+            { n: "03", l: "APROBADO", d: "Portal SRC-Dig\nhabilitado\nCarga previa docs", c: "#4A90FF" },
+            { n: "04", l: "AVALADO", d: "Auditoría OK\nAcceso físico\nCredencial activa", c: P.ac },
+          ].map((s, i) => (
+            <div key={i} style={{ flex: "1 1 140px", textAlign: "center", padding: "20px 8px", position: "relative", background: `${s.c}06`, borderLeft: i ? `1px solid ${P.bd}` : "none" }}>
+              <div style={{ width: 48, height: 48, borderRadius: "50%", background: `${s.c}15`, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 700, color: s.c, marginBottom: 8 }}>{s.n}</div>
+              <div style={{ fontSize: 12, fontWeight: 700, color: s.c, marginBottom: 6 }}>{s.l}</div>
+              <div style={{ fontSize: 11, color: P.t3, lineHeight: 1.5, whiteSpace: "pre-line" }}>{s.d}</div>
+              {i < 3 && <div style={{ position: "absolute", right: -8, top: "50%", transform: "translateY(-50%)", fontSize: 16, color: P.t4, zIndex: 1 }}>→</div>}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 14 }}>
+        {[
+          { icon: "◉", title: "Multi-empresa", desc: "3 subcontratos con datos aislados por permisos. Cada empresa ve solo lo suyo.", c: P.ac },
+          { icon: "◫", title: "Motor de Requisitos", desc: "Documentación requerida por categoría SRC: Laboral, Seguros, Salud, Vehicular.", c: P.bl },
+          { icon: "△", title: "Alertas Inteligentes", desc: "45 días pre-vencimiento. Bloqueo automático por ART/aptos vencidos.", c: P.am },
+          { icon: "◈", title: "Seguimiento de OTs", desc: "Avance HH estimadas vs ejecutadas vinculado al pliego genérico.", c: P.vi },
+          { icon: "☑", title: "Validación Admin", desc: "Cola de aprobación/rechazo con historial. Solo roles autorizados.", c: P.rd },
+          { icon: "▤", title: "OS/PE Digital", desc: "Canal formal con Inspector YPF. Trazabilidad legal completa.", c: P.bl },
+        ].map((f, i) => (
+          <div key={i} style={{ background: P.sf, border: `1px solid ${P.bd}`, borderRadius: 8, padding: 20 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 8, background: `${f.c}12`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, color: f.c, marginBottom: 10 }}>{f.icon}</div>
+            <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 6 }}>{f.title}</div>
+            <div style={{ fontSize: 12, color: P.t3, lineHeight: 1.5 }}>{f.desc}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// SHARED DATA: EMPRESAS
+// ═══════════════════════════════════════════════════════════════════
+const EMPRESAS_DATA = [
+  { nombre: "CODESIN S.A.", contrato: "VCD25232", ot: "OT-2025-0041", tipo: "Auditable", rubro: "Ingeniería Multidisciplinaria", inspector: "Miguel Melchiori", personal: 5, avance: 65, hhe: 12400, hhx: 8060, vigencia: "2026-12-31", c: P.ac },
+  { nombre: "TECFOR S.R.L.", contrato: "VCD25213", ot: "OT-2025-0038", tipo: "Auditable", rubro: "Montaje Electromecánico", inspector: "Mariano Diocares", personal: 4, avance: 42, hhe: 8200, hhx: 3444, vigencia: "2026-09-15", c: P.bl },
+  { nombre: "SERMAT S.A.", contrato: "VCD23028", ot: "OT-2024-0112", tipo: "Control Especial", rubro: "Mantenimiento Industrial", inspector: "José Meuli", personal: 3, avance: 78, hhe: 3600, hhx: 2808, vigencia: "2026-06-30", c: P.am },
+];
+
+// ═══════════════════════════════════════════════════════════════════
+// SECTION: EMPRESAS
+// ═══════════════════════════════════════════════════════════════════
+const Empresas = () => (
+  <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", padding: "80px 60px", position: "relative" }}>
+    <Glow c={P.bl} size={400} x="60%" y="80%" opacity={0.03} />
+    <div style={{ maxWidth: 1100, width: "100%" }}>
+      <Badge c={P.bl}>Subcontratos</Badge>
+      <h2 style={{ fontSize: 38, fontWeight: 800, margin: "12px 0 8px" }}>
+        3 empresas, <span style={{ color: P.bl }}>1 plataforma</span>
+      </h2>
+      <p style={{ fontSize: 16, color: P.t2, maxWidth: 550, lineHeight: 1.6, marginBottom: 32 }}>
+        Cada empresa opera su propio subcontrato con datos aislados.
+        El administrador y auditor ven el panorama completo.
+      </p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 16 }}>
+        {EMPRESAS_DATA.map((e, i) => (
+          <div key={i} className="nx-card-hover" style={{ background: P.sf, border: `1px solid ${P.bd}`, borderRadius: 10, overflow: "hidden" }}>
+            <div style={{ height: 4, background: e.c }} />
+            <div style={{ padding: 22 }}>
+              <div style={{ fontSize: 18, fontWeight: 700, marginBottom: 2 }}>{e.nombre}</div>
+              <div style={{ fontSize: 12, color: P.t3, marginBottom: 14 }}>{e.rubro}</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px 16px", marginBottom: 16 }}>
+                {[["Contrato", e.contrato], ["OT", e.ot], ["Tipo", e.tipo], ["Inspector", e.inspector], ["Personal", `${e.personal} recursos`], ["Vigencia", e.vigencia]].map(([l, v], j) => (
+                  <div key={j}>
+                    <div style={{ fontSize: 9, color: P.t4, textTransform: "uppercase", letterSpacing: ".04em" }}>{l}</div>
+                    <div className={j >= 4 ? "nx-num" : ""} style={{ fontSize: 13, fontWeight: 600, color: j < 2 ? e.c : P.t }}>{v}</div>
+                  </div>
+                ))}
+              </div>
+              <div style={{ padding: "12px 14px", background: P.bg2, borderRadius: 6 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, marginBottom: 4 }}>
+                  <span style={{ color: P.t3 }}>Avance OT</span>
+                  <span className="nx-num" style={{ color: e.c, fontWeight: 700 }}>{e.avance}%</span>
+                </div>
+                <Bar v={e.avance} mx={100} c={e.c} />
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, marginTop: 8 }}>
+                  <span className="nx-num" style={{ color: P.t4 }}>HH: {e.hhx.toLocaleString()}/{e.hhe.toLocaleString()}</span>
+                  <span className="nx-num" style={{ color: e.c, fontWeight: 600 }}>{Math.round(e.hhx / e.hhe * 100)}%</span>
+                </div>
+                <Bar v={e.hhx} mx={e.hhe} c={e.c} h={3} />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// SECTION: MÓDULOS
+// ═══════════════════════════════════════════════════════════════════
+const Modulos = () => (
+  <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", padding: "80px 60px", position: "relative" }}>
+    <div style={{ maxWidth: 1100, width: "100%" }}>
+      <Badge c={P.vi}>Arquitectura</Badge>
+      <h2 style={{ fontSize: 38, fontWeight: 800, margin: "12px 0 8px" }}>
+        9 módulos <span style={{ color: P.vi }}>integrados</span>
+      </h2>
+      <p style={{ fontSize: 16, color: P.t2, maxWidth: 550, lineHeight: 1.6, marginBottom: 32 }}>
+        Cada módulo cubre una rama del SRC-YPF. Desde el alta de personal
+        hasta la comunicación formal con inspectores.
+      </p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 12 }}>
+        {[
+          { icon: "▣", title: "Dashboard", desc: "KPIs globales, pipeline de compliance, avance por empresa y OT", c: P.ac, tag: "Core" },
+          { icon: "◉", title: "Personal", desc: "Altas, bajas, fichas. Estado SRC, vencimientos ART/Apto, credenciales", c: P.bl, tag: "Gestión" },
+          { icon: "◫", title: "Documentos", desc: "Motor de requisitos SRC-Digitalización por categoría (Laboral, Seguros, Salud, Vehicular)", c: P.vi, tag: "Compliance" },
+          { icon: "◆", title: "Plan de Acciones", desc: "Listado priorizado por empresa con responsable, categoría y deadline", c: P.am, tag: "Seguimiento" },
+          { icon: "◈", title: "Órdenes de Trabajo", desc: "Avance de OTs, HH estimadas vs ejecutadas, vinculación al pliego genérico", c: P.ac, tag: "Operaciones" },
+          { icon: "▤", title: "OS / PE", desc: "Órdenes de Servicio y Pedidos de Empresa. Canal formal con Inspector YPF", c: P.bl, tag: "Comunicación" },
+          { icon: "△", title: "Alertas", desc: "Vencimientos a 45 días, bloqueos automáticos, plazos mensuales GIA", c: P.rd, tag: "Preventivo" },
+          { icon: "⚿", title: "Usuarios", desc: "Gestión de accesos, activar/desactivar usuarios, 4 roles diferenciados", c: P.vi, tag: "Admin" },
+          { icon: "☑", title: "Validar Docs", desc: "Cola de aprobación con botones Aprobar/Rechazar. Historial de auditoría", c: P.am, tag: "Admin" },
+        ].map((m, i) => (
+          <div key={i} style={{ background: P.sf, border: `1px solid ${P.bd}`, borderRadius: 8, padding: "18px 20px", display: "flex", gap: 14, alignItems: "flex-start" }}>
+            <div style={{ width: 38, height: 38, borderRadius: 8, background: `${m.c}10`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, color: m.c, flexShrink: 0 }}>{m.icon}</div>
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4, flexWrap: "wrap" }}>
+                <span style={{ fontSize: 14, fontWeight: 700 }}>{m.title}</span>
+                <Badge c={m.c}>{m.tag}</Badge>
+              </div>
+              <div style={{ fontSize: 12, color: P.t3, lineHeight: 1.5 }}>{m.desc}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// SHARED DATA: ROLES
+// ═══════════════════════════════════════════════════════════════════
+const ROLES_DATA = [
+  { rol: "Administrador", user: "admin", desc: "Control total del sistema. Gestiona usuarios, valida documentos, configura empresas y contratos.", perms: ["Dashboard global", "Gestión usuarios", "Validar documentos", "Configuración", "Todas las empresas"], c: P.rd, av: "A" },
+  { rol: "Auditor", user: "auditor1", desc: "Revisa y aprueba/rechaza documentos cargados. Genera informes de cumplimiento.", perms: ["Dashboard global", "Validar documentos", "Informes compliance", "Historial auditoría"], c: P.vi, av: "L" },
+  { rol: "Empresa", user: "codesin / tecfor / sermat", desc: "Carga documentos de su personal. Ve solo datos de su subcontrato propio.", perms: ["Dashboard propio", "Cargar documentos", "Plan de acciones", "Personal propio", "OS/PE propio"], c: P.bl, av: "E" },
+  { rol: "Inspector YPF", user: "inspector", desc: "Recibe y responde Órdenes de Servicio. Aprueba afectaciones de recursos.", perms: ["Recibir OS", "Enviar PE", "Aprobar afectaciones", "Consulta lectura"], c: P.am, av: "M" },
+];
+
+// ═══════════════════════════════════════════════════════════════════
+// SECTION: ROLES
+// ═══════════════════════════════════════════════════════════════════
+const Roles = () => (
+  <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", padding: "80px 60px", position: "relative" }}>
+    <Glow c={P.vi} size={400} x="80%" y="40%" opacity={0.03} />
+    <div style={{ maxWidth: 1100, width: "100%" }}>
+      <Badge c={P.am}>Control de Acceso</Badge>
+      <h2 style={{ fontSize: 38, fontWeight: 800, margin: "12px 0 8px" }}>
+        4 roles, <span style={{ color: P.am }}>permisos granulares</span>
+      </h2>
+      <p style={{ fontSize: 16, color: P.t2, maxWidth: 550, lineHeight: 1.6, marginBottom: 32 }}>
+        Cada usuario ve exactamente lo que necesita. Ni más, ni menos.
+        La seguridad de datos está integrada desde el diseño. Probalo en la
+        sección <b style={{ color: P.t2 }}>Demo</b> — el login usa estos mismos cuatro roles.
+      </p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(230px,1fr))", gap: 14 }}>
+        {ROLES_DATA.map((r, i) => (
+          <div key={i} className="nx-card-hover" style={{ background: P.sf, border: `1px solid ${P.bd}`, borderRadius: 10, overflow: "hidden" }}>
+            <div style={{ height: 3, background: r.c }} />
+            <div style={{ padding: 22, textAlign: "center" }}>
+              <div style={{ width: 48, height: 48, borderRadius: "50%", background: `${r.c}15`, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 20, fontWeight: 700, color: r.c, marginBottom: 10 }}>{r.av}</div>
+              <div style={{ fontSize: 16, fontWeight: 700, color: r.c, marginBottom: 4 }}>{r.rol}</div>
+              <div className="nx-num" style={{ fontSize: 11, color: P.t4, marginBottom: 12 }}>{r.user}</div>
+              <div style={{ fontSize: 12, color: P.t3, lineHeight: 1.5, marginBottom: 14, textAlign: "left" }}>{r.desc}</div>
+              <div style={{ textAlign: "left" }}>
+                {r.perms.map((p, j) => (
+                  <div key={j} style={{ fontSize: 11, color: P.t2, padding: "3px 0", borderBottom: j < r.perms.length - 1 ? `1px solid ${P.bd}` : "none" }}>
+                    <span style={{ color: r.c, marginRight: 6 }}>✓</span>{p}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// SECTION: SRC MAP
+// ═══════════════════════════════════════════════════════════════════
+const SRCMap = () => (
+  <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", padding: "80px 60px", position: "relative" }}>
+    <div style={{ maxWidth: 1100, width: "100%" }}>
+      <Badge c={P.ac}>Cobertura SRC</Badge>
+      <h2 style={{ fontSize: 38, fontWeight: 800, margin: "12px 0 8px" }}>
+        Las 7 ramas del SRC,<br /><span style={{ color: P.ac }}>todas cubiertas</span>
+      </h2>
+      <p style={{ fontSize: 16, color: P.t2, maxWidth: 550, lineHeight: 1.6, marginBottom: 32 }}>
+        NEXUS implementa cada proceso del Sistema de Recursos Contratados
+        de YPF, desde el marco normativo hasta las bajas y comunicaciones.
+      </p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(230px,1fr))", gap: 12, marginBottom: 12 }}>
+        {[
+          { title: "Marco Normativo", items: ["SRC 3.0", "Portal SRC-Digitalización", "Clasificación: Auditable / Control Especial / No Auditable", "Registro Proveedores (Ariba)"], c: P.ac },
+          { title: "Gestión de Personal", items: ["Alta Temprana ARCA (Mi Simplificación II)", "Ficha: Dependencia / Autónomo", "Seguros: ART, SVO, Accidentes", "Salud Ocupacional, Aptos Médicos"], c: P.bl },
+          { title: "Circuito Afectación", items: ["Comunicación de Subcontratación", "Aprobación del Inspector", "Solicitud Individual o Masiva", "Workflow: Inspector → RP → Jefe GIP"], c: P.vi },
+          { title: "Vehículos y Equipos", items: ["Fichas de Unidades (Habilitación CENT)", "Pólizas de Seguro Vehicular", "Form. 11 (Habilitación CILP)", "Form. 12 (Credencial Colgante Roja)"], c: P.am },
+        ].map((b, i) => (
+          <div key={i} style={{ background: P.sf, border: `1px solid ${P.bd}`, borderRadius: 8, overflow: "hidden" }}>
+            <div style={{ height: 3, background: b.c }} />
+            <div style={{ padding: 16 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: b.c, marginBottom: 10 }}>{b.title}</div>
+              {b.items.map((it, j) => <div key={j} style={{ fontSize: 11, color: P.t2, padding: "3px 0", lineHeight: 1.4 }}>› {it}</div>)}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(230px,1fr))", gap: 12 }}>
+        {[
+          { title: "Control y Auditoría Mensual", items: ["Declaración días/horas trabajadas", "Planilla GIA: KM, Índice Manejo, MASS", "Matriz de Auditoría e Informe"], c: P.ac },
+          { title: "Accesos y Credenciales", items: ["Tarjetas Magnéticas (GIP/Refinería)", "Credenciales Autogestionadas desde SRC", "Vigencia por contrato y seguros/aptos"], c: P.bl },
+          { title: "Bajas y Comunicaciones", items: ["Desafectación: Renuncia, Despido, Fallecimiento", "Baja automática por vencimiento contrato", "OS (Inspector) / PE (Empresa)"], c: P.rd },
+        ].map((b, i) => (
+          <div key={i} style={{ background: P.sf, border: `1px solid ${P.bd}`, borderRadius: 8, overflow: "hidden" }}>
+            <div style={{ height: 3, background: b.c }} />
+            <div style={{ padding: 16 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, color: b.c, marginBottom: 10 }}>{b.title}</div>
+              {b.items.map((it, j) => <div key={j} style={{ fontSize: 11, color: P.t2, padding: "3px 0", lineHeight: 1.4 }}>› {it}</div>)}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// DEMO — SEED DATA
+// ═══════════════════════════════════════════════════════════════════
+function demoFileUrl(label) {
+  try { return URL.createObjectURL(new Blob([label], { type: "text/plain" })); }
+  catch (e) { return ""; }
+}
+function demoFile(name, sizeKB, revision) {
+  return { name, size: sizeKB * 1024, type: "text/plain", url: demoFileUrl(`${name} — documento de ejemplo (modo demostración).`), revision };
+}
+
+const SEED_PERSONAL = [
+  { id: 1, nombre: "Juan Pérez", dni: "30.456.789", emp: "CODESIN S.A.", estado: "Avalado", rol: "Soldador", art: 97, apto: 53, arca: true, cred: true, archivos: [
+    demoFile("ART_JuanPerez.pdf", 340, { estado: "Visado", revisor: "Lucía Auditora", fecha: "01/08/2026" }),
+    demoFile("AptoMedico_JuanPerez.pdf", 210, { estado: "Visado", revisor: "Lucía Auditora", fecha: "01/08/2026" }),
+  ] },
+  { id: 2, nombre: "Carlos García", dni: "28.123.456", emp: "CODESIN S.A.", estado: "Pend. Inspector", rol: "Cañista", art: 133, apto: 154, arca: true, cred: false, archivos: [
+    demoFile("DDJJ_CarlosGarcia.docx", 85, { estado: "Pendiente" }),
+  ] },
+  { id: 3, nombre: "María López", dni: "35.789.012", emp: "CODESIN S.A.", estado: "Avalado", rol: "Ing. Seguridad", art: 52, apto: 6, arca: true, cred: true, archivos: [] },
+  { id: 4, nombre: "Roberto Díaz", dni: "27.654.321", emp: "TECFOR S.R.L.", estado: "Nuevo", rol: "Electricista", art: 204, apto: 190, arca: false, cred: false, archivos: [
+    demoFile("Planilla_GIA_Tecfor.xlsx", 128, { estado: "Observado", comentario: "Verificar índice de conducta de manejo, el dato cargado es ilegible.", revisor: "Lucía Auditora", fecha: "07/08/2026" }),
+  ] },
+  { id: 5, nombre: "Ana Fernández", dni: "33.987.654", emp: "TECFOR S.R.L.", estado: "Avalado", rol: "Instrumentista", art: 72, apto: 27, arca: true, cred: true, archivos: [] },
+  { id: 6, nombre: "Diego Martínez", dni: "31.246.810", emp: "SERMAT S.A.", estado: "Rechazado", rol: "Ayudante", art: -8, apto: -20, arca: true, cred: false, archivos: [
+    demoFile("DDJJ_Independiente_DiegoMartinez.docx", 64, { estado: "Rechazado", comentario: "Falta firma certificada del contratista y del trabajador.", revisor: "Administrador Sistema", fecha: "05/08/2026" }),
+  ] },
+  { id: 7, nombre: "Laura Gómez", dni: "34.135.790", emp: "CODESIN S.A.", estado: "Avalado", rol: "Topógrafa", art: 159, apto: 114, arca: true, cred: true, archivos: [] },
+  { id: 8, nombre: "Pablo Sánchez", dni: "32.111.222", emp: "CODESIN S.A.", estado: "Nuevo", rol: "Montajista", art: 249, apto: 204, arca: false, cred: false, archivos: [] },
+];
+
+const SEED_USUARIOS = [
+  { id: 1, nombre: "Administrador Sistema", usuario: "admin", rol: "Administrador", empresa: null, activo: true },
+  { id: 2, nombre: "Lucía Auditora", usuario: "auditor1", rol: "Auditor", empresa: null, activo: true },
+  { id: 3, nombre: "Damián Manzo", usuario: "codesin", rol: "Empresa", empresa: "CODESIN S.A.", activo: true },
+  { id: 4, nombre: "Ricardo Almada", usuario: "tecfor", rol: "Empresa", empresa: "TECFOR S.R.L.", activo: true },
+  { id: 5, nombre: "Graciela Fuentes", usuario: "sermat", rol: "Empresa", empresa: "SERMAT S.A.", activo: true },
+  { id: 6, nombre: "Miguel Melchiori", usuario: "inspector", rol: "Inspector YPF", empresa: null, activo: true },
+];
+
+const SEED_ACCIONES = [
+  { id: 1, p: "critica", ac: "Completar Alta ARCA de Pablo Sánchez", emp: "CODESIN S.A.", resp: "Damián Manzo", v: "2026-08-12", cat: "Laboral", estado: "Pendiente" },
+  { id: 2, p: "critica", ac: "Corregir DDJJ Independiente de Diego Martínez", emp: "SERMAT S.A.", resp: "Graciela Fuentes", v: "2026-08-11", cat: "Laboral", estado: "En curso" },
+  { id: 3, p: "critica", ac: "Alta ARCA de Roberto Díaz — URGENTE", emp: "TECFOR S.R.L.", resp: "Ricardo Almada", v: "2026-08-10", cat: "Laboral", estado: "Pendiente" },
+  { id: 4, p: "critica", ac: "Iniciar prórroga contrato VCD23028", emp: "SERMAT S.A.", resp: "Graciela Fuentes", v: "2026-08-20", cat: "Contractual", estado: "Pendiente" },
+  { id: 5, p: "alta", ac: "Renovar Apto Médico María López", emp: "CODESIN S.A.", resp: "Damián Manzo", v: "2026-08-14", cat: "Salud", estado: "Hecho" },
+  { id: 6, p: "alta", ac: "Curso seguridad UTN para Roberto Díaz", emp: "TECFOR S.R.L.", resp: "Ricardo Almada", v: "2026-08-18", cat: "Seguridad", estado: "En curso" },
+];
+
+const SEED_OSPE = [
+  { id: 1, tipo: "OS", motivo: "Solicitud de documentación adicional — soldadores calificados", emp: "CODESIN S.A.", estado: "Enviada", fecha: "08-04" },
+  { id: 2, tipo: "PE", motivo: "Afectación de Pablo Sánchez (Montajista)", emp: "CODESIN S.A.", estado: "Pendiente", fecha: "08-09" },
+  { id: 3, tipo: "PE", motivo: "Afectación de Roberto Díaz (Electricista)", emp: "TECFOR S.R.L.", estado: "Pendiente", fecha: "08-10" },
+  { id: 4, tipo: "OS", motivo: "Corrección de DDJJ Independiente — Diego Martínez", emp: "SERMAT S.A.", estado: "Respondida", fecha: "08-07" },
+];
+
+const SEED_SUBCONTRATOS = [
+  { id: 1, razonSocial: "Andamios del Sur S.R.L.", cuit: "30-71234567-8", esNueva: true, empresaPrincipal: "CODESIN S.A.", contratoVinculado: "VCD25232 · OT-2025-0041", estado: "Pendiente Inspector", solicitante: "Damián Manzo", fecha: "2026-08-14", notificado: false },
+  { id: 2, razonSocial: "Grúas Patagónicas S.A.", cuit: "30-70987654-1", esNueva: false, empresaPrincipal: "TECFOR S.R.L.", contratoVinculado: "VCD25213 · OT-2025-0038", estado: "Aprobada", solicitante: "Ricardo Almada", fecha: "2026-08-02", notificado: true },
+];
+
+const STATIC_ALERTS = [
+  { p: "critica", msg: "Contrato VCD23028 (SERMAT) vence en 45 días", t: "vencimiento", emp: "SERMAT S.A." },
+  { p: "alta", msg: "Carga mensual GIA Agosto pendiente", t: "auditoría", emp: null },
+  { p: "media", msg: "Declaración días/horas trabajadas Agosto", t: "sistema", emp: null },
+];
+
+const ROLE_COLOR = { "Administrador": P.rd, "Auditor": P.vi, "Empresa": P.bl, "Inspector YPF": P.am };
+const stColor = { "Avalado": P.ac, "Pend. Inspector": P.am, "Nuevo": P.bl, "Rechazado": P.rd };
+
+function loadLS(key, fallback) {
+  try { const raw = window.localStorage.getItem(key); return raw ? JSON.parse(raw) : fallback; }
+  catch (e) { return fallback; }
+}
+function saveLS(key, val) {
+  try { window.localStorage.setItem(key, JSON.stringify(val)); } catch (e) { /* storage unavailable */ }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// DEMO — ADJUNTAR ARCHIVO (PDF / Word / Excel / otro)
+// ═══════════════════════════════════════════════════════════════════
+const MAX_FILE_MB = 15;
+const FILE_ACCEPT = ".pdf,.doc,.docx,.xls,.xlsx,.csv,.png,.jpg,.jpeg,.txt";
+
+function fileExt(name) {
+  const m = /\.([a-zA-Z0-9]+)$/.exec(name || "");
+  return m ? m[1].toUpperCase() : "ARCHIVO";
+}
+function fileTypeColor(ext) {
+  const e = ext.toLowerCase();
+  if (e === "pdf") return P.rd;
+  if (e === "doc" || e === "docx") return P.bl;
+  if (e === "xls" || e === "xlsx" || e === "csv") return P.ac;
+  return P.t3;
+}
+function fmtBytes(bytes) {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+const REVISION_LABEL = { Pendiente: "Pendiente de revisión", Visado: "Visado", Observado: "Con observaciones", Rechazado: "Rechazado" };
+const REVISION_COLOR = () => ({ Pendiente: P.t4, Visado: P.ac, Observado: P.am, Rechazado: P.rd });
+
+const FilePreview = ({ f }) => {
+  const [state, setState] = useState({ status: "idle" }); // idle | loading | text | image | unsupported | error
+
+  const load = async () => {
+    setState({ status: "loading" });
+    try {
+      const blob = await blobFromObjectUrl(f.url);
+      if (f.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = () => setState({ status: "image", src: reader.result });
+        reader.onerror = () => setState({ status: "error" });
+        reader.readAsDataURL(blob);
+      } else if (f.type.startsWith("text/")) {
+        const text = await blob.text();
+        setState({ status: "text", text });
+      } else {
+        setState({ status: "unsupported" });
+      }
+    } catch (e) { setState({ status: "error" }); }
+  };
+
+  if (state.status === "idle") {
+    return (
+      <button type="button" onClick={load} className="nx-btn" style={{ background: "transparent", border: "none", color: P.bl, fontWeight: 600, fontSize: 10.5, cursor: "pointer", padding: 0, textDecoration: "underline", textUnderlineOffset: 2 }}>Vista previa</button>
+    );
+  }
+  return (
+    <div style={{ marginTop: 6 }}>
+      {state.status === "loading" && <Spinner c={P.t3} />}
+      {state.status === "image" && <img src={state.src} alt={f.name} style={{ maxWidth: "100%", maxHeight: 220, borderRadius: 6, border: `1px solid ${P.bd}`, display: "block" }} />}
+      {state.status === "text" && <pre style={{ margin: 0, fontFamily: "var(--font-mono)", fontSize: 10.5, color: P.t2, background: P.bg, border: `1px solid ${P.bd}`, borderRadius: 6, padding: 8, whiteSpace: "pre-wrap", wordBreak: "break-word", maxHeight: 160, overflowY: "auto" }}>{state.text}</pre>}
+      {state.status === "unsupported" && <div style={{ fontSize: 10.5, color: P.t4 }}>Vista previa no disponible para este tipo de archivo — usá Descargar.</div>}
+      {state.status === "error" && <div style={{ fontSize: 10.5, color: P.rd }}>No se pudo cargar la vista previa.</div>}
+    </div>
+  );
+};
+
+const DownloadButton = ({ f }) => {
+  const downloads = useDownloads();
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState("");
+
+  const handleDownload = async () => {
+    if (!downloads) return;
+    setBusy(true);
+    setMsg("");
+    try {
+      const blob = await blobFromObjectUrl(f.url);
+      await downloads.save({ filename: f.name, data: blob });
+      setMsg("Guardado.");
+    } catch (e) {
+      setMsg(e && e.code === "declined" ? "" : "No se pudo descargar.");
+    } finally {
+      setBusy(false);
+      setTimeout(() => setMsg(""), 2500);
+    }
+  };
+
+  if (!downloads) {
+    return <span style={{ fontSize: 10, color: P.t4 }} title="La descarga no está disponible en esta vista">Descarga no disponible</span>;
+  }
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+      <button type="button" onClick={handleDownload} disabled={busy} className="nx-btn" style={{ background: "transparent", border: "none", color: P.bl, fontWeight: 600, fontSize: 10.5, cursor: "pointer", padding: 0, textDecoration: "underline", textUnderlineOffset: 2 }}>
+        {busy ? <Spinner c={P.bl} /> : "Descargar"}
+      </button>
+      {msg && <span style={{ fontSize: 10, color: P.t4 }}>{msg}</span>}
+    </span>
+  );
+};
+
+const FileAttach = ({ files, onAdd, onRemove, compact, canReview, onReview }) => {
+  const inputRef = useRef(null);
+  const [error, setError] = useState("");
+  const [reviewing, setReviewing] = useState(null); // { idx, estado }
+  const revColor = REVISION_COLOR();
+
+  const handleFiles = (fileList) => {
+    const picked = Array.from(fileList || []);
+    if (picked.length === 0) return;
+    const tooBig = picked.find(f => f.size > MAX_FILE_MB * 1024 * 1024);
+    if (tooBig) {
+      setError(`"${tooBig.name}" supera ${MAX_FILE_MB} MB. Elegí un archivo más liviano.`);
+      return;
+    }
+    setError("");
+    onAdd(picked.map(f => {
+      let url = "";
+      try { url = URL.createObjectURL(f); } catch (e) { /* sin soporte de blobs */ }
+      return { name: f.name, size: f.size, type: f.type, url, revision: { estado: "Pendiente" } };
+    }));
+  };
+
+  const startReview = (idx, estado) => {
+    if (estado === "Visado") { onReview(idx, estado, ""); return; }
+    setReviewing({ idx, estado });
+  };
+
+  return (
+    <div>
+      <input
+        ref={inputRef}
+        type="file"
+        multiple
+        accept={FILE_ACCEPT}
+        style={{ display: "none" }}
+        onChange={e => { handleFiles(e.target.files); e.target.value = ""; }}
+      />
+      <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+        <button
+          type="button"
+          onClick={() => inputRef.current && inputRef.current.click()}
+          className="nx-btn"
+          style={{ background: P.bl2, color: P.bl, border: `1px solid ${P.bl}40`, borderRadius: 6, padding: compact ? "5px 10px" : "8px 14px", fontSize: compact ? 11 : 12.5, fontWeight: 700, cursor: "pointer" }}
+        >
+          + Adjuntar Archivo
+        </button>
+        <span style={{ fontSize: 10, color: P.t4 }}>PDF, Word, Excel u otro · máx. {MAX_FILE_MB} MB</span>
+      </div>
+      {error && <div style={{ fontSize: 11, color: P.rd, marginTop: 8 }}>{error}</div>}
+      {files.length > 0 && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 10 }}>
+          {files.map((f, i) => {
+            const rev = f.revision || { estado: "Pendiente" };
+            return (
+              <div key={i} style={{ background: P.bg2, border: `1px solid ${P.bd}`, borderRadius: 6, padding: "8px 10px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                  <Badge c={fileTypeColor(fileExt(f.name))}>{fileExt(f.name)}</Badge>
+                  <span style={{ flex: 1, minWidth: 80, fontSize: 11.5, color: P.t2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{f.name}</span>
+                  <span className="nx-num" style={{ fontSize: 10, color: P.t4, flexShrink: 0 }}>{fmtBytes(f.size)}</span>
+                  {f.url && <FilePreview f={f} />}
+                  {f.url && <DownloadButton f={f} />}
+                  {onRemove && (
+                    <button type="button" onClick={() => onRemove(i)} className="nx-btn" style={{ background: "transparent", border: "none", color: P.t3, cursor: "pointer", fontSize: 13, lineHeight: 1, padding: 2, flexShrink: 0 }} aria-label={`Quitar ${f.name}`}>✕</button>
+                  )}
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 6, flexWrap: "wrap" }}>
+                  <Badge c={revColor[rev.estado]}>{REVISION_LABEL[rev.estado]}</Badge>
+                  {rev.comentario && <span style={{ fontSize: 10.5, color: P.t3 }}>&ldquo;{rev.comentario}&rdquo;</span>}
+                  {rev.revisor && <span style={{ fontSize: 10, color: P.t4 }}>— {rev.revisor}{rev.fecha ? ` · ${rev.fecha}` : ""}</span>}
+                </div>
+                {canReview && rev.estado === "Pendiente" && (
+                  reviewing && reviewing.idx === i ? (
+                    <ReasonPrompt
+                      placeholder={reviewing.estado === "Observado" ? "Detalle la observación para la empresa…" : "Motivo del rechazo…"}
+                      confirmLabel={reviewing.estado === "Observado" ? "Enviar observación" : "Confirmar rechazo"}
+                      confirmColor={reviewing.estado === "Observado" ? P.am : P.rd}
+                      onCancel={() => setReviewing(null)}
+                      onConfirm={(text) => { onReview(i, reviewing.estado, text); setReviewing(null); }}
+                    />
+                  ) : (
+                    <div style={{ display: "flex", gap: 6, marginTop: 8, flexWrap: "wrap" }}>
+                      <button type="button" onClick={() => startReview(i, "Visado")} className="nx-btn" style={{ background: P.ac2, color: P.ac, border: `1px solid ${P.ac}40`, borderRadius: 5, padding: "5px 11px", fontSize: 10.5, fontWeight: 700, cursor: "pointer" }}>Visar</button>
+                      <button type="button" onClick={() => startReview(i, "Observado")} className="nx-btn" style={{ background: P.am2, color: P.am, border: `1px solid ${P.am}40`, borderRadius: 5, padding: "5px 11px", fontSize: 10.5, fontWeight: 700, cursor: "pointer" }}>Observar</button>
+                      <button type="button" onClick={() => startReview(i, "Rechazado")} className="nx-btn" style={{ background: P.rd2, color: P.rd, border: `1px solid ${P.rd}40`, borderRadius: 5, padding: "5px 11px", fontSize: 10.5, fontWeight: 700, cursor: "pointer" }}>Rechazar</button>
+                    </div>
+                  )
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// DEMO — LOGIN GATE
+// ═══════════════════════════════════════════════════════════════════
+const LoginGate = ({ usuarios, onLogin, busy }) => {
+  const activeFor = (rol, empresa) =>
+    usuarios.find(u => u.rol === rol && u.activo && (empresa ? u.empresa === empresa : true));
+
+  return (
+    <div style={{ padding: "36px 12px 8px", position: "relative" }}>
+      <div style={{ textAlign: "center", marginBottom: 28 }}>
+        <Badge c={P.ac}>Acceso Multiusuario</Badge>
+        <h3 style={{ fontSize: 21, fontWeight: 800, margin: "10px 0 6px" }}>Seleccioná tu usuario para continuar</h3>
+        <p style={{ fontSize: 12.5, color: P.t3, maxWidth: 460, margin: "0 auto" }}>
+          Cada rol ve un panel distinto — datos aislados por empresa, permisos distintos por función.
+        </p>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 14, maxWidth: 980, margin: "0 auto" }}>
+        {ROLES_DATA.map((r, i) => {
+          const rolKey = r.rol;
+          if (rolKey !== "Empresa") {
+            const u = activeFor(rolKey, null);
+            return (
+              <div key={i} className="nx-card-hover" style={{ background: P.sf, border: `1px solid ${P.bd}`, borderRadius: 10, overflow: "hidden", opacity: u ? 1 : 0.55 }}>
+                <div style={{ height: 3, background: r.c }} />
+                <div style={{ padding: "20px 18px", textAlign: "center" }}>
+                  <div style={{ width: 44, height: 44, borderRadius: "50%", background: `${r.c}15`, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 700, color: r.c, marginBottom: 10 }}>
+                    {u ? u.nombre.charAt(0) : r.av}
+                  </div>
+                  <div style={{ fontSize: 14, fontWeight: 700, color: r.c }}>{rolKey}</div>
+                  <div style={{ fontSize: 11.5, color: P.t3, margin: "6px 0 14px", minHeight: 32 }}>{u ? u.nombre : "Sin usuarios activos"}</div>
+                  <button
+                    disabled={!u || busy}
+                    onClick={() => onLogin(rolKey, u, null)}
+                    className="nx-btn"
+                    style={{ width: "100%", background: u ? `${r.c}18` : P.bg2, color: u ? r.c : P.t4, border: `1px solid ${u ? r.c + "40" : P.bd}`, borderRadius: 6, padding: "8px 0", fontSize: 12, fontWeight: 700, cursor: u ? "pointer" : "not-allowed" }}
+                  >
+                    {busy ? <Spinner /> : (u ? `Ingresar como ${rolKey}` : "Usuario inactivo")}
+                  </button>
+                </div>
+              </div>
+            );
+          }
+          return (
+            <div key={i} className="nx-card-hover" style={{ background: P.sf, border: `1px solid ${P.bd}`, borderRadius: 10, overflow: "hidden" }}>
+              <div style={{ height: 3, background: r.c }} />
+              <div style={{ padding: "20px 18px", textAlign: "center" }}>
+                <div style={{ width: 44, height: 44, borderRadius: "50%", background: `${r.c}15`, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 18, fontWeight: 700, color: r.c, marginBottom: 10 }}>E</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: r.c }}>Empresa</div>
+                <div style={{ fontSize: 11, color: P.t4, margin: "6px 0 12px" }}>Elegí tu subcontrato</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                  {EMPRESAS_DATA.map(e => {
+                    const u = activeFor("Empresa", e.nombre);
+                    return (
+                      <button
+                        key={e.nombre}
+                        disabled={!u || busy}
+                        onClick={() => onLogin("Empresa", u, e.nombre)}
+                        className="nx-btn"
+                        style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: u ? P.bg2 : "transparent", border: `1px solid ${P.bd}`, borderRadius: 6, padding: "7px 10px", fontSize: 11.5, cursor: u ? "pointer" : "not-allowed", color: u ? P.t2 : P.t4 }}
+                      >
+                        <span>{e.nombre.replace(" S.A.", "").replace(" S.R.L.", "")}</span>
+                        {u ? <span style={{ color: e.c, fontSize: 10 }}>→</span> : <span style={{ fontSize: 9 }}>inactivo</span>}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <p style={{ textAlign: "center", fontSize: 10.5, color: P.t4, marginTop: 22 }}>
+        Modo demostración — los cambios se guardan solo en este navegador.
+      </p>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// DEMO — SESSION CHIP
+// ═══════════════════════════════════════════════════════════════════
+const SessionChip = ({ session, onLogout }) => (
+  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+    <div style={{ width: 22, height: 22, borderRadius: "50%", background: `${ROLE_COLOR[session.rol]}20`, color: ROLE_COLOR[session.rol], display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 700 }}>
+      {session.nombre.charAt(0)}
+    </div>
+    <div style={{ fontSize: 10, lineHeight: 1.3, textAlign: "left" }}>
+      <div style={{ color: P.t2, fontWeight: 600 }}>{session.nombre}</div>
+      <div style={{ color: P.t4 }}>{session.rol}{session.empresa ? ` · ${session.empresa.replace(" S.A.", "").replace(" S.R.L.", "")}` : ""}</div>
+    </div>
+    <button onClick={onLogout} className="nx-btn" style={{ background: "transparent", border: `1px solid ${P.bd2}`, color: P.t3, borderRadius: 5, padding: "3px 9px", fontSize: 10, cursor: "pointer", marginLeft: 4 }}>Salir</button>
+  </div>
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// DEMO — RESOURCE FORM (alta de personal)
+// ═══════════════════════════════════════════════════════════════════
+const ResourceForm = ({ fixedEmpresa, onSubmit, onClose, busy }) => {
+  const [nombre, setNombre] = useState("");
+  const [dni, setDni] = useState("");
+  const [rol, setRol] = useState("");
+  const [art, setArt] = useState(180);
+  const [apto, setApto] = useState(180);
+  const [arca, setArca] = useState(false);
+  const [empresa, setEmpresa] = useState(fixedEmpresa || EMPRESAS_DATA[0].nombre);
+  const [archivos, setArchivos] = useState([]);
+
+  const submit = (e) => {
+    e.preventDefault();
+    if (!nombre.trim() || !dni.trim() || !rol.trim()) return;
+    onSubmit({ nombre: nombre.trim(), dni: dni.trim(), rol: rol.trim(), art: Number(art), apto: Number(apto), arca, emp: fixedEmpresa || empresa, archivos });
+  };
+
+  return (
+    <form onSubmit={submit}>
+      <Field label="Nombre completo">
+        <input className="nx-input" value={nombre} onChange={e => setNombre(e.target.value)} placeholder="Nombre y apellido" required />
+      </Field>
+      <Field label="DNI">
+        <input className="nx-input" value={dni} onChange={e => setDni(e.target.value)} placeholder="30.456.789" required />
+      </Field>
+      <Field label="Rol / Puesto">
+        <input className="nx-input" value={rol} onChange={e => setRol(e.target.value)} placeholder="Soldador, Electricista…" required />
+      </Field>
+      {!fixedEmpresa && (
+        <Field label="Empresa">
+          <select className="nx-input" value={empresa} onChange={e => setEmpresa(e.target.value)}>
+            {EMPRESAS_DATA.map(e => <option key={e.nombre} value={e.nombre}>{e.nombre}</option>)}
+          </select>
+        </Field>
+      )}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+        <Field label="ART — días restantes">
+          <input type="number" className="nx-input" value={art} onChange={e => setArt(e.target.value)} />
+        </Field>
+        <Field label="Apto médico — días">
+          <input type="number" className="nx-input" value={apto} onChange={e => setApto(e.target.value)} />
+        </Field>
+      </div>
+      <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 18, cursor: "pointer" }}>
+        <input type="checkbox" className="nx-check" checked={arca} onChange={e => setArca(e.target.checked)} />
+        <span style={{ fontSize: 12.5, color: P.t2 }}>Alta Temprana ARCA ya realizada</span>
+      </label>
+      <Field label="Documentación (opcional)">
+        <FileAttach
+          files={archivos}
+          onAdd={f => setArchivos(prev => [...prev, ...f])}
+          onRemove={i => setArchivos(prev => prev.filter((_, idx) => idx !== i))}
+        />
+      </Field>
+      <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 18 }}>
+        <button type="button" onClick={onClose} className="nx-btn" style={{ background: "transparent", border: `1px solid ${P.bd}`, color: P.t3, borderRadius: 6, padding: "9px 16px", fontSize: 12.5, cursor: "pointer" }}>Cancelar</button>
+        <button type="submit" disabled={busy} className="nx-btn" style={{ background: P.ac, color: P.bg, border: "none", borderRadius: 6, padding: "9px 18px", fontSize: 12.5, fontWeight: 700, cursor: "pointer", minWidth: 130 }}>
+          {busy ? <Spinner c={P.bg} /> : "Agregar recurso"}
+        </button>
+      </div>
+    </form>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// DEMO — USER FORM (alta de usuario)
+// ═══════════════════════════════════════════════════════════════════
+const UserForm = ({ onSubmit, onClose, busy }) => {
+  const [nombre, setNombre] = useState("");
+  const [usuario, setUsuario] = useState("");
+  const [rol, setRol] = useState("Empresa");
+  const [empresa, setEmpresa] = useState(EMPRESAS_DATA[0].nombre);
+  const [activo, setActivo] = useState(true);
+
+  const submit = (e) => {
+    e.preventDefault();
+    if (!nombre.trim() || !usuario.trim()) return;
+    onSubmit({ nombre: nombre.trim(), usuario: usuario.trim().toLowerCase(), rol, empresa: rol === "Empresa" ? empresa : null, activo });
+  };
+
+  return (
+    <form onSubmit={submit}>
+      <Field label="Nombre completo">
+        <input className="nx-input" value={nombre} onChange={e => setNombre(e.target.value)} placeholder="Nombre y apellido" required />
+      </Field>
+      <Field label="Usuario (login)">
+        <input className="nx-input nx-num" value={usuario} onChange={e => setUsuario(e.target.value)} placeholder="usuario.login" required />
+      </Field>
+      <Field label="Rol">
+        <select className="nx-input" value={rol} onChange={e => setRol(e.target.value)}>
+          {ROLES_DATA.map(r => <option key={r.rol} value={r.rol}>{r.rol}</option>)}
+        </select>
+      </Field>
+      {rol === "Empresa" && (
+        <Field label="Empresa">
+          <select className="nx-input" value={empresa} onChange={e => setEmpresa(e.target.value)}>
+            {EMPRESAS_DATA.map(e => <option key={e.nombre} value={e.nombre}>{e.nombre}</option>)}
+          </select>
+        </Field>
+      )}
+      <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 18, cursor: "pointer" }}>
+        <input type="checkbox" className="nx-check" checked={activo} onChange={e => setActivo(e.target.checked)} />
+        <span style={{ fontSize: 12.5, color: P.t2 }}>Usuario activo desde el alta</span>
+      </label>
+      <div style={{ display: "flex", gap: 10, justifyContent: "flex-end" }}>
+        <button type="button" onClick={onClose} className="nx-btn" style={{ background: "transparent", border: `1px solid ${P.bd}`, color: P.t3, borderRadius: 6, padding: "9px 16px", fontSize: 12.5, cursor: "pointer" }}>Cancelar</button>
+        <button type="submit" disabled={busy} className="nx-btn" style={{ background: P.vi, color: P.bg, border: "none", borderRadius: 6, padding: "9px 18px", fontSize: 12.5, fontWeight: 700, cursor: "pointer", minWidth: 130 }}>
+          {busy ? <Spinner c={P.bg} /> : "Crear usuario"}
+        </button>
+      </div>
+    </form>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// GRÁFICAS — donut SVG y barras horizontales
+// ═══════════════════════════════════════════════════════════════════
+const Donut = ({ segments, size = 128, thickness = 16 }) => {
+  const total = segments.reduce((s, x) => s + x.value, 0) || 1;
+  const r = (size - thickness) / 2;
+  const c = 2 * Math.PI * r;
+  let offset = 0;
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label="Distribución de estados">
+      <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={P.bd} strokeWidth={thickness} />
+      {segments.filter(s => s.value > 0).map((s, i) => {
+        const frac = s.value / total;
+        const dash = frac * c;
+        const dashoffset = -offset;
+        offset += dash;
+        return (
+          <circle
+            key={i}
+            cx={size / 2} cy={size / 2} r={r} fill="none"
+            stroke={s.color} strokeWidth={thickness}
+            strokeDasharray={`${dash} ${c - dash}`}
+            strokeDashoffset={dashoffset}
+            transform={`rotate(-90 ${size / 2} ${size / 2})`}
+          />
+        );
+      })}
+      <text x="50%" y="46%" textAnchor="middle" fontSize="22" fontWeight="800" fill={P.t} fontFamily="var(--font-mono)">{total}</text>
+      <text x="50%" y="62%" textAnchor="middle" fontSize="9" fill={P.t4} letterSpacing=".05em">RECURSOS</text>
+    </svg>
+  );
+};
+
+const HBarChart = ({ rows, max = 100 }) => (
+  <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+    <div style={{ position: "relative", height: 1 }}>
+      {[0, 25, 50, 75, 100].map(v => (
+        <div key={v} style={{ position: "absolute", left: `${v}%`, top: -4, bottom: -1000, width: 1, background: P.bd, opacity: 0.6 }} />
+      ))}
+    </div>
+    {rows.map((r, i) => (
+      <div key={i} style={{ display: "grid", gridTemplateColumns: "110px 1fr 42px", alignItems: "center", gap: 10 }}>
+        <span style={{ fontSize: 11, color: P.t2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{r.label}</span>
+        <div style={{ position: "relative", height: 18, background: P.bg2, borderRadius: 4, overflow: "hidden" }}>
+          <div style={{ position: "absolute", inset: 0, width: `${Math.min(100, (r.value / max) * 100)}%`, background: r.color, borderRadius: 4, transition: "width 1s ease" }} />
+        </div>
+        <span className="nx-num" style={{ fontSize: 11, fontWeight: 700, color: r.color, textAlign: "right" }}>{r.value}%</span>
+      </div>
+    ))}
+  </div>
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// DEMO — TAB: DASHBOARD
+// ═══════════════════════════════════════════════════════════════════
+function rowsToCsv(rows) {
+  return rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\n");
+}
+
+const CsvDownloadButton = ({ csv, filename }) => {
+  const downloads = useDownloads();
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState("");
+
+  const handleDownload = async () => {
+    if (!downloads) return;
+    setBusy(true);
+    setMsg("");
+    try {
+      await downloads.save({ filename, data: csv });
+      setMsg("Guardado.");
+    } catch (e) {
+      setMsg(e && e.code === "declined" ? "" : "No se pudo descargar.");
+    } finally {
+      setBusy(false);
+      setTimeout(() => setMsg(""), 2500);
+    }
+  };
+
+  if (!downloads) return <span style={{ fontSize: 10, color: P.t4 }}>Descarga no disponible</span>;
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+      <button type="button" onClick={handleDownload} disabled={busy} className="nx-btn" style={{ background: "transparent", border: "none", color: P.bl, fontWeight: 600, fontSize: 10.5, cursor: "pointer", padding: 0, textDecoration: "underline", textUnderlineOffset: 2, flexShrink: 0 }}>
+        {busy ? <Spinner c={P.bl} /> : "Descargar CSV"}
+      </button>
+      {msg && <span style={{ fontSize: 10, color: P.t4 }}>{msg}</span>}
+    </span>
+  );
+};
+
+const DashboardTab = ({ personal, empresas, canReport, onOpenReportes }) => {
+  const total = personal.length;
+  const avalados = personal.filter(p => p.estado === "Avalado").length;
+  const pendientes = personal.filter(p => p.estado === "Nuevo" || p.estado === "Pend. Inspector").length;
+  const rechazados = personal.filter(p => p.estado === "Rechazado").length;
+  const criticas = personal.filter(p => p.art < 0 || p.apto < 0).length;
+
+  const pipeline = [
+    { l: "NUEVO", n: personal.filter(p => p.estado === "Nuevo").length, c: P.bl },
+    { l: "PEND. INSPECTOR", n: personal.filter(p => p.estado === "Pend. Inspector").length, c: P.am },
+    { l: "AVALADO", n: avalados, c: P.ac },
+    { l: "RECHAZADO", n: rechazados, c: P.rd },
+  ];
+
+  return (
+    <>
+      <div style={{ display: "flex", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
+        {[{ l: "Recursos", v: total, c: P.ac }, { l: "Avalados", v: avalados, c: P.ac }, { l: "Pendientes", v: pendientes, c: P.am }, { l: "Rechazados", v: rechazados, c: P.rd }, { l: "Alertas Crít.", v: criticas, c: P.rd }].map((s, i) => (
+          <div key={i} style={{ flex: "1 1 110px", background: P.bg2, borderRadius: 6, padding: "12px 14px", borderTop: `3px solid ${s.c}` }}>
+            <div style={{ fontSize: 9, color: P.t4, textTransform: "uppercase", letterSpacing: ".05em", marginBottom: 4 }}>{s.l}</div>
+            <div className="nx-num" style={{ fontSize: 22, fontWeight: 700, color: s.c }}>{s.v}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ background: P.bg2, borderRadius: 6, padding: 14, marginBottom: 16 }}>
+        <div style={{ fontSize: 10, color: P.t4, textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 10 }}>Pipeline Compliance</div>
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
+          {pipeline.map((s, i) => (
+            <div key={i} style={{ flex: "1 1 90px", textAlign: "center", padding: "8px 4px", background: `${s.c}06`, borderLeft: i ? `1px solid ${P.bd}` : "none" }}>
+              <div className="nx-num" style={{ fontSize: 20, fontWeight: 700, color: s.c }}>{s.n}</div>
+              <div style={{ fontSize: 9, color: s.c, fontWeight: 600 }}>{s.l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: empresas.length > 1 ? "auto 1fr" : "1fr", gap: 16, alignItems: "center", background: P.bg2, borderRadius: 6, padding: 14, marginBottom: 16, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+          <Donut segments={pipeline.map(s => ({ value: s.n, color: s.c }))} />
+          <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+            {pipeline.map((s, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 10.5, color: P.t3 }}>
+                <span style={{ width: 8, height: 8, borderRadius: 2, background: s.c, flexShrink: 0 }} />
+                {s.l.charAt(0) + s.l.slice(1).toLowerCase()} <span className="nx-num" style={{ color: P.t2, fontWeight: 600 }}>{s.n}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        {empresas.length > 1 && (
+          <div>
+            <div style={{ fontSize: 10, color: P.t4, textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 12 }}>Compliance por empresa</div>
+            <HBarChart rows={empresas.map(e => {
+              const ep = personal.filter(p => p.emp === e.nombre);
+              const pct = ep.length ? Math.round((ep.filter(p => p.estado === "Avalado").length / ep.length) * 100) : 0;
+              return { label: e.nombre.replace(" S.A.", "").replace(" S.R.L.", ""), value: pct, color: e.c };
+            })} />
+          </div>
+        )}
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(empresas.length, 3)},1fr)`, gap: 10 }}>
+        {empresas.map((e, i) => {
+          const ep = personal.filter(p => p.emp === e.nombre);
+          const pct = ep.length ? Math.round((ep.filter(p => p.estado === "Avalado").length / ep.length) * 100) : 0;
+          return (
+            <div key={i} style={{ background: P.bg2, borderRadius: 6, borderLeft: `3px solid ${e.c}`, padding: 12 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>{e.nombre}</div>
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, marginBottom: 3 }}>
+                <span style={{ color: P.t4 }}>Compliance</span><span className="nx-num" style={{ color: e.c, fontWeight: 600 }}>{pct}%</span>
+              </div>
+              <Bar v={pct} mx={100} c={e.c} />
+              <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, marginTop: 6 }}>
+                <span style={{ color: P.t4 }}>OT avance</span><span className="nx-num" style={{ color: e.c, fontWeight: 600 }}>{e.avance}%</span>
+              </div>
+              <Bar v={e.avance} mx={100} c={e.c} h={3} />
+            </div>
+          );
+        })}
+      </div>
+
+      {canReport && (
+        <button onClick={onOpenReportes} className="nx-btn" style={{ marginTop: 16, width: "100%", background: P.ac2, color: P.ac, border: `1px solid ${P.ac}40`, borderRadius: 6, padding: "12px 14px", fontSize: 12, fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+          ▥ Ir a Reportes Semanales — KPIs, tendencia, alertas y recomendaciones →
+        </button>
+      )}
+    </>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// DEMO — TAB: PERSONAL
+// ═══════════════════════════════════════════════════════════════════
+const PersonalTab = ({ personal, canAdd, onAddClick, justAddedId, onManageFiles }) => (
+  <div>
+    {canAdd && (
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 10 }}>
+        <button onClick={onAddClick} className="nx-btn" style={{ background: P.ac2, color: P.ac, border: `1px solid ${P.ac}40`, borderRadius: 6, padding: "7px 14px", fontSize: 11.5, fontWeight: 700, cursor: "pointer" }}>+ Agregar Recurso</button>
+      </div>
+    )}
+    <div style={{ borderRadius: 6, overflow: "hidden", border: `1px solid ${P.bd}` }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1.3fr .9fr .6fr .8fr .5fr .5fr .4fr .4fr", padding: "8px 12px", background: P.bg2, fontSize: 9, fontWeight: 700, color: P.t4, textTransform: "uppercase", letterSpacing: ".04em" }}>
+        <span>Nombre</span><span>Empresa</span><span>Rol</span><span>Estado</span><span>ART</span><span>Apto</span><span>ARCA</span><span>Cred.</span>
+      </div>
+      {personal.length === 0 && (
+        <div style={{ padding: "24px 12px", textAlign: "center", fontSize: 12, color: P.t4 }}>Sin recursos cargados todavía.</div>
+      )}
+      {personal.map((p) => {
+        const archivos = p.archivos || [];
+        const pendientes = archivos.filter(f => (f.revision || {}).estado === "Pendiente").length;
+        return (
+          <div key={p.id} className={p.id === justAddedId ? "nx-row-new" : ""} style={{ display: "grid", gridTemplateColumns: "1.3fr .9fr .6fr .8fr .5fr .5fr .4fr .4fr", padding: "8px 12px", borderTop: `1px solid ${P.bd}`, alignItems: "center", fontSize: 12 }}>
+            <div>
+              <div style={{ fontWeight: 500 }}>{p.nombre}</div>
+              <div className="nx-num" style={{ fontSize: 10, color: P.t4 }}>{p.dni}</div>
+              <button
+                type="button"
+                onClick={() => onManageFiles(p.id)}
+                className="nx-btn"
+                style={{ background: "transparent", border: "none", padding: 0, marginTop: 2, fontSize: 10, fontWeight: 600, color: pendientes ? P.am : (archivos.length ? P.bl : P.t4), cursor: "pointer" }}
+              >
+                {archivos.length ? `${archivos.length} archivo${archivos.length > 1 ? "s" : ""}${pendientes ? ` · ${pendientes} pend.` : ""}` : "+ adjuntar"}
+              </button>
+            </div>
+            <span style={{ color: P.t3, fontSize: 11 }}>{p.emp}</span>
+            <span style={{ color: P.t3 }}>{p.rol}</span>
+            <Badge c={stColor[p.estado]}>{p.estado}</Badge>
+            <span className="nx-num" style={{ color: p.art < 60 ? P.am : P.t3, fontSize: 11 }}>{p.art}d</span>
+            <span className="nx-num" style={{ color: p.apto < 30 ? P.rd : P.t3, fontSize: 11 }}>{p.apto}d</span>
+            <span style={{ color: p.arca ? P.ac : P.rd, fontWeight: 600 }}>{p.arca ? "✓" : "✕"}</span>
+            <span style={{ color: p.cred ? P.ac : P.t4, fontWeight: 600 }}>{p.cred ? "✓" : "—"}</span>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// DEMO — TAB: VALIDAR (aprobación con historial)
+// ═══════════════════════════════════════════════════════════════════
+const ValidarTab = ({ personal, onAdvance, onReject, busyId, log }) => {
+  const cola = personal.filter(p => p.estado === "Nuevo" || p.estado === "Pend. Inspector");
+  return (
+    <div>
+      <div style={{ borderRadius: 6, overflow: "hidden", border: `1px solid ${P.bd}`, marginBottom: 18 }}>
+        {cola.length === 0 && <div style={{ padding: "24px 12px", textAlign: "center", fontSize: 12, color: P.t4 }}>No hay recursos pendientes de validación.</div>}
+        {cola.map((p) => {
+          const isBusy = busyId === p.id;
+          return (
+            <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderTop: `1px solid ${P.bd}` }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 12.5, fontWeight: 600 }}>{p.nombre} <span style={{ fontWeight: 400, color: P.t4 }}>· {p.rol}</span></div>
+                <div style={{ fontSize: 10.5, color: P.t4 }}>{p.emp}</div>
+              </div>
+              <Badge c={stColor[p.estado]}>{p.estado}</Badge>
+              <button onClick={() => onAdvance(p.id)} disabled={isBusy} className="nx-btn" style={{ background: P.ac2, color: P.ac, border: `1px solid ${P.ac}40`, borderRadius: 5, padding: "6px 12px", fontSize: 11, fontWeight: 700, cursor: "pointer", minWidth: 76 }}>
+                {isBusy ? <Spinner /> : "Aprobar →"}
+              </button>
+              <button onClick={() => onReject(p.id)} disabled={isBusy} className="nx-btn" style={{ background: P.rd2, color: P.rd, border: `1px solid ${P.rd}40`, borderRadius: 5, padding: "6px 12px", fontSize: 11, fontWeight: 700, cursor: "pointer" }}>
+                Rechazar ✕
+              </button>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ fontSize: 10, color: P.t4, textTransform: "uppercase", letterSpacing: ".05em", marginBottom: 8, fontWeight: 700 }}>Historial de auditoría</div>
+      {log.length === 0 && <div style={{ fontSize: 11.5, color: P.t4 }}>Sin movimientos todavía.</div>}
+      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+        {log.slice(0, 6).map((entry, i) => (
+          <div key={i} style={{ fontSize: 11.5, color: P.t2, display: "flex", gap: 8 }}>
+            <span className="nx-num" style={{ color: P.t4, flexShrink: 0 }}>{entry.ts}</span>
+            <span>{entry.detail}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// DEMO — TAB: USUARIOS
+// ═══════════════════════════════════════════════════════════════════
+const UsuariosTab = ({ usuarios, onToggle, onAddClick }) => (
+  <div>
+    <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 10 }}>
+      <button onClick={onAddClick} className="nx-btn" style={{ background: P.vi2, color: P.vi, border: `1px solid ${P.vi}40`, borderRadius: 6, padding: "7px 14px", fontSize: 11.5, fontWeight: 700, cursor: "pointer" }}>+ Nuevo Usuario</button>
+    </div>
+    <div style={{ borderRadius: 6, overflow: "hidden", border: `1px solid ${P.bd}` }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1.4fr .9fr .9fr .9fr .6fr", padding: "8px 12px", background: P.bg2, fontSize: 9, fontWeight: 700, color: P.t4, textTransform: "uppercase", letterSpacing: ".04em" }}>
+        <span>Nombre</span><span>Usuario</span><span>Rol</span><span>Empresa</span><span>Activo</span>
+      </div>
+      {usuarios.map(u => (
+        <div key={u.id} style={{ display: "grid", gridTemplateColumns: "1.4fr .9fr .9fr .9fr .6fr", padding: "8px 12px", borderTop: `1px solid ${P.bd}`, alignItems: "center", fontSize: 12 }}>
+          <span style={{ fontWeight: 500 }}>{u.nombre}</span>
+          <span className="nx-num" style={{ color: P.t3, fontSize: 11 }}>{u.usuario}</span>
+          <Badge c={ROLE_COLOR[u.rol]}>{u.rol}</Badge>
+          <span style={{ color: P.t3, fontSize: 11 }}>{u.empresa ? u.empresa.replace(" S.A.", "").replace(" S.R.L.", "") : "—"}</span>
+          <label className="nx-toggle" title={u.activo ? "Desactivar" : "Activar"}>
+            <input type="checkbox" checked={u.activo} onChange={() => onToggle(u.id)} />
+            <span className="trk" />
+          </label>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// DEMO — TAB: OS/PE (Inspector)
+// ═══════════════════════════════════════════════════════════════════
+const OspeTab = ({ ospe, onApprove, busyId }) => (
+  <div>
+    {ospe.map(o => {
+      const isBusy = busyId === o.id;
+      return (
+        <div key={o.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderBottom: `1px solid ${P.bd}` }}>
+          <Badge c={o.tipo === "OS" ? P.bl : P.ac}>{o.tipo}</Badge>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 12 }}>{o.motivo}</div>
+            <div style={{ fontSize: 10, color: P.t4 }}>{o.emp} · {o.fecha}</div>
+          </div>
+          <Badge c={o.estado === "Pendiente" ? P.am : o.estado === "Aprobada" ? P.ac : P.t3}>{o.estado}</Badge>
+          {o.estado === "Pendiente" && (
+            <button onClick={() => onApprove(o.id)} disabled={isBusy} className="nx-btn" style={{ background: P.ac2, color: P.ac, border: `1px solid ${P.ac}40`, borderRadius: 5, padding: "6px 12px", fontSize: 11, fontWeight: 700, cursor: "pointer", minWidth: 120 }}>
+              {isBusy ? <Spinner /> : "Aprobar afectación"}
+            </button>
+          )}
+        </div>
+      );
+    })}
+  </div>
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// DEMO — TAB: PLAN DE ACCIÓN
+// ═══════════════════════════════════════════════════════════════════
+const ACCION_ESTADO_COLOR = () => ({ "Pendiente": P.t4, "En curso": P.bl, "Hecho": P.ac });
+
+const ActionForm = ({ fixedEmpresa, onSubmit, onClose, busy }) => {
+  const [ac, setAc] = useState("");
+  const [cat, setCat] = useState("Laboral");
+  const [p, setP] = useState("alta");
+  const [resp, setResp] = useState("");
+  const [v, setV] = useState("");
+  const [empresa, setEmpresa] = useState(fixedEmpresa || EMPRESAS_DATA[0].nombre);
+
+  const submit = (e) => {
+    e.preventDefault();
+    if (!ac.trim() || !resp.trim() || !v) return;
+    onSubmit({ ac: ac.trim(), cat, p, resp: resp.trim(), v, emp: fixedEmpresa || empresa, estado: "Pendiente" });
+  };
+
+  return (
+    <form onSubmit={submit}>
+      <Field label="Acción a realizar">
+        <input className="nx-input" value={ac} onChange={e => setAc(e.target.value)} placeholder="Ej: Renovar Apto Médico…" required />
+      </Field>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+        <Field label="Categoría">
+          <select className="nx-input" value={cat} onChange={e => setCat(e.target.value)}>
+            {["Laboral", "Contractual", "Salud", "Seguridad", "Vehicular", "Otro"].map(c => <option key={c} value={c}>{c}</option>)}
+          </select>
+        </Field>
+        <Field label="Prioridad">
+          <select className="nx-input" value={p} onChange={e => setP(e.target.value)}>
+            <option value="critica">Crítica</option>
+            <option value="alta">Alta</option>
+            <option value="media">Media</option>
+          </select>
+        </Field>
+      </div>
+      <Field label="Responsable">
+        <input className="nx-input" value={resp} onChange={e => setResp(e.target.value)} placeholder="Nombre y apellido" required />
+      </Field>
+      {!fixedEmpresa && (
+        <Field label="Empresa">
+          <select className="nx-input" value={empresa} onChange={e => setEmpresa(e.target.value)}>
+            {EMPRESAS_DATA.map(e => <option key={e.nombre} value={e.nombre}>{e.nombre}</option>)}
+          </select>
+        </Field>
+      )}
+      <Field label="Fecha límite">
+        <input type="date" className="nx-input" value={v} onChange={e => setV(e.target.value)} required />
+      </Field>
+      <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 18 }}>
+        <button type="button" onClick={onClose} className="nx-btn" style={{ background: "transparent", border: `1px solid ${P.bd}`, color: P.t3, borderRadius: 6, padding: "9px 16px", fontSize: 12.5, cursor: "pointer" }}>Cancelar</button>
+        <button type="submit" disabled={busy} className="nx-btn" style={{ background: P.am, color: P.bg, border: "none", borderRadius: 6, padding: "9px 18px", fontSize: 12.5, fontWeight: 700, cursor: "pointer", minWidth: 130 }}>
+          {busy ? <Spinner c={P.bg} /> : "Agregar acción"}
+        </button>
+      </div>
+    </form>
+  );
+};
+
+const AccionesTab = ({ acciones, empresaFiltro, canManage, onAddClick, onToggleEstado }) => {
+  const items = empresaFiltro ? acciones.filter(a => a.emp === empresaFiltro) : acciones;
+  const hechas = items.filter(a => a.estado === "Hecho").length;
+  const pct = items.length ? Math.round((hechas / items.length) * 100) : 0;
+  const estColor = ACCION_ESTADO_COLOR();
+  const nextEstado = { "Pendiente": "En curso", "En curso": "Hecho", "Hecho": "Pendiente" };
+
+  return (
+    <div>
+      <div style={{ background: P.bg2, borderRadius: 6, padding: 12, marginBottom: 14 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, marginBottom: 6 }}>
+          <span style={{ color: P.t3 }}>Plan de Acción — avance</span>
+          <span className="nx-num" style={{ color: P.am, fontWeight: 700 }}>{hechas}/{items.length} completadas ({pct}%)</span>
+        </div>
+        <Bar v={pct} mx={100} c={P.am} />
+      </div>
+      {canManage && (
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 10 }}>
+          <button onClick={onAddClick} className="nx-btn" style={{ background: P.am2, color: P.am, border: `1px solid ${P.am}40`, borderRadius: 6, padding: "7px 14px", fontSize: 11.5, fontWeight: 700, cursor: "pointer" }}>+ Nueva Acción</button>
+        </div>
+      )}
+      {items.length === 0 && <div style={{ padding: "24px 12px", textAlign: "center", fontSize: 12, color: P.t4 }}>Sin acciones cargadas.</div>}
+      {items.map((a) => (
+        <div key={a.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderBottom: `1px solid ${P.bd}`, background: a.p === "critica" && a.estado !== "Hecho" ? P.rd2 : "transparent", opacity: a.estado === "Hecho" ? 0.6 : 1 }}>
+          <Badge c={a.p === "critica" ? P.rd : a.p === "alta" ? P.am : P.bl}>{a.p === "critica" ? "CRÍTICA" : a.p === "alta" ? "ALTA" : "MEDIA"}</Badge>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 12, textDecoration: a.estado === "Hecho" ? "line-through" : "none" }}>{a.ac}</div>
+            <div style={{ fontSize: 10, color: P.t4 }}>{a.emp} · {a.resp}</div>
+          </div>
+          <Badge c={P.bl}>{a.cat}</Badge>
+          <span className="nx-num" style={{ fontSize: 11, color: P.t4, whiteSpace: "nowrap" }}>{a.v}</span>
+          {canManage ? (
+            <button onClick={() => onToggleEstado(a.id)} className="nx-btn" style={{ background: `${estColor[a.estado]}18`, color: estColor[a.estado], border: `1px solid ${estColor[a.estado]}40`, borderRadius: 5, padding: "4px 10px", fontSize: 10, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}>
+              {a.estado} →
+            </button>
+          ) : (
+            <Badge c={estColor[a.estado]}>{a.estado}</Badge>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// DEMO — TAB: ALERTAS (derivadas de personal + estáticas)
+// ═══════════════════════════════════════════════════════════════════
+const AlertRow = ({ a }) => {
+  const bc = a.p === "critica" ? P.rd : a.p === "alta" ? P.am : P.bl;
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", borderBottom: `1px solid ${P.bd}`, borderLeft: `3px solid ${bc}`, background: a.p === "critica" ? P.rd2 : "transparent" }}>
+      <Badge c={bc}>{a.p === "critica" ? "CRÍTICA" : a.p === "alta" ? "ALTA" : "MEDIA"}</Badge>
+      <div style={{ flex: 1 }}>
+        <div style={{ fontSize: 12 }}>{a.msg}</div>
+        <div style={{ fontSize: 10, color: P.t4, marginTop: 1 }}>{a.t}{a.emp ? ` · ${a.emp}` : ""}</div>
+      </div>
+    </div>
+  );
+};
+
+/** Deriva alertas urgentes (0–45 días) y de planificación (46–90 días) a partir del personal. Reutilizado por AlertasTab y ReportesTab. */
+function computeAlertas(personal, empresaFiltro) {
+  const urgentes = [];
+  const futuras = [];
+  personal.forEach(p => {
+    if (p.art < 0) urgentes.push({ p: "critica", msg: `${p.nombre} — ART vencida, recurso BLOQUEADO`, t: "bloqueo", emp: p.emp });
+    else if (p.art < 45) urgentes.push({ p: "alta", msg: `ART de ${p.nombre} vence en ${p.art} días`, t: "vencimiento", emp: p.emp });
+    else if (p.art < 90) futuras.push({ p: "media", msg: `ART de ${p.nombre} vence en ${p.art} días`, t: "planificación", emp: p.emp });
+    if (p.apto < 0) urgentes.push({ p: "critica", msg: `${p.nombre} — Apto médico vencido`, t: "documentación", emp: p.emp });
+    else if (p.apto < 45) urgentes.push({ p: "alta", msg: `Apto médico de ${p.nombre} vence en ${p.apto} días`, t: "vencimiento", emp: p.emp });
+    else if (p.apto < 90) futuras.push({ p: "media", msg: `Apto médico de ${p.nombre} vence en ${p.apto} días`, t: "planificación", emp: p.emp });
+    if (!p.arca) urgentes.push({ p: "critica", msg: `${p.nombre} sin Alta ARCA — NO puede ingresar`, t: "documentación", emp: p.emp });
+  });
+  const all = [...urgentes, ...STATIC_ALERTS];
+  const items = (empresaFiltro ? all.filter(a => !a.emp || a.emp === empresaFiltro) : all)
+    .sort((a, b) => (a.p === "critica" ? 0 : a.p === "alta" ? 1 : 2) - (b.p === "critica" ? 0 : b.p === "alta" ? 1 : 2));
+  const futItems = empresaFiltro ? futuras.filter(a => a.emp === empresaFiltro) : futuras;
+  return { urgentes: items, futuras: futItems };
+}
+
+const AlertasTab = ({ personal, empresaFiltro }) => {
+  const { urgentes: items, futuras: futItems } = computeAlertas(personal, empresaFiltro);
+
+  return (
+    <div>
+      <div style={{ fontSize: 10, color: P.t4, textTransform: "uppercase", letterSpacing: ".05em", marginBottom: 8, fontWeight: 700 }}>Alertas activas (0–45 días)</div>
+      {items.length === 0 && <div style={{ padding: "24px 12px", textAlign: "center", fontSize: 12, color: P.t4 }}>Sin alertas activas.</div>}
+      <div style={{ borderRadius: 6, overflow: "hidden", border: `1px solid ${P.bd}`, marginBottom: 22 }}>
+        {items.map((a, i) => <AlertRow key={i} a={a} />)}
+      </div>
+
+      <div style={{ fontSize: 10, color: P.t4, textTransform: "uppercase", letterSpacing: ".05em", marginBottom: 8, fontWeight: 700 }}>Planificación — vencimientos 46 a 90 días</div>
+      {futItems.length === 0 ? (
+        <div style={{ fontSize: 11.5, color: P.t4 }}>Sin vencimientos previstos en el horizonte de planificación.</div>
+      ) : (
+        <div style={{ borderRadius: 6, overflow: "hidden", border: `1px solid ${P.bd}` }}>
+          {futItems.map((a, i) => <AlertRow key={i} a={a} />)}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// DEMO — TAB: COMUNICACIÓN DE SUBCONTRATACIÓN
+// ═══════════════════════════════════════════════════════════════════
+const SUBC_ESTADO_COLOR = () => ({ "Pendiente Inspector": P.am, "Aprobada": P.ac, "Rechazada": P.rd });
+
+const SubcontratoForm = ({ fixedEmpresa, onSubmit, onClose, busy }) => {
+  const [razonSocial, setRazonSocial] = useState("");
+  const [cuit, setCuit] = useState("");
+  const [esNueva, setEsNueva] = useState(true);
+  const [empresaPrincipal, setEmpresaPrincipal] = useState(fixedEmpresa || EMPRESAS_DATA[0].nombre);
+
+  const submit = (e) => {
+    e.preventDefault();
+    if (!razonSocial.trim() || !cuit.trim()) return;
+    const empresa = EMPRESAS_DATA.find(x => x.nombre === (fixedEmpresa || empresaPrincipal));
+    onSubmit({
+      razonSocial: razonSocial.trim(), cuit: cuit.trim(), esNueva,
+      empresaPrincipal: fixedEmpresa || empresaPrincipal,
+      contratoVinculado: `${empresa.contrato} · ${empresa.ot}`,
+    });
+  };
+
+  return (
+    <form onSubmit={submit}>
+      <p style={{ fontSize: 11.5, color: P.t3, lineHeight: 1.5, marginBottom: 16 }}>
+        Identificá al subcontratista por Razón Social o CUIT. Si la empresa no existe
+        en el SRC, se crea automáticamente al enviar la solicitud.
+      </p>
+      <Field label="Razón Social del subcontratista">
+        <input className="nx-input" value={razonSocial} onChange={e => setRazonSocial(e.target.value)} placeholder="Ej: Andamios del Sur S.R.L." required />
+      </Field>
+      <Field label="CUIT">
+        <input className="nx-input nx-num" value={cuit} onChange={e => setCuit(e.target.value)} placeholder="30-71234567-8" required />
+      </Field>
+      <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14, cursor: "pointer" }}>
+        <input type="checkbox" className="nx-check" checked={esNueva} onChange={e => setEsNueva(e.target.checked)} />
+        <span style={{ fontSize: 12.5, color: P.t2 }}>Empresa nueva — no registrada aún en el SRC</span>
+      </label>
+      {!fixedEmpresa && (
+        <Field label="Contratista principal">
+          <select className="nx-input" value={empresaPrincipal} onChange={e => setEmpresaPrincipal(e.target.value)}>
+            {EMPRESAS_DATA.map(e => <option key={e.nombre} value={e.nombre}>{e.nombre}</option>)}
+          </select>
+        </Field>
+      )}
+      <Field label="Contrato / OT vinculado">
+        <div className="nx-input" style={{ color: P.t3, background: P.bg2 }}>
+          {EMPRESAS_DATA.find(x => x.nombre === (fixedEmpresa || empresaPrincipal))?.contrato} · {EMPRESAS_DATA.find(x => x.nombre === (fixedEmpresa || empresaPrincipal))?.ot}
+        </div>
+      </Field>
+      <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 18 }}>
+        <button type="button" onClick={onClose} className="nx-btn" style={{ background: "transparent", border: `1px solid ${P.bd}`, color: P.t3, borderRadius: 6, padding: "9px 16px", fontSize: 12.5, cursor: "pointer" }}>Cancelar</button>
+        <button type="submit" disabled={busy} className="nx-btn" style={{ background: P.vi, color: P.bg, border: "none", borderRadius: 6, padding: "9px 18px", fontSize: 12.5, fontWeight: 700, cursor: "pointer", minWidth: 160 }}>
+          {busy ? <Spinner c={P.bg} /> : "Enviar al Inspector"}
+        </button>
+      </div>
+    </form>
+  );
+};
+
+const SubcontratosTab = ({ subcontratos, empresaFiltro, canRequest, canApprove, onAddClick, onApprove, onReject, busyId }) => {
+  const [rejecting, setRejecting] = useState(null);
+  const items = empresaFiltro ? subcontratos.filter(s => s.empresaPrincipal === empresaFiltro) : subcontratos;
+  const estColor = SUBC_ESTADO_COLOR();
+
+  return (
+    <div>
+      {canRequest && (
+        <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 10 }}>
+          <button onClick={onAddClick} className="nx-btn" style={{ background: P.vi2, color: P.vi, border: `1px solid ${P.vi}40`, borderRadius: 6, padding: "7px 14px", fontSize: 11.5, fontWeight: 700, cursor: "pointer" }}>+ Solicitar Subcontratación</button>
+        </div>
+      )}
+      {items.length === 0 && <div style={{ padding: "24px 12px", textAlign: "center", fontSize: 12, color: P.t4 }}>Sin comunicaciones de subcontratación.</div>}
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {items.map(s => {
+          const isBusy = busyId === s.id;
+          return (
+            <div key={s.id} style={{ border: `1px solid ${P.bd}`, borderRadius: 8, overflow: "hidden" }}>
+              <div style={{ height: 3, background: estColor[s.estado] }} />
+              <div style={{ padding: "12px 14px" }}>
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 10, flexWrap: "wrap" }}>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700 }}>{s.razonSocial} {s.esNueva && <Badge c={P.vi}>Nueva en SRC</Badge>}</div>
+                    <div className="nx-num" style={{ fontSize: 10.5, color: P.t4, marginTop: 2 }}>CUIT {s.cuit}</div>
+                  </div>
+                  <Badge c={estColor[s.estado]}>{s.estado}</Badge>
+                </div>
+                <div style={{ fontSize: 11.5, color: P.t2, marginTop: 8 }}>
+                  Subcontrato de <b>{s.empresaPrincipal}</b> — vinculado a <span className="nx-num">{s.contratoVinculado}</span>
+                </div>
+                <div style={{ fontSize: 10.5, color: P.t4, marginTop: 4 }}>Solicitado por {s.solicitante} · {s.fecha}</div>
+
+                {s.estado === "Aprobada" && (
+                  <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
+                    <span style={{ fontSize: 10.5, color: P.ac }}>✓ Afectación de personal subcontratado habilitada</span>
+                    {s.notificado && <span style={{ fontSize: 10.5, color: P.t3 }}>✓ Notificación automática enviada a Responsable Técnico y Administrativo</span>}
+                  </div>
+                )}
+                {s.estado === "Rechazada" && s.motivo && (
+                  <div style={{ marginTop: 10, fontSize: 11, color: P.rd }}>&ldquo;{s.motivo}&rdquo;</div>
+                )}
+
+                {canApprove && s.estado === "Pendiente Inspector" && (
+                  rejecting === s.id ? (
+                    <ReasonPrompt
+                      placeholder="Motivo del rechazo de la subcontratación…"
+                      confirmLabel="Confirmar rechazo"
+                      confirmColor={P.rd}
+                      onCancel={() => setRejecting(null)}
+                      onConfirm={(text) => { onReject(s.id, text); setRejecting(null); }}
+                    />
+                  ) : (
+                    <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+                      <button onClick={() => onApprove(s.id)} disabled={isBusy} className="nx-btn" style={{ background: P.ac2, color: P.ac, border: `1px solid ${P.ac}40`, borderRadius: 5, padding: "6px 14px", fontSize: 11, fontWeight: 700, cursor: "pointer", minWidth: 90 }}>
+                        {isBusy ? <Spinner /> : "Aprobar"}
+                      </button>
+                      <button onClick={() => setRejecting(s.id)} disabled={isBusy} className="nx-btn" style={{ background: P.rd2, color: P.rd, border: `1px solid ${P.rd}40`, borderRadius: 5, padding: "6px 14px", fontSize: 11, fontWeight: 700, cursor: "pointer" }}>
+                        Rechazar
+                      </button>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// DEMO — TAB: REPORTES SEMANALES (Auditor / Cliente)
+// Basado en la Guía Maestra YPF: plazos de auditoría (48hs altas,
+// 72hs mensual/bajas), retenciones por incumplimiento (3%/5%) y el
+// camino a "Empresa Promovida" (12 meses consecutivos sin incumplir).
+// ═══════════════════════════════════════════════════════════════════
+const TARGET_CUMPLIMIENTO = 90;
+
+/** Historial semanal sintético de cumplimiento (%) previo a la semana actual, por alcance. */
+const SEED_HISTORIAL_CUMPLIMIENTO = {
+  "todas": [34, 38, 41, 44, 47, 48],
+  "CODESIN S.A.": [42, 46, 50, 54, 57, 58],
+  "TECFOR S.R.L.": [26, 30, 34, 38, 42, 46],
+  "SERMAT S.A.": [0, 0, 0, 0, 0, 0],
+};
+
+const REPORTE_HOY = new Date("2026-08-28T12:00:00");
+
+/** Regresión lineal simple sobre los últimos puntos para proyectar semanas hasta la meta. */
+function projectWeeks(history, target) {
+  const pts = history.slice(-4).map((v, i) => [i, v]);
+  if (pts.length < 2) return { slope: 0, weeksToTarget: null };
+  const meanX = pts.reduce((s, p) => s + p[0], 0) / pts.length;
+  const meanY = pts.reduce((s, p) => s + p[1], 0) / pts.length;
+  const num = pts.reduce((s, [x, y]) => s + (x - meanX) * (y - meanY), 0);
+  const den = pts.reduce((s, [x]) => s + (x - meanX) ** 2, 0) || 1;
+  const slope = num / den;
+  const last = history[history.length - 1];
+  let weeksToTarget = null;
+  if (slope > 0.4 && last < target) weeksToTarget = Math.ceil((target - last) / slope);
+  return { slope, weeksToTarget };
+}
+
+function generarRecomendaciones(scoped, pct, target) {
+  const vencidos = scoped.filter(p => p.art < 0 || p.apto < 0).length;
+  const sinArca = scoped.filter(p => !p.arca).length;
+  const rechazados = scoped.filter(p => p.estado === "Rechazado").length;
+  const proximos = scoped.filter(p => (p.art >= 0 && p.art < 45) || (p.apto >= 0 && p.apto < 45)).length;
+  const recs = [];
+  if (vencidos > 0) recs.push({ nivel: "critica", texto: `Regularizar ${vencidos} recurso${vencidos > 1 ? "s" : ""} con documentación vencida (ART/Apto) esta semana — el 1er mes en falta retiene 3% del monto certificado, y 5% desde el 2do mes.` });
+  if (sinArca > 0) recs.push({ nivel: "critica", texto: `Completar Alta Temprana ARCA de ${sinArca} recurso${sinArca > 1 ? "s" : ""} antes del ingreso — el Estudio Auditor responde altas y actualizaciones en hasta 48hs hábiles.` });
+  if (rechazados > 0) recs.push({ nivel: "alta", texto: `Reingresar ${rechazados} documento${rechazados > 1 ? "s" : ""} rechazado${rechazados > 1 ? "s" : ""}; mensual y bajas se resuelven en hasta 72hs hábiles.` });
+  if (proximos > 0) recs.push({ nivel: "alta", texto: `Anticipar la renovación de ${proximos} póliza${proximos > 1 ? "s" : ""}/apto${proximos > 1 ? "s" : ""} que vence${proximos > 1 ? "n" : ""} dentro de 45 días.` });
+  if (pct < target) recs.push({ nivel: "media", texto: `Cumplimiento en ${pct}%, ${target - pct} puntos por debajo de la meta (${target}%) — priorizar el Plan de Acción.` });
+  else recs.push({ nivel: "buena", texto: `Cumplimiento de ${pct}% ≥ meta (${target}%). Sostenerlo suma hacia "Empresa Promovida" (12 meses consecutivos sin incumplimientos → control trimestral).` });
+  if (recs.length === 1 && pct >= target) recs.unshift({ nivel: "buena", texto: "Sin hallazgos críticos esta semana." });
+  return recs;
+}
+
+function proximaSemanaAcciones(acciones, empresaFiltro) {
+  const scoped = empresaFiltro ? acciones.filter(a => a.emp === empresaFiltro) : acciones;
+  return scoped
+    .filter(a => a.estado !== "Hecho")
+    .map(a => ({ ...a, diffDays: Math.round((new Date(`${a.v}T00:00:00`) - REPORTE_HOY) / 86400000) }))
+    .filter(a => a.diffDays <= 7)
+    .sort((x, y) => x.diffDays - y.diffDays);
+}
+
+const REC_TONE = () => ({ critica: P.rd, alta: P.am, media: P.bl, buena: P.ac });
+
+const TrendChart = ({ history, target = TARGET_CUMPLIMIENTO, width = 480, height = 150 }) => {
+  const { slope, weeksToTarget } = projectWeeks(history, target);
+  const projN = weeksToTarget !== null ? Math.min(6, weeksToTarget) : 0;
+  const totalPts = history.length + projN;
+  const padL = 26, padB = 6, padT = 10, padR = 8;
+  const innerW = width - padL - padR, innerH = height - padT - padB;
+  const xFor = (i) => padL + (i / Math.max(1, totalPts - 1)) * innerW;
+  const yFor = (v) => padT + innerH - (Math.max(0, Math.min(100, v)) / 100) * innerH;
+  const historyPts = history.map((v, i) => [xFor(i), yFor(v)]);
+  const lastIdx = history.length - 1;
+  const lastVal = history[lastIdx];
+  const projPts = [];
+  for (let k = 1; k <= projN; k++) projPts.push([xFor(lastIdx + k), yFor(Math.min(100, lastVal + slope * k))]);
+  const path = (pts) => pts.map((p, i) => `${i === 0 ? "M" : "L"}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(" ");
+
+  return (
+    <svg width="100%" viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Tendencia de cumplimiento">
+      {[0, 25, 50, 75, 100].map(v => (
+        <g key={v}>
+          <line x1={padL} x2={width - padR} y1={yFor(v)} y2={yFor(v)} stroke={P.bd} strokeWidth="1" />
+          <text x={0} y={yFor(v) + 3} fontSize="8" fill={P.t4}>{v}</text>
+        </g>
+      ))}
+      <line x1={padL} x2={width - padR} y1={yFor(target)} y2={yFor(target)} stroke={P.am} strokeWidth="1.5" strokeDasharray="4 3" />
+      <text x={width - padR} y={yFor(target) - 4} fontSize="8" fill={P.am} textAnchor="end">Meta {target}%</text>
+      {projPts.length > 0 && <path d={path([historyPts[historyPts.length - 1], ...projPts])} fill="none" stroke={P.bl} strokeWidth="2" strokeDasharray="5 4" strokeLinecap="round" />}
+      <path d={path(historyPts)} fill="none" stroke={P.ac} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      {historyPts.map(([x, y], i) => <circle key={i} cx={x} cy={y} r={i === historyPts.length - 1 ? 4 : 2.5} fill={P.ac} />)}
+      {projPts.map(([x, y], i) => <circle key={i} cx={x} cy={y} r={2} fill={P.bl} />)}
+    </svg>
+  );
+};
+
+const ReportesTab = ({ personal, acciones, role, sessionEmpresa, historial, reportes, onGenerar, onEnviar, busyEnviar }) => {
+  const [scope, setScope] = useState(role === "Empresa" ? sessionEmpresa : "todas");
+  const scoped = scope === "todas" ? personal : personal.filter(p => p.emp === scope);
+  const total = scoped.length;
+  const avalados = scoped.filter(p => p.estado === "Avalado").length;
+  const rechazados = scoped.filter(p => p.estado === "Rechazado").length;
+  const pendientes = total - avalados - rechazados;
+  const pct = total ? Math.round((avalados / total) * 100) : 0;
+
+  const hist = [...(historial[scope] || []), pct];
+  const { weeksToTarget } = projectWeeks(hist, TARGET_CUMPLIMIENTO);
+  const { urgentes, futuras } = computeAlertas(scoped, scope === "todas" ? null : scope);
+  const recomendaciones = generarRecomendaciones(scoped, pct, TARGET_CUMPLIMIENTO);
+  const recTone = REC_TONE();
+  const plan = proximaSemanaAcciones(acciones, scope === "todas" ? null : scope);
+  const misReportes = reportes.filter(r => r.empresa === scope);
+
+  return (
+    <div>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", marginBottom: 14 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+          <Badge c={scope === "todas" ? P.vi : P.bl}>{scope === "todas" ? "Reporte de Auditor" : "Reporte de Cliente"}</Badge>
+          {role !== "Empresa" && (
+            <select value={scope} onChange={e => setScope(e.target.value)} className="nx-input" style={{ width: "auto", padding: "6px 10px", fontSize: 11.5 }}>
+              <option value="todas">Todas las empresas</option>
+              {EMPRESAS_DATA.map(e => <option key={e.nombre} value={e.nombre}>{e.nombre}</option>)}
+            </select>
+          )}
+        </div>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+          <button onClick={() => onGenerar(scope)} className="nx-btn" style={{ background: P.ac2, color: P.ac, border: `1px solid ${P.ac}40`, borderRadius: 5, padding: "7px 14px", fontSize: 11, fontWeight: 700, cursor: "pointer" }}>Generar reporte de esta semana</button>
+          {role !== "Empresa" && scope === "todas" && (
+            <button onClick={onEnviar} disabled={busyEnviar} className="nx-btn" style={{ background: P.vi2, color: P.vi, border: `1px solid ${P.vi}40`, borderRadius: 5, padding: "7px 14px", fontSize: 11, fontWeight: 700, cursor: "pointer", minWidth: 190 }}>
+              {busyEnviar ? <Spinner c={P.vi} /> : "Enviar a todos los subcontratos"}
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* KPIs */}
+      <div style={{ display: "flex", gap: 10, marginBottom: 16, flexWrap: "wrap" }}>
+        {[{ l: "Recursos", v: total, c: P.t2 }, { l: "Avalados", v: avalados, c: P.ac }, { l: "Pendientes", v: pendientes, c: P.am }, { l: "Rechazados", v: rechazados, c: P.rd }, { l: "Cumplimiento", v: `${pct}%`, c: pct >= TARGET_CUMPLIMIENTO ? P.ac : P.am }, { l: "Meta", v: `${TARGET_CUMPLIMIENTO}%`, c: P.t3 }].map((s, i) => (
+          <div key={i} style={{ flex: "1 1 100px", background: P.bg2, borderRadius: 6, padding: "12px 14px", borderTop: `3px solid ${s.c}` }}>
+            <div style={{ fontSize: 9, color: P.t4, textTransform: "uppercase", letterSpacing: ".05em", marginBottom: 4 }}>{s.l}</div>
+            <div className="nx-num" style={{ fontSize: 20, fontWeight: 700, color: s.c }}>{s.v}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Tendencia y proyección */}
+      <div style={{ background: P.bg2, borderRadius: 6, padding: 14, marginBottom: 16 }}>
+        <div style={{ fontSize: 10, color: P.t4, textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 10 }}>Tendencia de cumplimiento — últimas {hist.length} semanas y proyección</div>
+        <TrendChart history={hist} target={TARGET_CUMPLIMIENTO} />
+        <p style={{ fontSize: 11, color: P.t3, marginTop: 8 }}>
+          {pct >= TARGET_CUMPLIMIENTO
+            ? `Cumplimiento por encima de la meta. Manteniendo el ritmo, suma hacia los 12 meses consecutivos para el estatus "Empresa Promovida".`
+            : weeksToTarget !== null
+              ? `Al ritmo actual, se proyecta alcanzar la meta de ${TARGET_CUMPLIMIENTO}% en aproximadamente ${weeksToTarget} semana${weeksToTarget > 1 ? "s" : ""} (línea punteada).`
+              : `El ritmo actual no proyecta alcanzar la meta de ${TARGET_CUMPLIMIENTO}% — se requieren acciones correctivas del Plan de Acción.`}
+        </p>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+        {/* Alertas resumen */}
+        <div>
+          <div style={{ fontSize: 10, color: P.t4, textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 8 }}>Alertas ({urgentes.length} activas · {futuras.length} en planificación)</div>
+          {urgentes.length === 0 ? (
+            <div style={{ fontSize: 11.5, color: P.t4, padding: "10px 0" }}>Sin alertas activas esta semana.</div>
+          ) : (
+            <div style={{ borderRadius: 6, overflow: "hidden", border: `1px solid ${P.bd}` }}>
+              {urgentes.slice(0, 5).map((a, i) => <AlertRow key={i} a={a} />)}
+            </div>
+          )}
+        </div>
+
+        {/* Recomendaciones */}
+        <div>
+          <div style={{ fontSize: 10, color: P.t4, textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 8 }}>Recomendaciones</div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {recomendaciones.map((r, i) => (
+              <div key={i} style={{ display: "flex", gap: 8, alignItems: "flex-start", borderLeft: `3px solid ${recTone[r.nivel]}`, background: `${recTone[r.nivel]}0d`, borderRadius: 4, padding: "8px 10px" }}>
+                <span style={{ fontSize: 11, color: P.t2, lineHeight: 1.4 }}>{r.texto}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Planificación semana próxima */}
+      <div style={{ marginBottom: 16 }}>
+        <div style={{ fontSize: 10, color: P.t4, textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 8 }}>Planificación — próximos 7 días</div>
+        {plan.length === 0 ? (
+          <div style={{ fontSize: 11.5, color: P.t4 }}>Sin acciones vencidas ni previstas en los próximos 7 días.</div>
+        ) : (
+          <div style={{ borderRadius: 6, overflow: "hidden", border: `1px solid ${P.bd}` }}>
+            {plan.map(a => (
+              <div key={a.id} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderTop: `1px solid ${P.bd}` }}>
+                <Badge c={a.diffDays < 0 ? P.rd : a.p === "critica" ? P.rd : P.am}>{a.diffDays < 0 ? `Vencida (${Math.abs(a.diffDays)}d)` : a.diffDays === 0 ? "Hoy" : `En ${a.diffDays}d`}</Badge>
+                <span style={{ flex: 1, fontSize: 11.5, color: P.t2 }}>{a.ac}</span>
+                <span style={{ fontSize: 10, color: P.t4 }}>{a.resp}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Historial de reportes generados */}
+      <div>
+        <div style={{ fontSize: 10, color: P.t4, textTransform: "uppercase", letterSpacing: ".04em", marginBottom: 8 }}>Historial de reportes — {scope === "todas" ? "Auditor" : scope}</div>
+        {misReportes.length === 0 ? (
+          <div style={{ fontSize: 11.5, color: P.t4 }}>Todavía no se generaron reportes para este alcance en la sesión.</div>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {misReportes.map((r, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: 11, padding: "6px 0", borderTop: i ? `1px solid ${P.bd}` : "none" }}>
+                <span className="nx-num" style={{ color: P.t4, flexShrink: 0 }}>{r.fecha}</span>
+                <span style={{ color: P.t2, flex: 1 }}>{r.total} recursos · {r.avalados} avalados · {r.pct}% cumplimiento</span>
+                <CsvDownloadButton csv={r.csv} filename={`reporte-semanal-${scope === "todas" ? "auditor" : scope.replace(/[^a-zA-Z0-9]+/g, "-")}-${r.fecha.replace(/\//g, "-")}.csv`} />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// SECTION: DEMO INTERACTIVO
+// ═══════════════════════════════════════════════════════════════════
+const TABS_BY_ROLE = {
+  "Administrador": [["dashboard", "▣ Dashboard"], ["personal", "◉ Personal"], ["validar", "☑ Validar Docs"], ["subcontratos", "◈ Subcontratos"], ["usuarios", "⚿ Usuarios"], ["acciones", "◆ Plan de Acción"], ["alertas", "△ Alertas"], ["reportes", "▥ Reportes"]],
+  "Auditor": [["dashboard", "▣ Dashboard"], ["validar", "☑ Validar Docs"], ["alertas", "△ Alertas"], ["reportes", "▥ Reportes"]],
+  "Empresa": [["dashboard", "▣ Dashboard"], ["personal", "◉ Personal"], ["subcontratos", "◈ Subcontratos"], ["acciones", "◆ Plan de Acción"], ["alertas", "△ Alertas"], ["reportes", "▥ Reportes"]],
+  "Inspector YPF": [["dashboard", "▣ Dashboard"], ["ospe", "▤ OS / PE"], ["subcontratos", "◈ Subcontratos"]],
+};
+
+const DemoView = () => {
+  const [session, setSession] = useState(() => loadLS("nexusDemo.session", null));
+  const [personal, setPersonal] = useState(() => loadLS("nexusDemo.personal", SEED_PERSONAL));
+  const [usuarios, setUsuarios] = useState(() => loadLS("nexusDemo.usuarios", SEED_USUARIOS));
+  const [ospe, setOspe] = useState(() => loadLS("nexusDemo.ospe", SEED_OSPE));
+  const [acciones, setAcciones] = useState(() => loadLS("nexusDemo.acciones", SEED_ACCIONES));
+  const [subcontratos, setSubcontratos] = useState(() => loadLS("nexusDemo.subcontratos", SEED_SUBCONTRATOS));
+  const [reportes, setReportes] = useState(() => loadLS("nexusDemo.reportes", []));
+  const [historial, setHistorial] = useState(() => loadLS("nexusDemo.historial", SEED_HISTORIAL_CUMPLIMIENTO));
+  const [log, setLog] = useState(() => loadLS("nexusDemo.log", []));
+
+  const [tab, setTab] = useState("dashboard");
+  const [tabLoading, setTabLoading] = useState(false);
+  const [sessionBusy, setSessionBusy] = useState(false);
+  const [enviandoReportes, setEnviandoReportes] = useState(false);
+  const [modal, setModal] = useState(null); // null | 'addRecurso' | 'addUsuario' | 'manageFiles' | 'addAccion' | 'addSubcontrato'
+  const [modalTarget, setModalTarget] = useState(null);
+  const [modalBusy, setModalBusy] = useState(false);
+  const [rowBusy, setRowBusy] = useState(null);
+  const [justAddedId, setJustAddedId] = useState(null);
+  const loadedTabs = useRef(new Set());
+
+  useEffect(() => saveLS("nexusDemo.session", session), [session]);
+  useEffect(() => saveLS("nexusDemo.personal", personal), [personal]);
+  useEffect(() => saveLS("nexusDemo.usuarios", usuarios), [usuarios]);
+  useEffect(() => saveLS("nexusDemo.ospe", ospe), [ospe]);
+  useEffect(() => saveLS("nexusDemo.acciones", acciones), [acciones]);
+  useEffect(() => saveLS("nexusDemo.subcontratos", subcontratos), [subcontratos]);
+  useEffect(() => saveLS("nexusDemo.reportes", reportes), [reportes]);
+  useEffect(() => saveLS("nexusDemo.historial", historial), [historial]);
+  useEffect(() => saveLS("nexusDemo.log", log), [log]);
+
+  const addLog = (detail) => {
+    const ts = new Date().toLocaleTimeString("es-AR", { hour: "2-digit", minute: "2-digit" });
+    setLog(prev => [{ ts, detail }, ...prev].slice(0, 20));
+  };
+
+  const handleLogin = (rolKey, usuarioObj, empresaName) => {
+    setSessionBusy(true);
+    setTimeout(() => {
+      setSession({ rol: rolKey, nombre: usuarioObj ? usuarioObj.nombre : rolKey, usuario: usuarioObj ? usuarioObj.usuario : rolKey.toLowerCase(), empresa: empresaName });
+      loadedTabs.current = new Set(["dashboard"]);
+      setTab("dashboard");
+      setSessionBusy(false);
+    }, 650);
+  };
+
+  const handleLogout = () => { setSession(null); setModal(null); };
+
+  const handleTabChange = (k) => {
+    if (k === tab) return;
+    if (!loadedTabs.current.has(k)) {
+      setTabLoading(true);
+      loadedTabs.current.add(k);
+      setTimeout(() => { setTab(k); setTabLoading(false); }, 400);
+    } else {
+      setTab(k);
+    }
+  };
+
+  const empresaFiltro = session && session.rol === "Empresa" ? session.empresa : null;
+  const personalScoped = useMemo(() => empresaFiltro ? personal.filter(p => p.emp === empresaFiltro) : personal, [personal, empresaFiltro]);
+  const empresasScoped = useMemo(() => empresaFiltro ? EMPRESAS_DATA.filter(e => e.nombre === empresaFiltro) : EMPRESAS_DATA, [empresaFiltro]);
+
+  const addRecurso = (data) => {
+    setModalBusy(true);
+    setTimeout(() => {
+      const id = Date.now();
+      setPersonal(prev => [...prev, { id, estado: "Nuevo", cred: false, ...data }]);
+      addLog(`Alta de recurso: ${data.nombre} (${data.emp}).`);
+      setModalBusy(false);
+      setModal(null);
+      setJustAddedId(id);
+      setTimeout(() => setJustAddedId(null), 1600);
+      if (!TABS_BY_ROLE[session.rol].some(t => t[0] === "personal")) return;
+      handleTabChange("personal");
+    }, 500);
+  };
+
+  const addUsuario = (data) => {
+    setModalBusy(true);
+    setTimeout(() => {
+      setUsuarios(prev => [...prev, { id: Date.now(), ...data }]);
+      addLog(`Usuario creado: ${data.usuario} (${data.rol}).`);
+      setModalBusy(false);
+      setModal(null);
+    }, 500);
+  };
+
+  const toggleUsuario = (id) => {
+    setUsuarios(prev => prev.map(u => {
+      if (u.id !== id) return u;
+      const next = { ...u, activo: !u.activo };
+      addLog(`Usuario ${u.usuario} ${next.activo ? "activado" : "desactivado"}.`);
+      if (!next.activo && session && session.usuario === u.usuario) {
+        setTimeout(() => handleLogout(), 300);
+      }
+      return next;
+    }));
+  };
+
+  const nextEstado = (estado) => estado === "Nuevo" ? "Pend. Inspector" : "Avalado";
+
+  const advancePersonal = (id) => {
+    setRowBusy(id);
+    setTimeout(() => {
+      setPersonal(prev => prev.map(p => {
+        if (p.id !== id) return p;
+        const ne = nextEstado(p.estado);
+        addLog(`${p.nombre}: ${p.estado} → ${ne}.`);
+        return { ...p, estado: ne, cred: ne === "Avalado" ? true : p.cred };
+      }));
+      setRowBusy(null);
+    }, 450);
+  };
+
+  const rejectPersonal = (id) => {
+    setRowBusy(id);
+    setTimeout(() => {
+      setPersonal(prev => prev.map(p => {
+        if (p.id !== id) return p;
+        addLog(`${p.nombre}: rechazado.`);
+        return { ...p, estado: "Rechazado" };
+      }));
+      setRowBusy(null);
+    }, 450);
+  };
+
+  const approveOspe = (id) => {
+    setRowBusy(id);
+    setTimeout(() => {
+      setOspe(prev => prev.map(o => o.id === id ? { ...o, estado: "Aprobada" } : o));
+      setRowBusy(null);
+    }, 450);
+  };
+
+  const attachFiles = (id, newFiles) => {
+    setPersonal(prev => prev.map(p => p.id === id ? { ...p, archivos: [...(p.archivos || []), ...newFiles] } : p));
+    const rec = personal.find(p => p.id === id);
+    if (rec) addLog(`${rec.nombre}: ${newFiles.length} archivo${newFiles.length > 1 ? "s" : ""} adjuntado${newFiles.length > 1 ? "s" : ""}.`);
+  };
+
+  const removeFile = (id, idx) => {
+    setPersonal(prev => prev.map(p => p.id === id ? { ...p, archivos: (p.archivos || []).filter((_, i) => i !== idx) } : p));
+  };
+
+  const reviewFile = (id, idx, estado, comentario) => {
+    const rec = personal.find(p => p.id === id);
+    const nombreArchivo = rec && (rec.archivos || [])[idx] ? rec.archivos[idx].name : "documento";
+    setPersonal(prev => prev.map(p => {
+      if (p.id !== id) return p;
+      const archivos = (p.archivos || []).map((f, i) => i === idx
+        ? { ...f, revision: { estado, comentario, revisor: session.nombre, fecha: new Date().toLocaleDateString("es-AR") } }
+        : f);
+      return { ...p, archivos };
+    }));
+    addLog(`${rec ? rec.nombre : ""}: "${nombreArchivo}" → ${estado}${comentario ? ` — "${comentario}"` : ""}.`);
+  };
+
+  const addAccion = (data) => {
+    setModalBusy(true);
+    setTimeout(() => {
+      setAcciones(prev => [...prev, { id: Date.now(), ...data }]);
+      addLog(`Nueva acción: "${data.ac}" (${data.emp}).`);
+      setModalBusy(false);
+      setModal(null);
+    }, 450);
+  };
+
+  const toggleAccionEstado = (id) => {
+    const NEXT = { "Pendiente": "En curso", "En curso": "Hecho", "Hecho": "Pendiente" };
+    setAcciones(prev => prev.map(a => {
+      if (a.id !== id) return a;
+      const ne = NEXT[a.estado];
+      addLog(`Acción "${a.ac}": ${a.estado} → ${ne}.`);
+      return { ...a, estado: ne };
+    }));
+  };
+
+  const addSubcontrato = (data) => {
+    setModalBusy(true);
+    setTimeout(() => {
+      setSubcontratos(prev => [...prev, {
+        id: Date.now(), ...data, estado: "Pendiente Inspector",
+        solicitante: session.nombre, fecha: new Date().toISOString().slice(0, 10), notificado: false,
+      }]);
+      addLog(`Comunicación de Subcontratación enviada: ${data.razonSocial} (${data.empresaPrincipal}) — pendiente de aprobación del Inspector.`);
+      setModalBusy(false);
+      setModal(null);
+    }, 500);
+  };
+
+  const approveSubcontrato = (id) => {
+    setRowBusy(id);
+    setTimeout(() => {
+      setSubcontratos(prev => prev.map(s => s.id === id ? { ...s, estado: "Aprobada", notificado: true } : s));
+      const s = subcontratos.find(x => x.id === id);
+      if (s) addLog(`Subcontratación de ${s.razonSocial} aprobada. Notificación automática enviada a Responsable Técnico y Administrativo de ${s.empresaPrincipal}.`);
+      setRowBusy(null);
+    }, 500);
+  };
+
+  const rejectSubcontrato = (id, motivo) => {
+    setRowBusy(id);
+    setTimeout(() => {
+      setSubcontratos(prev => prev.map(s => s.id === id ? { ...s, estado: "Rechazada", motivo } : s));
+      const s = subcontratos.find(x => x.id === id);
+      if (s) addLog(`Subcontratación de ${s.razonSocial} rechazada — "${motivo}".`);
+      setRowBusy(null);
+    }, 500);
+  };
+
+  const buildReporte = (scopeKey) => {
+    const scoped = scopeKey === "todas" ? personal : personal.filter(p => p.emp === scopeKey);
+    const total = scoped.length;
+    const avalados = scoped.filter(p => p.estado === "Avalado").length;
+    const pendientes = scoped.filter(p => p.estado === "Nuevo" || p.estado === "Pend. Inspector").length;
+    const rechazados = scoped.filter(p => p.estado === "Rechazado").length;
+    const pct = total ? Math.round((avalados / total) * 100) : 0;
+    const recs = generarRecomendaciones(scoped, pct, TARGET_CUMPLIMIENTO);
+    const plan = proximaSemanaAcciones(acciones, scopeKey === "todas" ? null : scopeKey);
+    const rows = [
+      [`Reporte Semanal de Compliance — ${scopeKey === "todas" ? "Auditor (todas las empresas)" : `Cliente — ${scopeKey}`}`],
+      ["Generado", new Date().toLocaleString("es-AR")],
+      [],
+      ["Recursos totales", total],
+      ["Avalados", avalados],
+      ["Pendientes", pendientes],
+      ["Rechazados", rechazados],
+      ["Cumplimiento (%)", pct],
+      ["Meta (%)", TARGET_CUMPLIMIENTO],
+      [],
+      ["Recomendaciones"],
+      ...recs.map(r => [r.texto]),
+      [],
+      ["Planificación — próximos 7 días"],
+      ...(plan.length ? plan.map(a => [a.ac, a.resp, a.v, a.diffDays < 0 ? "Vencida" : `En ${a.diffDays}d`]) : [["Sin acciones previstas"]]),
+      [],
+      ["Nombre", "Empresa", "Rol", "Estado", "ART (días)", "Apto (días)"],
+      ...scoped.map(p => [p.nombre, p.emp, p.rol, p.estado, p.art, p.apto]),
+    ];
+    return { fecha: new Date().toLocaleDateString("es-AR"), empresa: scopeKey, total, avalados, pct, csv: rowsToCsv(rows) };
+  };
+
+  const generarReporte = (scopeKey) => {
+    const r = buildReporte(scopeKey);
+    setReportes(prev => [r, ...prev].slice(0, 30));
+    setHistorial(prev => ({ ...prev, [scopeKey]: [...(prev[scopeKey] || []), r.pct].slice(-8) }));
+    addLog(`Reporte semanal generado (${scopeKey === "todas" ? "Auditor" : scopeKey}): ${r.avalados}/${r.total} avalados (${r.pct}% cumplimiento).`);
+  };
+
+  const enviarReportesSemanales = () => {
+    setEnviandoReportes(true);
+    setTimeout(() => {
+      const nuevos = EMPRESAS_DATA.map(e => buildReporte(e.nombre));
+      setReportes(prev => [...nuevos, ...prev].slice(0, 30));
+      setHistorial(prev => {
+        const next = { ...prev };
+        nuevos.forEach(r => { next[r.empresa] = [...(next[r.empresa] || []), r.pct].slice(-8); });
+        return next;
+      });
+      addLog(`Reportes semanales enviados a ${EMPRESAS_DATA.length} subcontratos: ${EMPRESAS_DATA.map(e => e.nombre).join(", ")}.`);
+      setEnviandoReportes(false);
+    }, 700);
+  };
+
+  const tabs = session ? TABS_BY_ROLE[session.rol] : [];
+  const canAddRecurso = session && (session.rol === "Administrador" || session.rol === "Empresa");
+
+  return (
+    <div style={{ minHeight: "100vh", padding: "80px 40px", position: "relative" }}>
+      <div style={{ maxWidth: 1200, width: "100%", margin: "0 auto" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24, flexWrap: "wrap" }}>
+          <Badge c={P.ac}>Demo en Vivo</Badge>
+          <span style={{ fontSize: 13, color: P.t3 }}>{session ? `Vista ${session.rol}` : "Login por rol"} · Datos de ejemplo</span>
+        </div>
+
+        <div style={{ background: P.sf, border: `1px solid ${P.bd}`, borderRadius: 12, overflow: "hidden", boxShadow: `0 0 80px ${P.ac}08` }}>
+          <div style={{ display: "flex", alignItems: "center", padding: "10px 18px", borderBottom: `1px solid ${P.bd}`, background: P.bg2, gap: 12 }}>
+            <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+              <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#FF5F57" }} />
+              <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#FFBD2E" }} />
+              <div style={{ width: 10, height: 10, borderRadius: "50%", background: "#28C840" }} />
+            </div>
+            <span style={{ fontSize: 11, color: P.t4, flex: 1, textAlign: "center" }}>nexus-empresarial.app — Panel de Control</span>
+            <div style={{ flexShrink: 0 }}>{session && <SessionChip session={session} onLogout={handleLogout} />}</div>
+          </div>
+
+          {session && (
+            <div style={{ display: "flex", gap: 0, borderBottom: `1px solid ${P.bd}`, overflowX: "auto" }}>
+              {tabs.map(([k, l]) => (
+                <div key={k} onClick={() => handleTabChange(k)} className="nx-btn" style={{
+                  padding: "10px 20px", fontSize: 12, cursor: "pointer", whiteSpace: "nowrap",
+                  color: tab === k ? P.ac : P.t3, fontWeight: tab === k ? 600 : 400,
+                  borderBottom: tab === k ? `2px solid ${P.ac}` : "2px solid transparent",
+                  background: tab === k ? P.ac2 : "transparent",
+                }}>{l}</div>
+              ))}
+            </div>
+          )}
+
+          <div style={{ padding: 20, minHeight: 440 }}>
+            {!session && <LoginGate usuarios={usuarios} onLogin={handleLogin} busy={sessionBusy} />}
+            {session && tabLoading && <ProgressPulse label="Cargando datos…" />}
+            {session && !tabLoading && tab === "dashboard" && (
+              <DashboardTab
+                personal={personalScoped} empresas={empresasScoped}
+                canReport={TABS_BY_ROLE[session.rol].some(t => t[0] === "reportes")}
+                onOpenReportes={() => handleTabChange("reportes")}
+              />
+            )}
+            {session && !tabLoading && tab === "personal" && <PersonalTab personal={personalScoped} canAdd={canAddRecurso} onAddClick={() => setModal("addRecurso")} justAddedId={justAddedId} onManageFiles={(id) => { setModalTarget(id); setModal("manageFiles"); }} />}
+            {session && !tabLoading && tab === "validar" && <ValidarTab personal={session.rol === "Auditor" ? personal : personalScoped} onAdvance={advancePersonal} onReject={rejectPersonal} busyId={rowBusy} log={log} />}
+            {session && !tabLoading && tab === "usuarios" && <UsuariosTab usuarios={usuarios} onToggle={toggleUsuario} onAddClick={() => setModal("addUsuario")} />}
+            {session && !tabLoading && tab === "ospe" && <OspeTab ospe={ospe} onApprove={approveOspe} busyId={rowBusy} />}
+            {session && !tabLoading && tab === "subcontratos" && (
+              <SubcontratosTab
+                subcontratos={subcontratos} empresaFiltro={empresaFiltro}
+                canRequest={session.rol === "Administrador" || session.rol === "Empresa"}
+                canApprove={session.rol === "Inspector YPF"}
+                onAddClick={() => setModal("addSubcontrato")}
+                onApprove={approveSubcontrato} onReject={rejectSubcontrato} busyId={rowBusy}
+              />
+            )}
+            {session && !tabLoading && tab === "acciones" && (
+              <AccionesTab
+                acciones={acciones} empresaFiltro={empresaFiltro}
+                canManage={session.rol === "Administrador" || session.rol === "Empresa"}
+                onAddClick={() => setModal("addAccion")} onToggleEstado={toggleAccionEstado}
+              />
+            )}
+            {session && !tabLoading && tab === "alertas" && <AlertasTab personal={personalScoped} empresaFiltro={empresaFiltro} />}
+            {session && !tabLoading && tab === "reportes" && (
+              <ReportesTab
+                personal={personal} acciones={acciones} role={session.rol} sessionEmpresa={session.empresa}
+                historial={historial} reportes={reportes} onGenerar={generarReporte}
+                onEnviar={enviarReportesSemanales} busyEnviar={enviandoReportes}
+              />
+            )}
+          </div>
+        </div>
+      </div>
+
+      {modal === "addRecurso" && (
+        <Modal title="Agregar Recurso" accent={P.ac} onClose={() => !modalBusy && setModal(null)}>
+          <ResourceForm fixedEmpresa={session.rol === "Empresa" ? session.empresa : null} onSubmit={addRecurso} onClose={() => setModal(null)} busy={modalBusy} />
+        </Modal>
+      )}
+      {modal === "addUsuario" && (
+        <Modal title="Nuevo Usuario" accent={P.vi} onClose={() => !modalBusy && setModal(null)}>
+          <UserForm onSubmit={addUsuario} onClose={() => setModal(null)} busy={modalBusy} />
+        </Modal>
+      )}
+      {modal === "addAccion" && (
+        <Modal title="Nueva Acción" accent={P.am} onClose={() => !modalBusy && setModal(null)}>
+          <ActionForm fixedEmpresa={session.rol === "Empresa" ? session.empresa : null} onSubmit={addAccion} onClose={() => setModal(null)} busy={modalBusy} />
+        </Modal>
+      )}
+      {modal === "addSubcontrato" && (
+        <Modal title="Comunicación de Subcontratación" accent={P.vi} onClose={() => !modalBusy && setModal(null)}>
+          <SubcontratoForm fixedEmpresa={session.rol === "Empresa" ? session.empresa : null} onSubmit={addSubcontrato} onClose={() => setModal(null)} busy={modalBusy} />
+        </Modal>
+      )}
+      {modal === "manageFiles" && modalTarget && (() => {
+        const rec = personal.find(p => p.id === modalTarget);
+        if (!rec) return null;
+        return (
+          <Modal title={`Documentos — ${rec.nombre}`} accent={P.bl} onClose={() => { setModal(null); setModalTarget(null); }}>
+            <FileAttach
+              files={rec.archivos || []}
+              onAdd={f => attachFiles(modalTarget, f)}
+              onRemove={i => removeFile(modalTarget, i)}
+              canReview={session.rol === "Administrador" || session.rol === "Auditor"}
+              onReview={(idx, estado, comentario) => reviewFile(modalTarget, idx, estado, comentario)}
+            />
+          </Modal>
+        );
+      })()}
+    </div>
+  );
+};
+
+// ═══════════════════════════════════════════════════════════════════
+// SECTION: CTA
+// ═══════════════════════════════════════════════════════════════════
+const CTA = () => (
+  <div style={{ minHeight: "60vh", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+    <Glow c={P.ac} size={500} x="50%" y="50%" opacity={0.05} />
+    <div style={{ textAlign: "center", maxWidth: 600, padding: "0 20px" }}>
+      <div style={{ width: 72, height: 72, borderRadius: 16, background: `linear-gradient(135deg,${P.ac},${P.bl})`, display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 36, fontWeight: 800, color: P.bg, marginBottom: 20, boxShadow: `0 0 60px ${P.ac}30` }}>N</div>
+      <h2 style={{ fontSize: 36, fontWeight: 800, marginBottom: 8 }}>
+        NEXUS <span style={{ color: P.ac }}>EMPRESARIAL</span>
+      </h2>
+      <p style={{ fontSize: 15, color: P.t3, marginBottom: 28, lineHeight: 1.6 }}>
+        Gestión inteligente de compliance SRC-YPF.<br />
+        Listo para producción. Agosto 2026.
+      </p>
+      <div style={{ display: "flex", gap: 20, justifyContent: "center", flexWrap: "wrap", fontSize: 13, color: P.t4 }}>
+        <span>3 subcontratos</span>
+        <span style={{ color: P.bd2 }}>·</span>
+        <span>9 módulos</span>
+        <span style={{ color: P.bd2 }}>·</span>
+        <span>4 roles</span>
+        <span style={{ color: P.bd2 }}>·</span>
+        <span>7 ramas SRC</span>
+      </div>
+    </div>
+  </div>
+);
+
+// ═══════════════════════════════════════════════════════════════════
+// MAIN APP — scroll-based sections
+// ═══════════════════════════════════════════════════════════════════
+const SECTIONS = [
+  { id: "hero", label: "Inicio" },
+  { id: "problema", label: "Desafío" },
+  { id: "solucion", label: "Solución" },
+  { id: "empresas", label: "Subcontratos" },
+  { id: "modulos", label: "Módulos" },
+  { id: "roles", label: "Roles" },
+  { id: "src", label: "SRC Map" },
+  { id: "demo", label: "Demo" },
+  { id: "cta", label: "Cierre" },
+];
+
+function App() {
+  const [section, setSection] = useState("hero");
+  const [mode, setMode] = useState(() => loadLS("nexusDemo.themeMode", "dark"));
+  const mainRef = useRef(null);
+
+  // Reescribe la paleta compartida ANTES de que se rendericen los hijos,
+  // así todo el árbol (marketing + demo) toma el estilo elegido.
+  Object.assign(P, mode === "light" ? LIGHT_PALETTE : DARK_PALETTE);
+
+  useEffect(() => {
+    saveLS("nexusDemo.themeMode", mode);
+    document.body.setAttribute("data-nx-mode", mode);
+  }, [mode]);
+
+  const toggleMode = () => setMode(m => (m === "light" ? "dark" : "light"));
+
+  const scrollTo = useCallback((id) => {
+    const el = document.getElementById(`section-${id}`);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
+    setSection(id);
+  }, []);
+
+  useEffect(() => {
+    const main = mainRef.current;
+    if (!main) return;
+    const handler = () => {
+      const scrollTop = main.scrollTop;
+      let cur = "hero";
+      SECTIONS.forEach(s => {
+        const el = document.getElementById(`section-${s.id}`);
+        if (el && el.offsetTop - 80 <= scrollTop) cur = s.id;
+      });
+      setSection(cur);
+    };
+    main.addEventListener("scroll", handler, { passive: true });
+    return () => main.removeEventListener("scroll", handler);
+  }, []);
+
+  const goNext = (target) => scrollTo(target || "problema");
+
+  return (
+    <div style={{ height: "100vh", background: P.bg, color: P.t, fontFamily: "var(--font-display)", overflow: "hidden" }}>
+      <TopBar section={section} setSection={scrollTo} sections={SECTIONS} mode={mode} onToggleMode={toggleMode} />
+      <div ref={mainRef} className="nx-scroll" style={{ height: "100vh", overflowY: "auto", paddingTop: 52 }}>
+        <div id="section-hero"><Hero onNext={goNext} /></div>
+        <div id="section-problema"><Problema /></div>
+        <div id="section-solucion"><Solucion /></div>
+        <div id="section-empresas"><Empresas /></div>
+        <div id="section-modulos"><Modulos /></div>
+        <div id="section-roles"><Roles /></div>
+        <div id="section-src"><SRCMap /></div>
+        <div id="section-demo"><DemoView /></div>
+        <div id="section-cta"><CTA /></div>
+        <div style={{ height: 60 }} />
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<DownloadsProvider><App /></DownloadsProvider>);
+</script>
