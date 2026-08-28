@@ -15,6 +15,10 @@
       --navy-700: #243b5c;
       --blue-accent: #2563eb;
       --blue-accent-soft: #dbeafe;
+      --green-600: #16a34a;
+      --amber-600: #b45309;
+      --red-600: #dc2626;
+      --purple-600: #7c3aed;
       --gray-50: #f9fafb;
       --gray-100: #f3f4f6;
       --gray-200: #e5e7eb;
@@ -74,6 +78,50 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 3rem 2rem;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--gray-200);
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 1rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn.active {
+      color: var(--blue-accent);
+      border-bottom-color: var(--blue-accent);
+    }
+
+    .tab-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .intro-text {
@@ -182,6 +230,242 @@
       color: white;
     }
 
+    /* Usuario Card */
+    .user-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .user-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-card);
+      border-left: 4px solid var(--blue-accent);
+      text-align: center;
+    }
+
+    .user-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .user-avatar.admin { background: linear-gradient(135deg, #ff6b6b, #ff5252); }
+    .user-avatar.auditor { background: linear-gradient(135deg, #a78bfa, #7c3aed); }
+    .user-avatar.empresa { background: linear-gradient(135deg, #60a5fa, #2563eb); }
+    .user-avatar.inspector { background: linear-gradient(135deg, #fbbf24, #f59e0b); }
+
+    .user-role {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--navy-900);
+      margin-bottom: 0.5rem;
+    }
+
+    .user-name {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .credentials {
+      background: var(--gray-100);
+      padding: 1rem;
+      border-radius: var(--radius);
+      margin-bottom: 1rem;
+      text-align: left;
+    }
+
+    .credentials-label {
+      font-size: 0.75rem;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+
+    .credentials-value {
+      font-family: 'Courier New', monospace;
+      font-weight: 600;
+      color: var(--navy-900);
+      word-break: break-all;
+    }
+
+    .permissions {
+      text-align: left;
+    }
+
+    .permissions-title {
+      font-weight: 600;
+      color: var(--navy-900);
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+    }
+
+    .permissions-list {
+      list-style: none;
+    }
+
+    .permissions-list li {
+      padding: 0.4rem 0;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .permissions-list li:before {
+      content: "✓ ";
+      color: var(--green-600);
+      font-weight: 700;
+      margin-right: 0.5rem;
+    }
+
+    /* Steps */
+    .steps-container {
+      display: grid;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .step {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-card);
+      border-left: 4px solid var(--blue-accent);
+    }
+
+    .step-number {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background: var(--blue-accent);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+    }
+
+    .step h3 {
+      font-family: 'Montserrat', sans-serif;
+      color: var(--navy-900);
+      margin-bottom: 0.75rem;
+    }
+
+    .step p {
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+    }
+
+    .step-code {
+      background: var(--gray-100);
+      padding: 1rem;
+      border-radius: var(--radius);
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      overflow-x: auto;
+      margin-top: 1rem;
+    }
+
+    /* FAQ */
+    .faq-item {
+      background: white;
+      border-radius: var(--radius-lg);
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
+    }
+
+    .faq-question {
+      padding: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      border: none;
+      width: 100%;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--navy-900);
+      transition: background 0.3s ease;
+    }
+
+    .faq-question:hover {
+      background: var(--gray-50);
+    }
+
+    .faq-toggle {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      text-align: center;
+      line-height: 24px;
+      transition: transform 0.3s ease;
+    }
+
+    .faq-question.active .faq-toggle {
+      transform: rotate(180deg);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: var(--gray-50);
+    }
+
+    .faq-question.active ~ .faq-answer {
+      max-height: 1000px;
+      padding: 1.5rem;
+    }
+
+    /* Security Box */
+    .security-box {
+      background: linear-gradient(135deg, #ecfdf5 0%, #dbeafe 100%);
+      border-left: 4px solid var(--green-600);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .security-box h3 {
+      color: var(--green-600);
+      margin-bottom: 1rem;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    .security-box ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .security-box li {
+      padding: 0.5rem 0;
+      color: var(--navy-900);
+    }
+
+    .security-box li:before {
+      content: "✓ ";
+      color: var(--green-600);
+      font-weight: 700;
+      margin-right: 0.5rem;
+    }
+
     /* Footer */
     .footer {
       background: var(--navy-900);
@@ -196,25 +480,6 @@
       font-size: 0.875rem;
     }
 
-    .feature-list {
-      list-style: none;
-      margin: 1.5rem 0;
-      padding: 0;
-    }
-
-    .feature-list li {
-      padding: 0.5rem 0;
-      color: var(--text-secondary);
-      font-size: 0.95rem;
-    }
-
-    .feature-list li:before {
-      content: "✓ ";
-      color: var(--blue-accent);
-      font-weight: 700;
-      margin-right: 0.5rem;
-    }
-
     @media (max-width: 768px) {
       .masthead h1 {
         font-size: 2rem;
@@ -224,8 +489,17 @@
         padding: 2rem 1rem;
       }
 
-      .options-grid {
+      .options-grid, .user-cards {
         grid-template-columns: 1fr;
+      }
+
+      .tabs {
+        gap: 0.5rem;
+      }
+
+      .tab-btn {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
       }
     }
   </style>
@@ -237,96 +511,467 @@
     <p>Gestor de Cumplimiento Normativo SRC-YPF</p>
   </div>
 
-  <!-- Container principal -->
-  <div class="container">
-    <!-- Introducción -->
-    <div class="intro-text">
-      <h2>Bienvenido a Nexus Empresarial</h2>
-      <p>
-        Plataforma interactiva para la gestión de cumplimiento normativo del Sistema de Recursos Contratados (SRC) de YPF.
-        Accede a la demo completa o consulta el reporte ejecutivo de conformidad.
-      </p>
+  <!-- Tabs -->
+  <div class="container" style="padding-top: 1rem; padding-bottom: 0;">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('inicio')">🏠 Inicio</button>
+      <button class="tab-btn" onclick="switchTab('usuarios')">👥 Usuarios Prueba</button>
+      <button class="tab-btn" onclick="switchTab('guia')">📖 Guía de Uso</button>
+      <button class="tab-btn" onclick="switchTab('faq')">❓ FAQ</button>
+      <button class="tab-btn" onclick="switchTab('seguridad')">🔒 Seguridad</button>
     </div>
+  </div>
 
-    <!-- Grid de opciones -->
-    <div class="options-grid">
-      <!-- Demo Interactiva -->
-      <div class="option-card">
-        <div class="option-icon">🚀</div>
-        <h3>Demo Interactiva</h3>
+  <!-- Tab: Inicio -->
+  <div id="inicio" class="tab-content active">
+    <div class="container">
+      <div class="intro-text">
+        <h2>Bienvenido a Nexus Empresarial</h2>
         <p>
-          Plataforma completa con múltiples perfiles de acceso (Administrador, Auditor, Empresa, Inspector YPF).
-          Gestiona recursos, órdenes de trabajo, aprobaciones, accesos y vigilancia de cumplimiento.
+          Plataforma interactiva para la gestión de cumplimiento normativo del Sistema de Recursos Contratados (SRC) de YPF.
+          Accede a la demo completa o consulta el reporte ejecutivo de conformidad.
         </p>
-        <ul class="feature-list">
-          <li>4 roles diferentes con permisos específicos</li>
-          <li>Gestión de recursos y OTs</li>
-          <li>Flujo de aprobaciones y avalúos</li>
-          <li>Dashboard de cumplimiento</li>
-          <li>Generación de reportes</li>
-          <li>Alertas y monitoreo en tiempo real</li>
-        </ul>
-        <a href="nexus-pitch-demo.html" class="btn btn-primary">Abrir Demo Interactiva</a>
       </div>
 
-      <!-- Reporte Ejecutivo -->
-      <div class="option-card">
-        <div class="option-icon">📊</div>
-        <h3>Reporte Ejecutivo</h3>
-        <p>
-          Informe corporativo profesional con diseño estándar YPF. Incluye KPIs de cumplimiento, análisis de tendencias,
-          matriz de conformidad por empresa y recomendaciones estratégicas.
-        </p>
-        <ul class="feature-list">
-          <li>Diseño corporativo profesional</li>
-          <li>KPIs y métricas clave</li>
-          <li>Gráficos de cumplimiento</li>
-          <li>Análisis de tendencias</li>
-          <li>Matriz de riesgos</li>
-          <li>Exportable a PDF</li>
-        </ul>
-        <a href="informe-ejecutivo-nexus.html" class="btn btn-primary">Ver Reporte Ejecutivo</a>
+      <div class="options-grid">
+        <!-- Demo Interactiva -->
+        <div class="option-card">
+          <div class="option-icon">🚀</div>
+          <h3>Demo Interactiva</h3>
+          <p>
+            Plataforma completa con múltiples perfiles de acceso (Administrador, Auditor, Empresa, Inspector YPF).
+            Gestiona recursos, órdenes de trabajo, aprobaciones, accesos y vigilancia de cumplimiento.
+          </p>
+          <ul style="list-style: none; padding: 0; margin: 1rem 0; flex-grow: 1;">
+            <li style="padding: 0.3rem 0; color: var(--text-secondary); font-size: 0.95rem;"><span style="color: var(--green-600); font-weight: 700;">✓</span> 4 roles diferentes con permisos específicos</li>
+            <li style="padding: 0.3rem 0; color: var(--text-secondary); font-size: 0.95rem;"><span style="color: var(--green-600); font-weight: 700;">✓</span> Gestión de recursos y OTs</li>
+            <li style="padding: 0.3rem 0; color: var(--text-secondary); font-size: 0.95rem;"><span style="color: var(--green-600); font-weight: 700;">✓</span> Flujo de aprobaciones y avalúos</li>
+            <li style="padding: 0.3rem 0; color: var(--text-secondary); font-size: 0.95rem;"><span style="color: var(--green-600); font-weight: 700;">✓</span> Dashboard de cumplimiento</li>
+            <li style="padding: 0.3rem 0; color: var(--text-secondary); font-size: 0.95rem;"><span style="color: var(--green-600); font-weight: 700;">✓</span> Generación de reportes</li>
+          </ul>
+          <a href="nexus-pitch-demo.html" class="btn btn-primary">Abrir Demo Interactiva →</a>
+        </div>
+
+        <!-- Reporte Ejecutivo -->
+        <div class="option-card">
+          <div class="option-icon">📊</div>
+          <h3>Reporte Ejecutivo</h3>
+          <p>
+            Informe corporativo profesional con diseño estándar YPF. Incluye KPIs de cumplimiento, análisis de tendencias,
+            matriz de conformidad por empresa y recomendaciones estratégicas.
+          </p>
+          <ul style="list-style: none; padding: 0; margin: 1rem 0; flex-grow: 1;">
+            <li style="padding: 0.3rem 0; color: var(--text-secondary); font-size: 0.95rem;"><span style="color: var(--green-600); font-weight: 700;">✓</span> Diseño corporativo profesional</li>
+            <li style="padding: 0.3rem 0; color: var(--text-secondary); font-size: 0.95rem;"><span style="color: var(--green-600); font-weight: 700;">✓</span> KPIs y métricas clave</li>
+            <li style="padding: 0.3rem 0; color: var(--text-secondary); font-size: 0.95rem;"><span style="color: var(--green-600); font-weight: 700;">✓</span> Gráficos de cumplimiento</li>
+            <li style="padding: 0.3rem 0; color: var(--text-secondary); font-size: 0.95rem;"><span style="color: var(--green-600); font-weight: 700;">✓</span> Análisis de tendencias</li>
+            <li style="padding: 0.3rem 0; color: var(--text-secondary); font-size: 0.95rem;"><span style="color: var(--green-600); font-weight: 700;">✓</span> Exportable a PDF</li>
+          </ul>
+          <a href="informe-ejecutivo-nexus.html" class="btn btn-primary">Ver Reporte Ejecutivo →</a>
+        </div>
       </div>
     </div>
+  </div>
 
-    <!-- Información adicional -->
-    <div class="intro-text">
-      <h2>Características Principales</h2>
-      <p style="margin-bottom: 1.5rem;">
-        Nexus Empresarial automatiza el cumplimiento normativo del SRC según los requisitos de YPF:
-      </p>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; text-align: left;">
-        <div>
-          <h4 style="color: var(--navy-900); margin-bottom: 0.75rem;">📋 Órdenes de Trabajo</h4>
-          <p style="font-size: 0.95rem;">Clasificación por tipo de contrato (Auditable, Control Especial, Subcontrato) con requisitos documentales específicos.</p>
+  <!-- Tab: Usuarios de Prueba -->
+  <div id="usuarios" class="tab-content">
+    <div class="container">
+      <div class="intro-text">
+        <h2>👥 Usuarios de Prueba</h2>
+        <p>Usa estas credenciales para acceder a la demo interactiva. Cada rol tiene permisos y datos específicos.</p>
+      </div>
+
+      <div class="user-cards">
+        <!-- Admin -->
+        <div class="user-card">
+          <div class="user-avatar admin">A</div>
+          <div class="user-role">Administrador</div>
+          <div class="user-name">Admin Sistema</div>
+          <div class="credentials">
+            <div class="credentials-label">Usuario</div>
+            <div class="credentials-value">admin</div>
+          </div>
+          <div class="credentials">
+            <div class="credentials-label">Contraseña</div>
+            <div class="credentials-value">admin123</div>
+          </div>
+          <div class="permissions">
+            <div class="permissions-title">Permisos:</div>
+            <ul class="permissions-list">
+              <li>Gestionar usuarios</li>
+              <li>Ver todas las empresas</li>
+              <li>Generar reportes</li>
+              <li>Modificar configuración</li>
+              <li>Control total del sistema</li>
+            </ul>
+          </div>
         </div>
-        <div>
-          <h4 style="color: var(--navy-900); margin-bottom: 0.75rem;">✅ Flujo de Aprobaciones</h4>
-          <p style="font-size: 0.95rem;">Estados: Nuevo → Pendiente Inspector → Aprobada → Avalado, con SLAs de 48/72hs.</p>
+
+        <!-- Auditor -->
+        <div class="user-card" style="border-left-color: var(--purple-600);">
+          <div class="user-avatar auditor">L</div>
+          <div class="user-role" style="color: var(--purple-600);">Auditor</div>
+          <div class="user-name">Lucía Auditora</div>
+          <div class="credentials">
+            <div class="credentials-label">Usuario</div>
+            <div class="credentials-value">lucia</div>
+          </div>
+          <div class="credentials">
+            <div class="credentials-label">Contraseña</div>
+            <div class="credentials-value">lucia123</div>
+          </div>
+          <div class="permissions">
+            <div class="permissions-title">Permisos:</div>
+            <ul class="permissions-list">
+              <li>Ver recursos</li>
+              <li>Auditar compliance</li>
+              <li>Generar reportes</li>
+              <li>Revisar documentación</li>
+              <li>Consultar historial</li>
+            </ul>
+          </div>
         </div>
-        <div>
-          <h4 style="color: var(--navy-900); margin-bottom: 0.75rem;">🔐 Habilitaciones</h4>
-          <p style="font-size: 0.95rem;">Cursos CILP/Y-TEC, credenciales magnéticas GIP y habilitación vehicular CILP.</p>
+
+        <!-- Empresa -->
+        <div class="user-card" style="border-left-color: var(--blue-accent);">
+          <div class="user-avatar empresa">E</div>
+          <div class="user-role" style="color: var(--blue-accent);">Empresa</div>
+          <div class="user-name">Empresa Contratista</div>
+          <div class="credentials">
+            <div class="credentials-label">Usuario</div>
+            <div class="credentials-value">codesin</div>
+          </div>
+          <div class="credentials">
+            <div class="credentials-label">Contraseña</div>
+            <div class="credentials-value">codesin123</div>
+          </div>
+          <div class="permissions">
+            <div class="permissions-title">Permisos:</div>
+            <ul class="permissions-list">
+              <li>Gestionar recursos propios</li>
+              <li>Cargar documentación</li>
+              <li>Ver estado de aprobaciones</li>
+              <li>Enviar comunicaciones</li>
+              <li>Ver propio reporte</li>
+            </ul>
+          </div>
         </div>
-        <div>
-          <h4 style="color: var(--navy-900); margin-bottom: 0.75rem;">📅 Vigencias</h4>
-          <p style="font-size: 0.95rem;">Alertas a 45 días, bloqueo de aplicación mensual y Planilla GIA de accidentabilidad.</p>
+
+        <!-- Inspector YPF -->
+        <div class="user-card" style="border-left-color: var(--amber-600);">
+          <div class="user-avatar inspector">M</div>
+          <div class="user-role" style="color: var(--amber-600);">Inspector YPF</div>
+          <div class="user-name">Miguel Melchiori</div>
+          <div class="credentials">
+            <div class="credentials-label">Usuario</div>
+            <div class="credentials-value">inspector</div>
+          </div>
+          <div class="credentials">
+            <div class="credentials-label">Contraseña</div>
+            <div class="credentials-value">inspector123</div>
+          </div>
+          <div class="permissions">
+            <div class="permissions-title">Permisos:</div>
+            <ul class="permissions-list">
+              <li>Validar recursos</li>
+              <li>Aprobar OTs</li>
+              <li>Revisar documentación</li>
+              <li>Generar alertas</li>
+              <li>Ver dashboard de control</li>
+            </ul>
+          </div>
         </div>
-        <div>
-          <h4 style="color: var(--navy-900); margin-bottom: 0.75rem;">💬 Comunicaciones</h4>
-          <p style="font-size: 0.95rem;">Canal OS/PE formal Inspector–Contratista y desafectación con evidencia.</p>
+      </div>
+
+      <div class="intro-text" style="margin-top: 3rem;">
+        <p style="margin: 0;">
+          <strong>💡 Consejo:</strong> Intenta cambiar de empresa en el selector (arriba a la izquierda) para ver cómo el panel se adapta a cada empresa. Los datos son ficticios y se guardan solo en tu navegador.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab: Guía de Uso -->
+  <div id="guia" class="tab-content">
+    <div class="container">
+      <div class="intro-text">
+        <h2>📖 Guía de Uso Paso a Paso</h2>
+        <p>Sigue estos pasos para explorar todas las funcionalidades de Nexus Empresarial.</p>
+      </div>
+
+      <div class="steps-container">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Selecciona un usuario y entra a la demo</h3>
+          <p>Haz clic en "Abrir Demo Interactiva" en la pestaña Inicio. Verás la pantalla de login con 4 opciones de rol.</p>
+          <p>Selecciona el rol que quieras (ej: Administrador) y entra con las credenciales de la pestaña "Usuarios Prueba".</p>
         </div>
-        <div>
-          <h4 style="color: var(--navy-900); margin-bottom: 0.75rem;">🎯 Control</h4>
-          <p style="font-size: 0.95rem;">Semáforo de cumplimiento por recurso y empresa hacia "Empresa Promovida".</p>
+
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Explora el Dashboard</h3>
+          <p>Una vez dentro, verás el panel principal con el selector de empresa en la esquina superior izquierda.</p>
+          <p>Cambia entre empresas (CODESIN, TECFOR, SERMAT) para ver datos específicos de cada una.</p>
         </div>
+
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Navega por los módulos</h3>
+          <p>En la barra lateral izquierda encontrarás accesos a:</p>
+          <div class="step-code" style="background: var(--gray-100); padding: 1rem; border-radius: var(--radius); margin-top: 0.75rem;">
+📋 Recursos & OT → Gestiona órdenes de trabajo<br>
+✅ Aprobaciones → Flujo de validación<br>
+🔐 Accesos → Habilitaciones y cursos<br>
+📅 Vigencias → Alertas de vencimiento<br>
+💬 Comunicaciones → OS/PE y bajas<br>
+🎯 Control → Semáforo de cumplimiento<br>
+📊 Auditoría → Reportes semanales<br>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">4</div>
+          <h3>Prueba interacciones clave</h3>
+          <p>Intenta estas acciones:</p>
+          <div class="step-code" style="background: var(--gray-100); padding: 1rem; border-radius: var(--radius); margin-top: 0.75rem;">
+✓ Marca documentos como completados (checkboxes)<br>
+✓ Cambia estado de aprobación (Nuevo → Avalado)<br>
+✓ Desafecta o vuelve a activar recursos<br>
+✓ Genera un reporte semanal y descárgalo en Excel<br>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">5</div>
+          <h3>Inicia sesión con otro rol</h3>
+          <p>Vuelve a la página de login (botón logout o actualiza la página) e inicia sesión con otro rol.</p>
+          <p>Observa cómo cambian los permisos y los datos visibles según el rol (ej: Auditor ve todo, Empresa solo sus recursos).</p>
+        </div>
+
+        <div class="step">
+          <div class="step-number">6</div>
+          <h3>Consulta el reporte ejecutivo</h3>
+          <p>Vuelve a la pestaña Inicio y abre "Reporte Ejecutivo". Este es un documento profesional con KPIs, gráficos y análisis de cumplimiento.</p>
+          <p>Puedes imprimirlo a PDF usando Ctrl+P o Cmd+P.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab: FAQ -->
+  <div id="faq" class="tab-content">
+    <div class="container">
+      <div class="intro-text">
+        <h2>❓ Preguntas Frecuentes</h2>
+        <p>Respuestas a las preguntas más comunes sobre Nexus Empresarial.</p>
+      </div>
+
+      <div>
+        <div class="faq-item">
+          <button class="faq-question active" onclick="toggleFaq(this)">
+            ¿Qué es Nexus Empresarial?
+            <span class="faq-toggle">▼</span>
+          </button>
+          <div class="faq-answer">
+            <p>Nexus Empresarial es una plataforma interactiva de demostración que automatiza el cumplimiento normativo del Sistema de Recursos Contratados (SRC) de YPF. Permite gestionar órdenes de trabajo, aprobaciones, habilitaciones, vigencias, comunicaciones y auditoría en un solo lugar.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            ¿Es seguro usar estas credenciales?
+            <span class="faq-toggle">▼</span>
+          </button>
+          <div class="faq-answer">
+            <p>Sí, estas son credenciales de prueba ficticias. Nexus es una demo local sin conexión a servidores externos. Los datos se guardan solo en tu navegador (localStorage) y no se envían a ningún servidor. Puedes usar estas credenciales con total confianza.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            ¿Cómo borro los datos de prueba?
+            <span class="faq-toggle">▼</span>
+          </button>
+          <div class="faq-answer">
+            <p>Los datos se guardan en localStorage de tu navegador. Para limpiar:<br><br>
+            <strong>Chrome/Firefox/Edge:</strong><br>
+            1. Abre el navegador en la demo (nexus-pitch-demo.html)<br>
+            2. Presiona F12 para abrir Desarrollador<br>
+            3. Ve a Application → localStorage<br>
+            4. Haz clic derecho en el archivo y elige "Delete"<br><br>
+            O simplemente limpia el historial de navegación completo.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            ¿Puedo descargar los archivos HTML?
+            <span class="faq-toggle">▼</span>
+          </button>
+          <div class="faq-answer">
+            <p>Sí. Todos los archivos (index.html, nexus-pitch-demo.html, informe-ejecutivo-nexus.html) pueden descargarse y usarse sin conexión a internet. Solo necesitas un navegador moderno (Chrome, Firefox, Safari, Edge).</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            ¿Qué navegadores son compatibles?
+            <span class="faq-toggle">▼</span>
+          </button>
+          <div class="faq-answer">
+            <p>Nexus funciona en navegadores modernos que soporten ES6 y localStorage:<br>
+            ✓ Chrome 60+ (recomendado)<br>
+            ✓ Firefox 55+<br>
+            ✓ Safari 11+<br>
+            ✓ Edge 79+<br><br>
+            No funciona en IE 11 o versiones antiguas.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            ¿Cómo descargo un reporte en Excel?
+            <span class="faq-toggle">▼</span>
+          </button>
+          <div class="faq-answer">
+            <p>En la pestaña "Auditoría" de la demo, haz clic en "Generar Reporte Semanal". Verás un botón "Descargar Reporte (XLSX)". Al hacer clic, el navegador te descargará un archivo Excel con los datos del reporte.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            ¿Cómo exporto el reporte ejecutivo a PDF?
+            <span class="faq-toggle">▼</span>
+          </button>
+          <div class="faq-answer">
+            <p>En la página del Reporte Ejecutivo, presiona Ctrl+P (Windows/Linux) o Cmd+P (Mac) para abrir el diálogo de impresión. Selecciona "Guardar como PDF" como destino y descarga el archivo.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            ¿Cuál es la diferencia entre roles?
+            <span class="faq-toggle">▼</span>
+          </button>
+          <div class="faq-answer">
+            <p><strong>Administrador:</strong> Acceso total al sistema, gestión de usuarios.<br>
+            <strong>Auditor:</strong> Ve todas las empresas y genera reportes de compliance.<br>
+            <strong>Empresa:</strong> Gestiona solo sus recursos, carga documentación, ve su estado.<br>
+            <strong>Inspector YPF:</strong> Valida y aprueba recursos, genera alertas.<br><br>
+            Intenta con cada rol para ver las diferencias en permisos y datos.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            ¿Se pierden los cambios si recargo la página?
+            <span class="faq-toggle">▼</span>
+          </button>
+          <div class="faq-answer">
+            <p>No. Los cambios se guardan automáticamente en localStorage mientras estés en la misma sesión. Si cierras completamente el navegador o limpias localStorage, se perderán los cambios. Este es el comportamiento normal de una demo.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab: Seguridad -->
+  <div id="seguridad" class="tab-content">
+    <div class="container">
+      <div class="intro-text">
+        <h2>🔒 Seguridad y Privacidad</h2>
+        <p>Información sobre cómo se protegen tus datos en Nexus Empresarial.</p>
+      </div>
+
+      <div class="security-box">
+        <h3>✓ Privacidad de Datos</h3>
+        <ul>
+          <li><strong>Sin servidores remotos:</strong> Nexus no se conecta a ningún servidor. Todo ocurre en tu navegador.</li>
+          <li><strong>Datos locales:</strong> Los datos se guardan solo en localStorage de tu navegador, nunca se envían a internet.</li>
+          <li><strong>Sin rastreo:</strong> No hay cookies de rastreo, analíticas externas o envío de información.</li>
+          <li><strong>Puedes verificar:</strong> Abre F12 → Network mientras usas la app. Verás que no hay peticiones HTTP a servidores.</li>
+          <li><strong>Fácil de limpiar:</strong> Limpia localStorage en cualquier momento desde los ajustes del navegador.</li>
+        </ul>
+      </div>
+
+      <div class="security-box">
+        <h3>✓ Seguridad de Credenciales</h3>
+        <ul>
+          <li><strong>Credenciales de prueba:</strong> Las credenciales proporcionadas son ficticias y solo para demostración.</li>
+          <li><strong>Sin hash real:</strong> Las contraseñas no se hashean (no es necesario en una demo local).</li>
+          <li><strong>No usar para producción:</strong> Nexus es una demo interactiva, NO es una plataforma de producción.</li>
+          <li><strong>Control de acceso por rol:</strong> Los permisos se validan en el navegador según el rol seleccionado.</li>
+        </ul>
+      </div>
+
+      <div class="security-box">
+        <h3>✓ Requisitos Técnicos Mínimos</h3>
+        <ul>
+          <li><strong>Navegador moderno:</strong> Chrome 60+, Firefox 55+, Safari 11+, Edge 79+</li>
+          <li><strong>JavaScript habilitado:</strong> La app requiere JavaScript. Si lo tienes deshabilitado, no funcionará.</li>
+          <li><strong>localStorage disponible:</strong> El navegador debe permitir localStorage (no está deshabilitado).</li>
+          <li><strong>Sin extensiones peligrosas:</strong> Algunas extensiones pueden interferir. Si tienes problemas, desactívalas temporalmente.</li>
+          <li><strong>Conexión a internet (solo para descargas):</strong> La app funciona offline, pero necesitas internet para descargar Excel.</li>
+        </ul>
+      </div>
+
+      <div class="security-box">
+        <h3>✓ Instrucciones para Usar Offline</h3>
+        <ul>
+          <li><strong>Paso 1:</strong> Descarga los 3 archivos HTML (index.html, nexus-pitch-demo.html, informe-ejecutivo-nexus.html) en una carpeta.</li>
+          <li><strong>Paso 2:</strong> Abre index.html con tu navegador (doble clic).</li>
+          <li><strong>Paso 3:</strong> Úsalo sin internet. Los datos se guardan localmente en tu navegador.</li>
+          <li><strong>Paso 4:</strong> Para descargar reportes en Excel, necesitarás internet solo para esa función específica.</li>
+          <li><strong>Nota:</strong> En algunos navegadores, localStorage puede tener limitaciones si abres archivos locales (usa un servidor local si tienes problemas).</li>
+        </ul>
+      </div>
+
+      <div class="security-box">
+        <h3>✓ Cómo Compartir Seguramente</h3>
+        <ul>
+          <li><strong>Comparte los archivos HTML:</strong> Puedes enviar por email los 3 archivos. No contienen datos sensibles.</li>
+          <li><strong>Usa un servidor web:</strong> Si lo despliegas en un servidor web, asegúrate de usar HTTPS.</li>
+          <li><strong>Sin credenciales reales:</strong> Las credenciales en la app son ficticias. Las credenciales reales deben manejarse en producción.</li>
+          <li><strong>Cumplimiento GDPR/CCPA:</strong> Como no recopilamos datos, no hay preocupaciones de privacidad.</li>
+          <li><strong>Auditoría de código:</strong> Todo el código está en el HTML. Puedes leerlo, modificarlo y verificarlo.</li>
+        </ul>
+      </div>
+
+      <div class="intro-text" style="margin-top: 3rem; background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%); border-left: 4px solid var(--red-600);">
+        <h3 style="color: var(--red-600);">⚠️ Disclaimer</h3>
+        <p>
+          <strong>Nexus Empresarial es una demo interactiva, no una plataforma de producción.</strong><br><br>
+          Esta herramienta está diseñada para demostración, capacitación y validación de conceptos.
+          No debe usarse para manejar datos reales o sensibles. Si implementas un sistema similar en producción,
+          asegúrate de implementar autenticación real, encriptación, auditoría y todas las medidas de seguridad necesarias.
+        </p>
       </div>
     </div>
   </div>
 
   <!-- Footer -->
   <div class="footer">
-    <p>© 2026 Nexus Empresarial • Sistema de Gestión de Cumplimiento SRC-YPF</p>
+    <p>© 2026 Nexus Empresarial • Sistema de Gestión de Cumplimiento SRC-YPF • Demo Interactiva</p>
   </div>
+
+  <script>
+    function switchTab(tabName) {
+      // Oculta todas las pestañas
+      const contents = document.querySelectorAll('.tab-content');
+      contents.forEach(content => content.classList.remove('active'));
+
+      // Actualiza botones
+      const buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+
+      // Activa la pestaña seleccionada
+      document.getElementById(tabName).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    function toggleFaq(element) {
+      element.classList.toggle('active');
+    }
+  </script>
 </body>
 </html>
