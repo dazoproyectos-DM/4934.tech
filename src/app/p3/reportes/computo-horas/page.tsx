@@ -14,6 +14,7 @@ import {
 import { exportToXls, exportToCsv, exportToJson, exportToPdf } from '@/lib/p3/export-utils';
 import { generateActionPlan } from '@/lib/p3/action-plan';
 import type { ActionPlan } from '@/lib/p3/action-plan';
+import { saveReport } from '@/lib/p3/report-storage';
 
 // ---------------------------------------------------------------------------
 // Small helpers
@@ -144,6 +145,13 @@ export default function ComputoHorasPage() {
     const plan = generateActionPlan(r);
     setActionPlan(plan);
     setShowPlan(false);
+
+    // Auto-save report
+    try {
+      saveReport(r);
+    } catch {
+      console.warn('Failed to save report');
+    }
   };
 
   // -------------------------------------------------------------------------
@@ -188,13 +196,21 @@ export default function ComputoHorasPage() {
     <main className="min-h-screen bg-gray-950 text-gray-100 p-4 md:p-8">
       {/* Header */}
       <div className="max-w-[1600px] mx-auto">
-        <div className="mb-6 border-b border-gray-700 pb-4">
-          <h1 className="text-2xl font-bold tracking-wide text-blue-400">
-            COMPUTO DE HORAS POR ESPECIALIDAD
-          </h1>
-          <p className="text-sm text-gray-400 mt-1">
-            P3 — Docs, Reportes &amp; Materiales · Generación de Informe
-          </p>
+        <div className="mb-6 border-b border-gray-700 pb-4 flex items-start justify-between">
+          <div>
+            <h1 className="text-2xl font-bold tracking-wide text-blue-400">
+              COMPUTO DE HORAS POR ESPECIALIDAD
+            </h1>
+            <p className="text-sm text-gray-400 mt-1">
+              P3 — Docs, Reportes &amp; Materiales · Generación de Informe
+            </p>
+          </div>
+          <a
+            href="/p3/reportes/historial"
+            className="text-xs bg-gray-700 hover:bg-gray-600 px-3 py-1.5 rounded border border-gray-600 transition-colors"
+          >
+            📋 Historial
+          </a>
         </div>
 
         {/* Project meta */}
