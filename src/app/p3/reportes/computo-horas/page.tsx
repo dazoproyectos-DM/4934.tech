@@ -11,6 +11,9 @@ import {
   sumHours,
   totalSpecialty,
 } from '@/lib/p3/hours-calculator';
+import { exportToXls, exportToCsv, exportToJson, exportToPdf } from '@/lib/p3/export-utils';
+import { generateActionPlan } from '@/lib/p3/action-plan';
+import type { ActionPlan } from '@/lib/p3/action-plan';
 
 // ---------------------------------------------------------------------------
 // Small helpers
@@ -46,6 +49,8 @@ export default function ComputoHorasPage() {
 
   // Report
   const [report, setReport] = useState<ReportData | null>(null);
+  const [actionPlan, setActionPlan] = useState<ActionPlan | null>(null);
+  const [showPlan, setShowPlan] = useState(false);
   const [error, setError] = useState('');
 
   // XLS upload
@@ -136,51 +141,39 @@ export default function ComputoHorasPage() {
       yacimiento: yacimiento || '',
     });
     setReport(r);
+    const plan = generateActionPlan(r);
+    setActionPlan(plan);
+    setShowPlan(false);
   };
 
   // -------------------------------------------------------------------------
-  // Export to XLS
+  // Export functions
   // -------------------------------------------------------------------------
-  const exportXls = async () => {
+  const [exporting, setExporting] = useState(false);
+
+  const handleExport = async (format: 'xls' | 'csv' | 'json' | 'pdf') => {
     if (!report) return;
-    const XLSX = await import('xlsx');
-
-    const header = [
-      'DOCUMENTO Nro.',
-      'DESCRIPCION',
-      'ESPECIALIDAD',
-      'REV.',
-      'FORM',
-      'HOJAS',
-      'HS BASE',
-      ...SPECIALTY_HOUR_KEYS.map(k => SPECIALTY_HOUR_LABELS[k]),
-      'TOTAL HS',
-    ];
-
-    const dataRows = report.documents.map(d => [
-      d.code,
-      d.description,
-      d.disciplineName,
-      d.revision,
-      d.format,
-      d.sheets,
-      d.baseHours,
-      ...SPECIALTY_HOUR_KEYS.map(k => d.hours[k] || ''),
-      d.totalHours,
-    ]);
-
-    const totalRow = [
-      '', 'TOTAL HS POR ESPECIALIDAD', '', '', '', '',
-      report.documents.reduce((s, d) => s + d.baseHours, 0),
-      ...SPECIALTY_HOUR_KEYS.map(k => report.totals[k]),
-      report.grandTotal,
-    ];
-
-    const ws = XLSX.utils.aoa_to_sheet([header, ...dataRows, [], totalRow]);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'HS ING - TOTALES PROY');
-    const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-    XLSX.writeFile(wb, `Computo_Horas_${date}.xlsx`);
+    setExporting(true);
+    try {
+      switch (format) {
+        case 'xls':
+          await exportToXls(report);
+          break;
+        case 'csv':
+          exportToCsv(report);
+          break;
+        case 'json':
+          exportToJson(report);
+          break;
+        case 'pdf':
+          await exportToPdf(report, { template: 'detailed' });
+          break;
+      }
+    } catch {
+      setError(`Error al exportar: ${format.toUpperCase()}`);
+    } finally {
+      setExporting(false);
+    }
   };
 
   // -------------------------------------------------------------------------
@@ -368,7 +361,7 @@ export default function ComputoHorasPage() {
         {report && (
           <section>
             {/* Report header */}
-            <div className="mb-4 flex items-start justify-between">
+            <div className="mb-4 flex flex-col md:flex-row md:items-start md:justify-between gap-4">
               <div>
                 <h2 className="text-lg font-bold text-blue-300">
                   DISTRIBUCIÓN DE HORAS POR ESPECIALIDAD
@@ -380,12 +373,36 @@ export default function ComputoHorasPage() {
                   {' · '}{report.date}
                 </p>
               </div>
-              <button
-                onClick={exportXls}
-                className="text-xs bg-green-700 hover:bg-green-600 text-white px-4 py-2 rounded transition-colors font-medium"
-              >
-                Exportar XLS
-              </button>
+              <div className="flex gap-2 flex-wrap">
+                <button
+                  onClick={() => handleExport('xls')}
+                  disabled={exporting}
+                  className="text-xs bg-green-700 hover:bg-green-600 disabled:opacity-50 text-white px-3 py-2 rounded transition-colors font-medium"
+                >
+                  XLS
+                </button>
+                <button
+                  onClick={() => handleExport('csv')}
+                  disabled={exporting}
+                  className="text-xs bg-blue-700 hover:bg-blue-600 disabled:opacity-50 text-white px-3 py-2 rounded transition-colors font-medium"
+                >
+                  CSV
+                </button>
+                <button
+                  onClick={() => handleExport('pdf')}
+                  disabled={exporting}
+                  className="text-xs bg-red-700 hover:bg-red-600 disabled:opacity-50 text-white px-3 py-2 rounded transition-colors font-medium"
+                >
+                  PDF
+                </button>
+                <button
+                  onClick={() => handleExport('json')}
+                  disabled={exporting}
+                  className="text-xs bg-purple-700 hover:bg-purple-600 disabled:opacity-50 text-white px-3 py-2 rounded transition-colors font-medium"
+                >
+                  JSON
+                </button>
+              </div>
             </div>
 
             {/* Main hours table */}
@@ -510,6 +527,102 @@ export default function ComputoHorasPage() {
                 </div>
               ))}
             </div>
+
+            {/* Action Plan Section */}
+            {actionPlan && (
+              <div className="mb-6 rounded border border-gray-700 overflow-hidden">
+                <button
+                  onClick={() => setShowPlan(!showPlan)}
+                  className="w-full bg-gray-800 hover:bg-gray-700 px-4 py-3 text-left font-semibold text-yellow-300 uppercase tracking-wide text-sm transition-colors flex items-center justify-between"
+                >
+                  <span>📋 PLAN DE ACCIÓN</span>
+                  <span className="text-gray-400">{showPlan ? '▼' : '▶'}</span>
+                </button>
+                {showPlan && (
+                  <div className="p-4 bg-gray-850">
+                    {/* Bottlenecks */}
+                    {actionPlan.bottlenecks.length > 0 && (
+                      <div className="mb-4">
+                        <h3 className="text-sm font-bold text-red-400 mb-2 uppercase">⚠️ Cuellos de Botella Identificados</h3>
+                        <div className="space-y-2">
+                          {actionPlan.bottlenecks.map((item, i) => (
+                            <div key={i} className="bg-gray-800 border-l-4 border-red-600 p-3 rounded">
+                              <div className="flex items-start justify-between mb-1">
+                                <span className="font-semibold text-sm text-gray-200">{item.action}</span>
+                                <span className={`text-xs px-2 py-1 rounded ${item.priority === 'HIGH' ? 'bg-red-900 text-red-200' : 'bg-yellow-900 text-yellow-200'}`}>
+                                  {item.priority}
+                                </span>
+                              </div>
+                              <p className="text-xs text-gray-400 mb-1">{item.rationale}</p>
+                              <p className="text-xs text-gray-500 italic">💡 {item.impact}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Resource Allocation */}
+                    {actionPlan.resourceAllocation.length > 0 && (
+                      <div className="mb-4">
+                        <h3 className="text-sm font-bold text-blue-400 mb-2 uppercase">👥 Asignación de Recursos</h3>
+                        <div className="space-y-2">
+                          {actionPlan.resourceAllocation.map((item, i) => (
+                            <div key={i} className="bg-gray-800 border-l-4 border-blue-600 p-3 rounded">
+                              <div className="flex items-start justify-between mb-1">
+                                <span className="font-semibold text-sm text-gray-200">{item.action}</span>
+                                <span className="text-xs px-2 py-1 rounded bg-blue-900 text-blue-200">{item.priority}</span>
+                              </div>
+                              <p className="text-xs text-gray-400 mb-1">{item.rationale}</p>
+                              <p className="text-xs text-gray-500 italic">💡 {item.impact}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Timeline */}
+                    {actionPlan.timeline.length > 0 && (
+                      <div className="mb-4">
+                        <h3 className="text-sm font-bold text-green-400 mb-2 uppercase">📅 Cronograma</h3>
+                        <div className="space-y-2">
+                          {actionPlan.timeline.map((item, i) => (
+                            <div key={i} className="bg-gray-800 border-l-4 border-green-600 p-3 rounded">
+                              <div className="flex items-start justify-between mb-1">
+                                <span className="font-semibold text-sm text-gray-200">{item.action}</span>
+                                <span className="text-xs px-2 py-1 rounded bg-green-900 text-green-200">{item.priority}</span>
+                              </div>
+                              <p className="text-xs text-gray-400 mb-1">{item.rationale}</p>
+                              <p className="text-xs text-gray-500 italic">💡 {item.impact}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Recommendations */}
+                    {actionPlan.recommendations.length > 0 && (
+                      <div>
+                        <h3 className="text-sm font-bold text-purple-400 mb-2 uppercase">✨ Recomendaciones</h3>
+                        <div className="space-y-2">
+                          {actionPlan.recommendations.map((item, i) => (
+                            <div key={i} className="bg-gray-800 border-l-4 border-purple-600 p-3 rounded">
+                              <div className="flex items-start justify-between mb-1">
+                                <span className="font-semibold text-sm text-gray-200">{item.action}</span>
+                                <span className={`text-xs px-2 py-1 rounded ${item.priority === 'HIGH' ? 'bg-red-900 text-red-200' : 'bg-gray-700 text-gray-300'}`}>
+                                  {item.priority}
+                                </span>
+                              </div>
+                              <p className="text-xs text-gray-400 mb-1">{item.rationale}</p>
+                              <p className="text-xs text-gray-500 italic">💡 {item.impact}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* Discipline summary */}
             <div className="rounded border border-gray-700 overflow-hidden">
